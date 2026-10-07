@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDFNest — All-in-One PDF Toolkit</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+
+<style>
+  :root {
+    --primary: #4f46e5;
+    --primary-dark: #4338ca;
+    --accent: #06b6d4;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --success: #10b981;
+    --error: #ef4444;
+    --radius: 14px;
+    --shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+  header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .logo-icon {
+    width: 34px;
+    height: 34px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 18px;
+  }
+  .lang-switch {
+    display: flex;
+    gap: 4px;
+    background: var(--bg);
+    padding: 4px;
+    border-radius: 8px;
+  }
+  .lang-switch button {
+    padding: 6px 12px;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .lang-switch button.active { background: var(--primary); color: #fff; }
+  .hero { text-align: center; padding: 48px 24px 32px; max-width: 900px; margin: 0 auto; }
+  .hero h1 {
+    font-size: 38px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p { color: var(--muted); font-size: 16px; max-width: 600px; margin: 0 auto; }
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 14px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px 60px;
+  }
+  .tool-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: var(--shadow);
+  }
+  .tool-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary);
+    box-shadow: 0 12px 28px rgba(79, 70, 229, 0.15);
+  }
+  .tool-icon { font-size: 32px; margin-bottom: 10px; display: block; }
+  .tool-card h3 { font-size: 15px; font-weight: 600; }
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: var(--card);
+    border-radius: 18px;
+    width: 100%;
+    max-width: 560px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 28px;
+    position: relative;
+    animation: pop 0.2s ease;
+  }
+  @keyframes pop { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .modal-close {
+    position: absolute; top: 16px; right: 16px;
+    width: 32px; height: 32px; border: none; background: var(--bg);
+    border-radius: 50%; cursor: pointer; font-size: 18px; color: var(--muted);
+  }
+  .modal-close:hover { background: var(--border); }
+  .modal h2 { font-size: 22px; margin-bottom: 6px; padding-right: 40px; }
+  .modal .desc { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+  .drop-zone {
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 32px 16px;
+    text-align: center;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 16px;
+  }
+  .drop-zone:hover, .drop-zone.dragover {
+    border-color: var(--primary); background: #f0f0ff; color: var(--primary);
+  }
+  .drop-zone input { display: none; }
+  .drop-zone .big { font-size: 36px; display: block; margin-bottom: 8px; }
+  .file-list { list-style: none; margin-bottom: 16px; max-height: 220px; overflow-y: auto; }
+  .file-list li {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px; background: var(--bg); border-radius: 8px;
+    margin-bottom: 8px; font-size: 14px;
+  }
+  .file-list .remove {
+    background: none; border: none; color: var(--error);
+    font-size: 20px; cursor: pointer; padding: 0 8px; font-weight: bold;
+  }
+  .btn {
+    width: 100%; padding: 14px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: #fff; border: none; border-radius: 10px;
+    font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+  }
+  .btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.35);
+  }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .status-msg {
+    margin-top: 14px; font-size: 14px; text-align: center;
+    padding: 10px; border-radius: 8px;
+  }
+  .status-msg.ok { color: var(--success); background: #ecfdf5; }
+  .status-msg.err { color: var(--error); background: #fef2f2; }
+  .status-msg.info { color: var(--primary); background: #eef2ff; }
+  .hidden { display: none !important; }
+  .options { margin-bottom: 16px; }
+  .options label {
+    display: block; font-size: 13px; color: var(--muted);
+    margin-bottom: 6px; font-weight: 600;
+  }
+  .options input[type="text"],
+  .options input[type="number"],
+  .options input[type="time"],
+  .options select {
+    width: 100%; padding: 10px 12px;
+    border: 1px solid var(--border); border-radius: 8px;
+    font-size: 14px; margin-bottom: 12px; font-family: inherit;
+  }
+  .options input:focus, .options select:focus { outline: none; border-color: var(--primary); }
+  .lock-screen {
+    position: fixed; inset: 0;
+    background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 9999; padding: 20px;
+  }
+  .lock-box {
+    background: #fff; border-radius: 18px; padding: 40px;
+    width: 100%; max-width: 380px; text-align: center;
+  }
+  .lock-box h1 { font-size: 22px; margin-bottom: 8px; }
+  .lock-box p { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+  .lock-box input {
+    width: 100%; padding: 12px 16px; border: 2px solid var(--border);
+    border-radius: 10px; font-size: 15px; margin-bottom: 12px; text-align: center;
+  }
+  .lock-box input:focus { outline: none; border-color: var(--primary); }
+  footer {
+    text-align: center; padding: 24px; color: var(--muted);
+    font-size: 13px; border-top: 1px solid var(--border);
+  }
+
+  /* ===== HEADER RIGHT (часы + кнопки) ===== */
+  .header-right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+  .lv-clock {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding: 4px 12px;
+    background: var(--bg);
+    border-radius: 8px;
+    line-height: 1.1;
+    min-width: 100px;
+  }
+  .clock-city {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .clock-time {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--primary);
+    font-variant-numeric: tabular-nums;
+    font-family: 'SF Mono', Consolas, Monaco, monospace;
+  }
+  .icon-btn {
+    width: 38px;
+    height: 38px;
+    border: none;
+    background: var(--bg);
+    border-radius: 9px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+  .icon-btn:hover {
+    background: var(--primary);
+    transform: scale(1.05);
+  }
+  .icon-btn.ringing {
+    background: var(--error);
+    animation: pulse 1s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+
+  /* ===== TIMER ===== */
+  .timer-display {
+    font-size: 48px;
+    font-weight: 800;
+    text-align: center;
+    color: var(--primary);
+    font-variant-numeric: tabular-nums;
+    font-family: 'SF Mono', Consolas, Monaco, monospace;
+    padding: 20px 0;
+    margin-bottom: 16px;
+    letter-spacing: 2px;
+    background: var(--bg);
+    border-radius: 12px;
+  }
+  .timer-display.running {
+    background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+    animation: timerGlow 2s infinite;
+  }
+  @keyframes timerGlow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.3); }
+    50% { box-shadow: 0 0 0 12px rgba(79, 70, 229, 0); }
+  }
+  .btn-secondary {
+    background: #fff;
+    color: var(--error);
+    border: 2px solid var(--error);
+  }
+  .btn-secondary:hover {
+    background: var(--error);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  /* ===== 24-HOUR TIME INPUT ===== */
+  .time-24 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .time-24 input {
+    width: 80px !important;
+    padding: 10px 12px !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 8px !important;
+    font-size: 18px !important;
+    text-align: center;
+    font-family: 'SF Mono', Consolas, Monaco, monospace;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 0 !important;
+  }
+  .time-24 span {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--muted);
+  }
+
+
+  /* ===== ALARM LIST ===== */
+  .alarm-list {
+    list-style: none;
+    margin-top: 16px;
+    max-height: 220px;
+    overflow-y: auto;
+  }
+  .alarm-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: var(--bg);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  .alarm-list li.active {
+    background: #eef2ff;
+    border-left: 3px solid var(--primary);
+  }
+  .alarm-list .alarm-time {
+    font-weight: 700;
+    color: var(--primary);
+    font-variant-numeric: tabular-nums;
+    font-family: 'SF Mono', Consolas, Monaco, monospace;
+  }
+  .alarm-list .alarm-label {
+    color: var(--muted);
+    font-size: 12px;
+    margin-left: 8px;
+  }
+  .alarm-list .alarm-del {
+    background: none;
+    border: none;
+    color: var(--error);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0 6px;
+  }
+
+  /* ===== MOBILE ===== */
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 26px; }
+    .tools-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 14px 40px; }
+    .tool-card { padding: 16px 10px; }
+    .tool-icon { font-size: 26px; }
+    .tool-card h3 { font-size: 13px; }
+    header { padding: 12px 16px; }
+    .lv-clock { min-width: 76px; padding: 3px 8px; }
+    .clock-time { font-size: 13px; }
+    .icon-btn { width: 34px; height: 34px; font-size: 16px; }
+    .timer-display { font-size: 38px; }
+    .header-right { gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== ЭКРАН БЛОКИРОВКИ ===== -->
+<div class="lock-screen" id="lockScreen">
+  <div class="lock-box">
+    <h1 data-i18n="lock.title">🔒 Access Required</h1>
+    <p data-i18n="lock.subtitle">Enter password to continue</p>
+    <input type="password" id="lockPassword" placeholder="Password">
+    <button class="btn" id="lockBtn" data-i18n="lock.button">Unlock</button>
+    <div class="status-msg err hidden" id="lockError" data-i18n="lock.error">Wrong password</div>
+  </div>
+</div>
+
+<!-- ===== ШАПКА С ЧАСАМИ ===== -->
+<header>
+  <div class="logo" onclick="location.reload()">
+    <div class="logo-icon">📄</div>
+    <span>PDFNest</span>
+  </div>
+  <div class="header-right">
+    <div class="lv-clock" id="lvClock" title="Rīga / Latvia">
+      <span class="clock-city">🇱🇻 Rīga</span>
+      <span class="clock-time" id="lvTime">00:00:00</span>
+    </div>
+    <button class="icon-btn" id="timerBtn" title="Timer / Таймер">⏱️</button>
+    <button class="icon-btn" id="alarmBtn" title="Alarm / Будильник">🔔</button>
+    <div class="lang-switch">
+      <button data-lang="en" class="active">EN</button>
+      <button data-lang="ru">RU</button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== ЗАГОЛОВОК ===== -->
+<section class="hero">
+  <h1 data-i18n="hero.title">All Your PDF Tools in One Place</h1>
+  <p data-i18n="hero.subtitle">Merge, convert, compress, and manage PDFs — free, fast, and 100% private. Your files never leave your device.</p>
+</section>
+
+<!-- ===== СЕТКА ИНСТРУМЕНТОВ ===== -->
+<div class="tools-grid" id="toolsGrid"></div>
+
+<!-- ===== ПОДВАЛ ===== -->
+<footer>
+  <span data-i18n="footer.text">Made with ❤️ — All processing happens in your browser</span>
+</footer>
+
+<!-- ===== МОДАЛКА ИНСТРУМЕНТОВ ===== -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2 id="modalTitle">Tool</h2>
+    <p class="desc" id="modalDesc"></p>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- ===== МОДАЛКА ТАЙМЕРА ===== -->
+<div class="modal-overlay" id="timerOverlay">
+  <div class="modal" style="max-width: 420px;">
+    <button class="modal-close" onclick="closeTimerModal()">✕</button>
+    <h2 id="timerTitle">⏱️ Timer</h2>
+    <p class="desc" id="timerDesc">Set a countdown. Browser will play a sound when it ends.</p>
+
+    <div class="timer-display" id="timerDisplay">00:00:00</div>
+
+    <div class="options">
+      <label id="timerLabelH">Hours</label>
+      <input type="number" id="timerH" value="0" min="0" max="23">
+      <label id="timerLabelM">Minutes</label>
+      <input type="number" id="timerM" value="5" min="0" max="59">
+      <label id="timerLabelS">Seconds</label>
+      <input type="number" id="timerS" value="0" min="0" max="59">
+    </div>
+
+    <button class="btn" id="timerStartBtn">▶ Start</button>
+    <button class="btn btn-secondary" id="timerStopBtn" style="display:none; margin-top:8px;">⏹ Stop</button>
+    <div class="status-msg hidden" id="timerStatus"></div>
+  </div>
+</div>
+
+<!-- ===== МОДАЛКА БУДИЛЬНИКА ===== -->
+<div class="modal-overlay" id="alarmOverlay">
+  <div class="modal" style="max-width: 420px;">
+    <button class="modal-close" onclick="closeAlarmModal()">✕</button>
+    <h2 id="alarmTitle">🔔 Alarm</h2>
+    <p class="desc" id="alarmDesc">Set a time — the browser will ring while the tab is open.</p>
+
+    <div class="options">
+      <label id="alarmLabelTime">Alarm time (Rīga, 24h)</label>
+      <div class="time-24">
+        <input type="number" id="alarmHour" value="7" min="0" max="23" placeholder="HH">
+        <span>:</span>
+        <input type="number" id="alarmMinute" value="0" min="0" max="59" placeholder="MM">
+      </div>
+      <label id="alarmLabelLabel">Label (optional)</label>
+      <input type="text" id="alarmLabel" placeholder="Wake up!">
+    </div>
+
+    <button class="btn" id="alarmSetBtn">🔔 Set Alarm</button>
+    <div class="status-msg hidden" id="alarmStatus"></div>
+
+    <ul class="alarm-list" id="alarmList"></ul>
+  </div>
+</div>
+
+<script>
+/* ==========================================================
+   🔐 ПАРОЛЬ — ИЗМЕНИТЕ ЗДЕСЬ
+   ========================================================== */
+const PASSWORD = "Bucher";
+
+/* ==========================================================
+   ПЕРЕВОДЫ
+   ========================================================== */
+const translations = {
+  en: {
+    "lock.title": "🔒 Access Required",
+    "lock.subtitle": "Enter password to continue",
+    "lock.button": "Unlock",
+    "lock.error": "Wrong password",
+    "hero.title": "All Your PDF Tools in One Place",
+    "hero.subtitle": "Merge, convert, compress, and manage PDFs — free, fast, and 100% private. Your files never leave your device.",
+    "footer.text": "Made with ❤️ — All processing happens in your browser",
+    "common.drop": "Drop files here or click to browse",
+    "common.run": "Run",
+    "common.processing": "Processing...",
+    "common.done": "Done! File downloaded.",
+    "common.error": "Error: ",
+    "tool.merge.name": "Merge PDF",
+    "tool.merge.desc": "Combine multiple PDFs into one file, in the order you choose.",
+    "tool.split.name": "Split PDF",
+    "tool.split.desc": "Extract a page range into a new PDF.",
+    "tool.compress.name": "Compress PDF",
+    "tool.compress.desc": "Reduce PDF file size (basic compression).",
+    "tool.rotate.name": "Rotate PDF",
+    "tool.rotate.desc": "Rotate all pages by 90°, 180° or 270°.",
+    "tool.extract.name": "Extract Pages",
+    "tool.extract.desc": "Pull selected pages into a separate PDF.",
+    "tool.watermark.name": "Add Watermark",
+    "tool.watermark.desc": "Stamp text on every page.",
+    "tool.pagenum.name": "Page Numbers",
+    "tool.pagenum.desc": "Add page numbers to the bottom of each page.",
+    "tool.excel2pdf.name": "Excel → PDF",
+    "tool.excel2pdf.desc": "Convert an Excel file (.xlsx/.xls) into a clean PDF table.",
+    "tool.pdf2excel.name": "PDF → Excel",
+    "tool.pdf2excel.desc": "Extract text from a PDF into an Excel file.",
+    "tool.word2pdf.name": "Word → PDF",
+    "tool.word2pdf.desc": "Convert .docx into PDF (text-based).",
+    "tool.img2pdf.name": "Images → PDF",
+    "tool.img2pdf.desc": "Combine JPG/PNG images into a single PDF.",
+    "tool.protect.name": "Protect PDF",
+    "tool.protect.desc": "Add password protection to a PDF.",
+    "tool.metadata.name": "Edit Metadata",
+    "tool.metadata.desc": "Change title, author and subject of a PDF.",
+    "opt.range": "Page range (e.g. 1-3,5)",
+    "opt.angle": "Angle",
+    "opt.text": "Watermark text",
+    "opt.opacity": "Opacity (0.1 – 1)",
+    "opt.position": "Position",
+    "opt.password": "Password",
+    "opt.title": "Title",
+    "opt.author": "Author",
+    "opt.subject": "Subject",
+    "timer.title": "⏱️ Timer",
+    "timer.desc": "Set a countdown. Browser will play a sound when it ends.",
+    "timer.hours": "Hours",
+    "timer.minutes": "Minutes",
+    "timer.seconds": "Seconds",
+    "timer.start": "▶ Start",
+    "timer.stop": "⏹ Stop",
+    "timer.finished": "⏰ Time's up!",
+    "alarm.title": "🔔 Alarm",
+    "alarm.desc": "Set a time — the browser will ring while the tab is open.",
+    "alarm.timeLabel": "Alarm time (Rīga)",
+    "alarm.labelLabel": "Label (optional)",
+    "alarm.set": "🔔 Set Alarm",
+    "alarm.added": "Alarm set for",
+    "alarm.needTime": "Please choose a time",
+    "alarm.ringing": "🔔 Alarm!"
+  },
+  ru: {
+    "lock.title": "🔒 Требуется доступ",
+    "lock.subtitle": "Введите пароль для продолжения",
+    "lock.button": "Войти",
+    "lock.error": "Неверный пароль",
+    "hero.title": "Все PDF-инструменты в одном месте",
+    "hero.subtitle": "Объединяйте, конвертируйте, сжимайте PDF — бесплатно, быстро и безопасно. Ваши файлы не покидают устройство.",
+    "footer.text": "Сделано с ❤️ — вся обработка происходит в вашем браузере",
+    "common.drop": "Перетащите файлы сюда или нажмите для выбора",
+    "common.run": "Выполнить",
+    "common.processing": "Обработка...",
+    "common.done": "Готово! Файл скачан.",
+    "common.error": "Ошибка: ",
+    "tool.merge.name": "Объединить PDF",
+    "tool.merge.desc": "Соедините несколько PDF в один файл в нужном порядке.",
+    "tool.split.name": "Разделить PDF",
+    "tool.split.desc": "Извлеките диапазон страниц в новый PDF.",
+    "tool.compress.name": "Сжать PDF",
+    "tool.compress.desc": "Уменьшить размер PDF (базовое сжатие).",
+    "tool.rotate.name": "Повернуть PDF",
+    "tool.rotate.desc": "Повернуть все страницы на 90°, 180° или 270°.",
+    "tool.extract.name": "Извлечь страницы",
+    "tool.extract.desc": "Выбрать страницы в отдельный PDF.",
+    "tool.watermark.name": "Водяной знак",
+    "tool.watermark.desc": "Поставить текст на каждой странице.",
+    "tool.pagenum.name": "Номера страниц",
+    "tool.pagenum.desc": "Добавить номера внизу каждой страницы.",
+    "tool.excel2pdf.name": "Excel → PDF",
+    "tool.excel2pdf.desc": "Преобразовать Excel (.xlsx/.xls) в аккуратный PDF.",
+    "tool.pdf2excel.name": "PDF → Excel",
+    "tool.pdf2excel.desc": "Извлечь текст из PDF в Excel-файл.",
+    "tool.word2pdf.name": "Word → PDF",
+    "tool.word2pdf.desc": "Конвертировать .docx в PDF (по тексту).",
+    "tool.img2pdf.name": "Картинки → PDF",
+    "tool.img2pdf.desc": "Объединить JPG/PNG в один PDF.",
+    "tool.protect.name": "Защитить PDF",
+    "tool.protect.desc": "Добавить пароль на PDF.",
+    "tool.metadata.name": "Метаданные",
+    "tool.metadata.desc": "Изменить название, автора и тему PDF.",
+    "opt.range": "Диапазон страниц (например 1-3,5)",
+    "opt.angle": "Угол",
+    "opt.text": "Текст знака",
+    "opt.opacity": "Прозрачность (0.1 – 1)",
+    "opt.position": "Позиция",
+    "opt.password": "Пароль",
+    "opt.title": "Название",
+    "opt.author": "Автор",
+    "opt.subject": "Тема",
+    "timer.title": "⏱️ Таймер",
+    "timer.desc": "Установите обратный отсчёт. По окончании — звук.",
+    "timer.hours": "Часы",
+    "timer.minutes": "Минуты",
+    "timer.seconds": "Секунды",
+    "timer.start": "▶ Старт",
+    "timer.stop": "⏹ Стоп",
+    "timer.finished": "⏰ Время вышло!",
+    "alarm.title": "🔔 Будильник",
+    "alarm.desc": "Установите время — браузер зазвонит, пока вкладка открыта.",
+    "alarm.timeLabel": "Время будильника (Рига)",
+    "alarm.labelLabel": "Название (необязательно)",
+    "alarm.set": "🔔 Поставить будильник",
+    "alarm.added": "Будильник установлен на",
+    "alarm.needTime": "Пожалуйста, выберите время",
+    "alarm.ringing": "🔔 Будильник!"
+  }
+};
+
+let currentLang = "en";
+const t = (key) => translations[currentLang][key] || key;
+
+/* ==========================================================
+   LOCK SCREEN
+   ========================================================== */
+const lockScreen = document.getElementById('lockScreen');
+const lockPassword = document.getElementById('lockPassword');
+const lockBtn = document.getElementById('lockBtn');
+const lockError = document.getElementById('lockError');
+
+function tryUnlock() {
+  if (lockPassword.value === PASSWORD) {
+    lockScreen.classList.add('hidden');
+    sessionStorage.setItem('pdfnest_unlocked', '1');
+  } else {
+    lockError.classList.remove('hidden');
+    lockPassword.value = '';
+    lockPassword.focus();
+  }
+}
+lockBtn.addEventListener('click', tryUnlock);
+lockPassword.addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
+if (sessionStorage.getItem('pdfnest_unlocked') === '1') lockScreen.classList.add('hidden');
+
+/* ==========================================================
+   LANGUAGE
+   ========================================================== */
+function setLang(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (translations[lang][key]) el.textContent = translations[lang][key];
+  });
+  document.querySelectorAll('.lang-switch button').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+  // Обновить заголовки модалок таймера/будильника
+  const timerTitle = document.getElementById('timerTitle');
+  const timerDesc = document.getElementById('timerDesc');
+  const alarmTitle = document.getElementById('alarmTitle');
+  const alarmDesc = document.getElementById('alarmDesc');
+  const timerLabelH = document.getElementById('timerLabelH');
+  const timerLabelM = document.getElementById('timerLabelM');
+  const timerLabelS = document.getElementById('timerLabelS');
+  const alarmLabelTime = document.getElementById('alarmLabelTime');
+  const alarmLabelLabel = document.getElementById('alarmLabelLabel');
+  const timerStartBtn = document.getElementById('timerStartBtn');
+  const timerStopBtn = document.getElementById('timerStopBtn');
+  const alarmSetBtn = document.getElementById('alarmSetBtn');
+  if (timerTitle) timerTitle.textContent = t('timer.title');
+  if (timerDesc) timerDesc.textContent = t('timer.desc');
+  if (alarmTitle) alarmTitle.textContent = t('alarm.title');
+  if (alarmDesc) alarmDesc.textContent = t('alarm.desc');
+  if (timerLabelH) timerLabelH.textContent = t('timer.hours');
+  if (timerLabelM) timerLabelM.textContent = t('timer.minutes');
+  if (timerLabelS) timerLabelS.textContent = t('timer.seconds');
+  if (alarmLabelTime) alarmLabelTime.textContent = t('alarm.timeLabel');
+  if (alarmLabelLabel) alarmLabelLabel.textContent = t('alarm.labelLabel');
+  if (timerStartBtn) timerStartBtn.textContent = t('timer.start');
+  if (timerStopBtn) timerStopBtn.textContent = t('timer.stop');
+  if (alarmSetBtn) alarmSetBtn.textContent = t('alarm.set');
+  renderTools();
+}
+document.querySelectorAll('.lang-switch button').forEach(btn => {
+  btn.addEventListener('click', () => setLang(btn.dataset.lang));
+});
+
+/* ==========================================================
+   TOOLS LIST
+   ========================================================== */
+const TOOLS = [
+  { id: 'merge',     icon: '🔗', needs: 2 },
+  { id: 'split',     icon: '✂️', needs: 1 },
+  { id: 'compress',  icon: '🗜️', needs: 1 },
+  { id: 'rotate',    icon: '🔄', needs: 1 },
+  { id: 'extract',   icon: '📑', needs: 1 },
+  { id: 'watermark', icon: '💧', needs: 1 },
+  { id: 'pagenum',   icon: '🔢', needs: 1 },
+  { id: 'excel2pdf', icon: '📊', needs: 1 },
+  { id: 'pdf2excel', icon: '📈', needs: 1 },
+  { id: 'word2pdf',  icon: '📝', needs: 1 },
+  { id: 'img2pdf',   icon: '🖼️', needs: 1 },
+  { id: 'protect',   icon: '🔐', needs: 1 },
+  { id: 'metadata',  icon: '🏷️', needs: 1 }
+];
+
+function renderTools() {
+  const grid = document.getElementById('toolsGrid');
+  grid.innerHTML = '';
+  TOOLS.forEach(tool => {
+    const card = document.createElement('div');
+    card.className = 'tool-card';
+    card.innerHTML = `<span class="tool-icon">${tool.icon}</span><h3>${t('tool.' + tool.id + '.name')}</h3>`;
+    card.addEventListener('click', () => openTool(tool));
+    grid.appendChild(card);
+  });
+}
+
+/* ==========================================================
+   MODAL (инструменты)
+   ========================================================== */
+const overlay = document.getElementById('modalOverlay');
+const modalTitle = document.getElementById('modalTitle');
+const modalDesc = document.getElementById('modalDesc');
+const modalBody = document.getElementById('modalBody');
+let currentTool = null;
+let currentFiles = [];
+
+function openTool(tool) {
+  currentTool = tool;
+  currentFiles = [];
+  modalTitle.textContent = t('tool.' + tool.id + '.name');
+  modalDesc.textContent = t('tool.' + tool.id + '.desc');
+  modalBody.innerHTML = buildToolForm(tool);
+  overlay.classList.add('active');
+  bindToolEvents(tool);
+}
+function closeModal() {
+  overlay.classList.remove('active');
+  currentTool = null;
+  currentFiles = [];
+}
+overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+
+/* ==========================================================
+   FORM BUILDER
+   ========================================================== */
+function buildToolForm(tool) {
+  let extra = '';
+  if (tool.id === 'split' || tool.id === 'extract') {
+    extra = `<div class="options"><label>${t('opt.range')}</label><input type="text" id="pageRange" placeholder="1-3,5"></div>`;
+  }
+  if (tool.id === 'rotate') {
+    extra = `<div class="options"><label>${t('opt.angle')}</label>
+      <select id="rotateAngle"><option value="90">90°</option><option value="180">180°</option><option value="270">270°</option></select></div>`;
+  }
+  if (tool.id === 'watermark') {
+    extra = `<div class="options">
+      <label>${t('opt.text')}</label><input type="text" id="wmText" value="CONFIDENTIAL">
+      <label>${t('opt.opacity')}</label><input type="number" id="wmOpacity" value="0.3" step="0.1" min="0.1" max="1"></div>`;
+  }
+  if (tool.id === 'pagenum') {
+    extra = `<div class="options"><label>${t('opt.position')}</label>
+      <select id="pnPosition"><option value="bottom-center">↓ center</option><option value="bottom-right">↘ right</option><option value="bottom-left">↙ left</option></select></div>`;
+  }
+  if (tool.id === 'protect') {
+    extra = `<div class="options"><label>${t('opt.password')}</label><input type="text" id="pdfPassword" value=""></div>`;
+  }
+  if (tool.id === 'metadata') {
+    extra = `<div class="options">
+      <label>${t('opt.title')}</label><input type="text" id="metaTitle">
+      <label>${t('opt.author')}</label><input type="text" id="metaAuthor">
+      <label>${t('opt.subject')}</label><input type="text" id="metaSubject"></div>`;
+  }
+
+  const accept = tool.id === 'excel2pdf' ? '.xlsx,.xls'
+              : tool.id === 'word2pdf' ? '.docx'
+              : tool.id === 'img2pdf' ? 'image/*'
+              : tool.id === 'pdf2excel' ? '.pdf'
+              : 'application/pdf';
+  const multiple = (tool.id === 'merge' || tool.id === 'img2pdf') ? 'multiple' : '';
+
+  return `
+    <div class="drop-zone" id="dropZone">
+      <span class="big">📁</span>
+      <span>${t('common.drop')}</span>
+      <input type="file" id="fileInput" accept="${accept}" ${multiple}>
+    </div>
+    <ul class="file-list" id="fileList"></ul>
+    ${extra}
+    <button class="btn" id="runBtn" disabled>${t('common.run')}</button>
+    <div class="status-msg hidden" id="statusMsg"></div>`;
+}
+
+/* ==========================================================
+   EVENTS
+   ========================================================== */
+function bindToolEvents(tool) {
+  const dropZone = document.getElementById('dropZone');
+  const fileInput = document.getElementById('fileInput');
+  const fileList = document.getElementById('fileList');
+  const runBtn = document.getElementById('runBtn');
+  const statusMsg = document.getElementById('statusMsg');
+
+  dropZone.addEventListener('click', () => fileInput.click());
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    addFiles([...e.dataTransfer.files]);
+  });
+  fileInput.addEventListener('change', e => { addFiles([...e.target.files]); fileInput.value = ''; });
+
+  function addFiles(newFiles) {
+    const filtered = newFiles.filter(f => {
+      const n = f.name.toLowerCase();
+      if (tool.id === 'excel2pdf') return n.endsWith('.xlsx') || n.endsWith('.xls');
+      if (tool.id === 'word2pdf')  return n.endsWith('.docx');
+      if (tool.id === 'img2pdf')   return f.type.startsWith('image/');
+      return f.type === 'application/pdf' || n.endsWith('.pdf');
+    });
+    if (tool.id === 'merge' || tool.id === 'img2pdf') currentFiles.push(...filtered);
+    else currentFiles = filtered.slice(0, 1);
+    renderFileList(tool, fileList, runBtn);
+  }
+
+  runBtn.addEventListener('click', () => executeTool(tool, statusMsg));
+}
+
+function renderFileList(tool, fileList, runBtn) {
+  fileList.innerHTML = '';
+  currentFiles.forEach((f, i) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<span>📎 ${f.name}</span>`;
+    const btn = document.createElement('button');
+    btn.className = 'remove';
+    btn.textContent = '×';
+    btn.addEventListener('click', () => {
+      currentFiles.splice(i, 1);
+      renderFileList(tool, fileList, runBtn);
+    });
+    li.appendChild(btn);
+    fileList.appendChild(li);
+  });
+  runBtn.disabled = currentFiles.length < (tool.needs || 1);
+}
+
+function showStatus(el, text, type = 'info') {
+  el.textContent = text;
+  el.className = 'status-msg ' + type;
+}
+
+/* ==========================================================
+   EXECUTE
+   ========================================================== */
+async function executeTool(tool, statusMsg) {
+  const runBtn = document.getElementById('runBtn');
+  runBtn.disabled = true;
+  showStatus(statusMsg, t('common.processing'), 'info');
+  try {
+    switch (tool.id) {
+      case 'merge':     await toolMerge();     break;
+      case 'split':     await toolSplit();     break;
+      case 'compress':  await toolCompress();  break;
+      case 'rotate':    await toolRotate();    break;
+      case 'extract':   await toolExtract();   break;
+      case 'watermark': await toolWatermark(); break;
+      case 'pagenum':   await toolPageNum();   break;
+      case 'excel2pdf': await toolExcel2Pdf(); break;
+      case 'pdf2excel': await toolPdf2Excel(); break;
+      case 'word2pdf':  await toolWord2Pdf();  break;
+      case 'img2pdf':   await toolImg2Pdf();   break;
+      case 'protect':   await toolProtect();   break;
+      case 'metadata':  await toolMetadata();  break;
+    }
+    showStatus(statusMsg, t('common.done'), 'ok');
+  } catch (err) {
+    console.error(err);
+    showStatus(statusMsg, t('common.error') + err.message, 'err');
+  } finally {
+    runBtn.disabled = false;
+  }
+}
+
+/* ==========================================================
+   HELPERS
+   ========================================================== */
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
+function parseRange(str, max) {
+  const pages = new Set();
+  str.split(',').forEach(part => {
+    part = part.trim(); if (!part) return;
+    if (part.includes('-')) {
+      const [a, b] = part.split('-').map(n => parseInt(n, 10));
+      for (let i = a; i <= Math.min(b, max); i++) pages.add(i - 1);
+    } else {
+      const n = parseInt(part, 10);
+      if (n >= 1 && n <= max) pages.add(n - 1);
+    }
+  });
+  return [...pages].sort((a, b) => a - b);
+}
+
+/* ==========================================================
+   PDF TOOLS
+   ========================================================== */
+
+/* ===== MERGE ===== */
+async function toolMerge() {
+  const { PDFDocument } = PDFLib;
+  const merged = await PDFDocument.create();
+  for (const file of currentFiles) {
+    const bytes = await file.arrayBuffer();
+    const pdf = await PDFDocument.load(bytes, { ignoreEncryption: true });
+    const pages = await merged.copyPages(pdf, pdf.getPageIndices());
+    pages.forEach(p => merged.addPage(p));
+  }
+  const out = await merged.save();
+  downloadBlob(new Blob([out], { type: 'application/pdf' }), 'merged.pdf');
+}
+
+/* ===== SPLIT ===== */
+async function toolSplit() {
+  const { PDFDocument } = PDFLib;
+  const rangeStr = document.getElementById('pageRange').value;
+  const src = await PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
+  const total = src.getPageCount();
+  const idx = parseRange(rangeStr, total);
+  if (!idx.length) throw new Error('No valid pages');
+  const out = await PDFDocument.create();
+  const pages = await out.copyPages(src, idx);
+  pages.forEach(p => out.addPage(p));
+  const bytes = await out.save();
+  downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'split.pdf');
+}
+
+/* ===== EXTRACT ===== */
+async function toolExtract() {
+  const { PDFDocument } = PDFLib;
+  const rangeStr = document.getElementById('pageRange').value;
+  const src = await PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
+  const total = src.getPageCount();
+  const idx = parseRange(rangeStr, total);
+  if (!idx.length) throw new Error('No valid pages');
+  const out = await PDFDocument.create();
+  const pages = await out.copyPages(src, idx);
+  pages.forEach(p => out.addPage(p));
+  const bytes = await out.save();
+  downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'extracted.pdf');
+}
+
+/* ===== COMPRESS ===== */
+async function toolCompress() {
+  const { PDFDocument } = PDFLib;
+  const src = await PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
+  const bytes = await src.save({ useObjectStreams: true });
+  downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'compressed.pdf');
+}
+
+/* ===== ROTATE ===== */
+async function toolRotate() {
+  const { PDFDocument, degrees } = PDFLib;
+  const angle = parseInt(document.getElementById('rotateAngle').value, 10);
+  const src = await PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
+  src.getPages().forEach(p => p.setRotation(degrees(angle)));
+  const bytes = await src.save();
+  downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'rotated.pdf');
+}
+
+/* ===== WATERMARK ===== */
+async function toolWatermark() {
+  const { PDFDocument, rgb, degrees, StandardFonts } = PDFLib;
+  const text = document.getElementById('wmText').value || 'CONFIDENTIAL';
+  const opacity = parseFloat(document.getElementById('wmOpacity').value) || 0.3;
+  const src = await PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
+  const font = await src.embedFont(StandardFonts.HelveticaBold);
+  src.getPages().forEach(page => {
+    const { width, height } = page.getSize();
+    page.drawText(text, {
+      x: width / 4,
+      y: height / 2,
+      size: 60,
+      font: font,
+      color: rgb(0.5, 0.5, 0.5),
+      opacity: opacity,
+      rotate: degrees(45)
+    });
+  });
+  const bytes = await src.save();
+  downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'watermarked.pdf');
+}
+
+/* ===== PAGE NUMBERS ===== */
+async function toolPageNum() {
+  const { PDFDocument, rgb, StandardFonts } = PDFLib;
+  const pos = document.getElementById('pnPosition').value;
+  const src = await PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
+  const font = await src.embedFont(StandardFonts.Helvetica);
+  const pages = src.getPages();
+  pages.forEach((page, i) => {
+    const { width } = page.getSize();
+    const label = `${i + 1} / ${pages.length}`;
+    const textWidth = font.widthOfTextAtSize(label, 12);
+    let x = (width - textWidth) / 2;
+    if (pos === 'bottom-right') x = width - textWidth - 40;
+    if (pos === 'bottom-left')  x = 40;
+    page.drawText(label, {
+      x: x,
+      y: 20,
+      size: 12,
+      font: font,
+      color: rgb(0.3, 0.3, 0.3)
+    });
+  });
+  const bytes = await src.save();
+  downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'numbered.pdf');
+}
+
+/* ===== EXCEL → PDF ===== */
+async function toolExcel2Pdf() {
+  const { jsPDF } = window.jspdf;
+  const buffer = await currentFiles[0].arrayBuffer();
+  const workbook = XLSX.read(buffer, { type: 'array' });
+  const doc = new jsPDF({ orientation: 'landscape' });
+  let firstSheet = true;
+  workbook.SheetNames.forEach(sheetName => {
+    const sheet = workbook.Sheets[sheetName];
+    const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+    if (!firstSheet) doc.addPage();
+    firstSheet = false;
+    doc.setFontSize(14);
+    doc.text(sheetName, 14, 14);
+    doc.autoTable({
+      head: rows.length ? [rows[0]] : [],
+      body: rows.slice(1),
+      startY: 20,
+      styles: { fontSize: 9 },
+      headStyles: { fillColor: [79, 70, 229] }
+    });
+  });
+  doc.save('excel.pdf');
+}
+
+/* ===== PDF → EXCEL ===== */
+async function toolPdf2Excel() {
+  const buffer = await currentFiles[0].arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: buffer }).promise;
+  const allRows = [];
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    const lines = {};
+    content.items.forEach(item => {
+      const y = Math.round(item.transform[5]);
+      if (!lines[y]) lines[y] = [];
+      lines[y].push({ x: item.transform[4], text: item.str });
+    });
+    const sortedY = Object.keys(lines).map(Number).sort((a, b) => b - a);
+    sortedY.forEach(y => {
+      lines[y].sort((a, b) => a.x - b.x);
+      const row = lines[y].map(o => o.text).join(' ').trim();
+      if (row) allRows.push([row]);
+    });
+    allRows.push([`--- Page ${i} ---`]);
+  }
+  const ws = XLSX.utils.aoa_to_sheet(allRows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Extracted');
+  XLSX.writeFile(wb, 'extracted.xlsx');
+}
+
+/* ===== WORD → PDF ===== */
+async function toolWord2Pdf() {
+  const { jsPDF } = window.jspdf;
+  const buffer = await currentFiles[0].arrayBuffer();
+  const result = await mammoth.extractRawText({ arrayBuffer: buffer });
+  const text = result.value || '';
+  const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+  doc.setFontSize(11);
+  const margin = 40;
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const maxWidth = pageWidth - margin * 2;
+  const lines = doc.splitTextToSize(text, maxWidth);
+  let y = margin;
+  lines.forEach(line => {
+    if (y > pageHeight - margin) {
+      doc.addPage();
+      y = margin;
+    }
+    doc.text(line, margin, y);
+    y += 16;
+  });
+  doc.save('word.pdf');
+}
+
+/* ===== IMAGES → PDF ===== */
+async function toolImg2Pdf() {
+  const { PDFDocument } = PDFLib;
+  const pdf = await PDFDocument.create();
+  for (const file of currentFiles) {
+    const bytes = await file.arrayBuffer();
+    let img;
+    if (file.type === 'image/png') {
+      img = await pdf.embedPng(bytes);
+    } else {
+      img = await pdf.embedJpg(bytes);
+    }
+    const page = pdf.addPage([img.width, img.height]);
+    page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
+  }
+  const out = await pdf.save();
+  downloadBlob(new Blob([out], { type: 'application/pdf' }), 'images.pdf');
+}
+
+/* ===== PROTECT ===== */
+async function toolProtect() {
+  const { PDFDocument } = PDFLib;
+  const password = document.getElementById('pdfPassword').value;
+  if (!password) throw new Error('Password required');
+  const src = await PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
+  const bytes = await src.save({
+    userPassword: password,
+    ownerPassword: password,
+    permissions: {
+      printing: 'highResolution',
+      modifying: false,
+      copying: false,
+      annotating: false,
+      fillingForms: false,
+      contentAccessibility: true,
+      documentAssembly: false
+    }
+  });
+  downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'protected.pdf');
+}
+
+/* ===== METADATA ===== */
+async function toolMetadata() {
+  const { PDFDocument } = PDFLib;
+  const src = await PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
+  const title = document.getElementById('metaTitle').value;
+  const author = document.getElementById('metaAuthor').value;
+  const subject = document.getElementById('metaSubject').value;
+  if (title) src.setTitle(title);
+  if (author) src.setAuthor(author);
+  if (subject) src.setSubject(subject);
+  const bytes = await src.save();
+  downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'metadata.pdf');
+}
+
+/* ==========================================================
+   🕐 LV CLOCK
+   ========================================================== */
+function updateLvClock() {
+  const now = new Date();
+  const formatted = new Intl.DateTimeFormat('ru-RU', {
+    timeZone: 'Europe/Riga',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  }).format(now);
+  const el = document.getElementById('lvTime');
+  if (el) el.textContent = formatted;
+}
+
+/* ==========================================================
+   ⏱️ TIMER
+   ========================================================== */
+const timerOverlay = document.getElementById('timerOverlay');
+const timerDisplay = document.getElementById('timerDisplay');
+const timerStartBtn = document.getElementById('timerStartBtn');
+const timerStopBtn = document.getElementById('timerStopBtn');
+const timerStatus = document.getElementById('timerStatus');
+let timerInterval = null;
+let timerRemaining = 0;
+
+function openTimerModal() {
+  timerOverlay.classList.add('active');
+  timerDisplay.classList.remove('running');
+}
+function closeTimerModal() {
+  timerOverlay.classList.remove('active');
+}
+timerOverlay.addEventListener('click', e => { if (e.target === timerOverlay) closeTimerModal(); });
+
+function formatHMS(sec) {
+  const h = String(Math.floor(sec / 3600)).padStart(2, '0');
+  const m = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
+  const s = String(sec % 60).padStart(2, '0');
+  return `${h}:${m}:${s}`;
+}
+
+function playBeep() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.value = 880;
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.5);
+    osc.start();
+    osc.stop(ctx.currentTime + 1.5);
+    // 3 звонка
+    let count = 0;
+    const repeat = setInterval(() => {
+      count++;
+      if (count >= 3) { clearInterval(repeat); return; }
+      const o2 = ctx.createOscillator();
+      const g2 = ctx.createGain();
+      o2.connect(g2);
+      g2.connect(ctx.destination);
+      o2.frequency.value = 880;
+      g2.gain.setValueAtTime(0.3, ctx.currentTime);
+      g2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.5);
+      o2.start();
+      o2.stop(ctx.currentTime + 1.5);
+    }, 600);
+  } catch (e) { console.warn('Audio not supported', e); }
+}
+
+function tickTimer() {
+  timerRemaining--;
+  timerDisplay.textContent = formatHMS(timerRemaining);
+  if (timerRemaining <= 0) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+    timerDisplay.classList.remove('running');
+    timerDisplay.textContent = '00:00:00';
+    timerStartBtn.style.display = 'block';
+    timerStopBtn.style.display = 'none';
+    showStatus(timerStatus, t('timer.finished'), 'ok');
+    playBeep();
+    // Мигание заголовка
+    let blink = 0;
+    const origTitle = document.title;
+    const blinkInt = setInterval(() => {
+      document.title = blink % 2 === 0 ? '⏰ TIME UP!' : origTitle;
+      blink++;
+      if (blink >= 10) { clearInterval(blinkInt); document.title = origTitle; }
+    }, 700);
+  }
+}
+
+timerStartBtn.addEventListener('click', () => {
+  const h = parseInt(document.getElementById('timerH').value, 10) || 0;
+  const m = parseInt(document.getElementById('timerM').value, 10) || 0;
+  const s = parseInt(document.getElementById('timerS').value, 10) || 0;
+  const total = h * 3600 + m * 60 + s;
+  if (total <= 0) { showStatus(timerStatus, 'Set time > 0', 'err'); return; }
+  timerRemaining = total;
+  timerDisplay.textContent = formatHMS(timerRemaining);
+  timerDisplay.classList.add('running');
+  showStatus(timerStatus, t('common.processing'), 'info');
+  timerStartBtn.style.display = 'none';
+  timerStopBtn.style.display = 'block';
+  timerInterval = setInterval(tickTimer, 1000);
+});
+
+timerStopBtn.addEventListener('click', () => {
+  clearInterval(timerInterval);
+  timerInterval = null;
+  timerDisplay.classList.remove('running');
+  timerDisplay.textContent = '00:00:00';
+  timerStartBtn.style.display = 'block';
+  timerStopBtn.style.display = 'none';
+  showStatus(timerStatus, '', 'info');
+});
+
+/* ==========================================================
+   🔔 ALARM
+   ========================================================== */
+const alarmOverlay = document.getElementById('alarmOverlay');
+const alarmHour = document.getElementById('alarmHour');
+const alarmMinute = document.getElementById('alarmMinute');
+const alarmLabel = document.getElementById('alarmLabel');
+const alarmSetBtn = document.getElementById('alarmSetBtn');
+const alarmStatus = document.getElementById('alarmStatus');
+const alarmList = document.getElementById('alarmList');
+let alarms = [];
+
+function openAlarmModal() {
+  alarmOverlay.classList.add('active');
+  renderAlarms();
+}
+function closeAlarmModal() {
+  alarmOverlay.classList.remove('active');
+}
+alarmOverlay.addEventListener('click', e => { if (e.target === alarmOverlay) closeAlarmModal(); });
+
+function renderAlarms() {
+  alarmList.innerHTML = '';
+  alarms.forEach((alarm, i) => {
+    const li = document.createElement('li');
+    if (alarm.active) li.classList.add('active');
+    li.innerHTML = `
+      <span><span class="alarm-time">${alarm.time}</span>
+      <span class="alarm-label">${alarm.label || ''}</span></span>
+    `;
+    const del = document.createElement('button');
+    del.className = 'alarm-del';
+    del.textContent = '×';
+    del.addEventListener('click', () => {
+      alarms.splice(i, 1);
+      renderAlarms();
+    });
+    li.appendChild(del);
+    alarmList.appendChild(li);
+  });
+}
+
+alarmSetBtn.addEventListener('click', () => {
+  const h = parseInt(document.getElementById('alarmHour').value, 10);
+  const m = parseInt(document.getElementById('alarmMinute').value, 10);
+  if (isNaN(h) || isNaN(m) || h < 0 || h > 23 || m < 0 || m > 59) {
+    showStatus(alarmStatus, t('alarm.needTime'), 'err');
+    return;
+  }
+  const time = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+  alarms.push({ time, label: alarmLabel.value || '', active: true, fired: false });
+  showStatus(alarmStatus, t('alarm.added') + ' ' + time, 'ok');
+  alarmLabel.value = '';
+  renderAlarms();
+});
+
+function checkAlarms() {
+  const now = new Date();
+  const lvTime = new Intl.DateTimeFormat('ru-RU', {
+    timeZone: 'Europe/Riga',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  }).format(now);
+  alarms.forEach(alarm => {
+    if (!alarm.fired && alarm.active && alarm.time === lvTime) {
+      alarm.fired = true;
+      alarm.active = false;
+      playBeep();
+      const msg = `🔔 ${t('alarm.ringing')} ${alarm.label || alarm.time}`;
+      alert(msg);
+      renderAlarms();
+      // Мигание кнопки будильника
+      const alarmBtn = document.getElementById('alarmBtn');
+      alarmBtn.classList.add('ringing');
+      setTimeout(() => alarmBtn.classList.remove('ringing'), 5000);
+    }
+  });
+}
+
+/* ==========================================================
+   BUTTONS — Часы, Таймер, Будильник
+   ========================================================== */
+document.getElementById('timerBtn').addEventListener('click', openTimerModal);
+document.getElementById('alarmBtn').addEventListener('click', openAlarmModal);
+
+/* ==========================================================
+   INIT
+   ========================================================== */
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+// Запуск часов
+updateLvClock();
+setInterval(updateLvClock, 1000);
+// Проверка будильников каждые 15 секунд
+setInterval(checkAlarms, 15000);
+
+renderTools();
+</script>
+</body>
+</html>
