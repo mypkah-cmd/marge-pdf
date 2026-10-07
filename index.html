@@ -433,7 +433,7 @@
   body.dark .status-msg.err { background: #7f1d1d; color: #fecaca; }
   body.dark .status-msg.info { background: #1e1b4b; color: #a5b4fc; }
 
-  /* ===== CURRENCY WIDGET ===== */
+  /* ===== CURRENCY BAR ===== */
   .currency-bar {
     display: flex;
     align-items: center;
@@ -456,8 +456,8 @@
   .currency-item {
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
+    gap: 8px;
+    padding: 6px 14px;
     background: var(--bg);
     border-radius: 8px;
     font-variant-numeric: tabular-nums;
@@ -472,17 +472,6 @@
     font-weight: 600;
     color: var(--text);
     font-family: 'SF Mono', Consolas, Monaco, monospace;
-  }
-  .currency-change {
-    font-size: 11px;
-    font-weight: 600;
-  }
-  .currency-change.up { color: #10b981; }
-  .currency-change.down { color: #ef4444; }
-  .currency-updated {
-    margin-left: auto;
-    color: var(--muted);
-    font-size: 11px;
   }
 
   /* ===== REMOVE PAGES LIST ===== */
@@ -638,6 +627,63 @@
     padding: 0 12px;
   }
 
+  /* ===== SAVE CHOICE MODAL ===== */
+  .save-choice-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .save-choice-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s;
+    width: 100%;
+    font-family: inherit;
+    color: var(--text);
+  }
+  .save-choice-item:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.15);
+  }
+  .save-choice-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+  .save-choice-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .save-choice-text strong {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .save-choice-text small {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* ===== FOOTER KOT ===== */
+  .footer-copy {
+    display: inline-block;
+    margin-top: 8px;
+    font-weight: 600;
+    color: var(--primary);
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+
   /* ===== MOBILE ===== */
   @media (max-width: 700px) {
     .hero h1 { font-size: 26px; }
@@ -692,24 +738,23 @@
 
 <!-- ===== КУРС ВАЛЮТ ===== -->
 <div class="currency-bar" id="currencyBar">
-  <span class="currency-title" data-i18n="currency.title">Курс валют:</span>
+  <span class="currency-title" data-i18n="currency.title">Currency rates:</span>
   <div class="currency-item">
-    <span class="currency-code">EUR/LVL</span>
-    <span class="currency-value" id="curEUR">—</span>
+    <span class="currency-code">EUR</span>
+    <span class="currency-value" id="curEUR">1.0000</span>
   </div>
   <div class="currency-item">
-    <span class="currency-code">USD/RUB</span>
+    <span class="currency-code">USD</span>
     <span class="currency-value" id="curUSD">—</span>
   </div>
   <div class="currency-item">
-    <span class="currency-code">EUR/RUB</span>
-    <span class="currency-value" id="curEURRUB">—</span>
+    <span class="currency-code">RUB</span>
+    <span class="currency-value" id="curRUB">—</span>
   </div>
   <div class="currency-item">
-    <span class="currency-code">USD/EUR</span>
-    <span class="currency-value" id="curUSDEUR">—</span>
+    <span class="currency-code">LVL</span>
+    <span class="currency-value" id="curLVL">0.702804</span>
   </div>
-  <span class="currency-updated" id="currencyUpdated"></span>
 </div>
 
 <!-- ===== ЗАГОЛОВОК ===== -->
@@ -724,6 +769,8 @@
 <!-- ===== ПОДВАЛ ===== -->
 <footer>
   <span data-i18n="footer.text">Made with ❤️ — All processing happens in your browser</span>
+  <br>
+  <span class="footer-copy">© KoT — All rights reserved</span>
 </footer>
 
 <!-- ===== МОДАЛКА ИНСТРУМЕНТОВ ===== -->
@@ -784,7 +831,7 @@
   <div class="modal" style="max-width: 640px;">
     <button class="modal-close" onclick="closeRemovePages()">✕</button>
     <h2 id="removePagesTitle">🗑️ Remove Pages</h2>
-    <p class="desc" id="removePagesDesc">Click on pages you want to delete. Selected pages will be removed.</p>
+    <p class="desc" id="removePagesDesc">Click on pages you want to delete.</p>
     <div class="drop-zone" id="rpDropZone">
       <span class="big">📁</span>
       <span id="rpDropText">Drop a PDF here or click to browse</span>
@@ -799,7 +846,7 @@
   </div>
 </div>
 
-<!-- ===== МОДАЛКА РИСОВАНИЯ (PDF Editor) ===== -->
+<!-- ===== МОДАЛКА РИСОВАНИЯ ===== -->
 <div class="modal-overlay" id="editorOverlay">
   <div class="modal editor-wrapper">
     <button class="modal-close" onclick="closeEditor()">✕</button>
@@ -814,10 +861,10 @@
 
     <div id="editorContent" class="hidden">
       <div class="editor-toolbar">
-        <button class="tool-btn active" data-tool="pen" title="Карандаш / Pen">✏️</button>
-        <button class="tool-btn" data-tool="rect" title="Прямоугольник / Rectangle">▭</button>
-        <button class="tool-btn" data-tool="arrow" title="Стрелка / Arrow">➜</button>
-        <button class="tool-btn" data-tool="text" title="Текст / Text">T</button>
+        <button class="tool-btn active" data-tool="pen" title="Pen">✏️</button>
+        <button class="tool-btn" data-tool="rect" title="Rectangle">▭</button>
+        <button class="tool-btn" data-tool="arrow" title="Arrow">➜</button>
+        <button class="tool-btn" data-tool="text" title="Text">T</button>
         <div class="tool-divider"></div>
         <div class="color-swatch active" data-color="#ef4444" style="background:#ef4444"></div>
         <div class="color-swatch" data-color="#4f46e5" style="background:#4f46e5"></div>
@@ -825,8 +872,8 @@
         <div class="color-swatch" data-color="#f59e0b" style="background:#f59e0b"></div>
         <div class="color-swatch" data-color="#000000" style="background:#000000"></div>
         <div class="tool-divider"></div>
-        <button class="tool-btn" id="editorUndo" title="Отменить / Undo">↶</button>
-        <button class="tool-btn" id="editorClear" title="Очистить / Clear">🗑️</button>
+        <button class="tool-btn" id="editorUndo" title="Undo">↶</button>
+        <button class="tool-btn" id="editorClear" title="Clear">🗑️</button>
       </div>
 
       <div class="editor-canvas-wrap">
@@ -842,6 +889,35 @@
       <button class="btn" id="editorSave" style="margin-top:12px;">💾 Save & Download</button>
     </div>
     <div class="status-msg hidden" id="editorStatus"></div>
+  </div>
+</div>
+
+<!-- ===== МОДАЛКА ВЫБОРА СОХРАНЕНИЯ ===== -->
+<div class="modal-overlay" id="saveChoiceOverlay">
+  <div class="modal" style="max-width: 480px;">
+    <button class="modal-close" onclick="closeSaveChoice()">✕</button>
+    <h2 id="saveChoiceTitle">💾 Save PDF</h2>
+    <p class="desc" id="saveChoiceDesc">Choose how you want to save your edited PDF.</p>
+
+    <div class="save-choice-list">
+      <button class="save-choice-item" id="saveVectorBtn">
+        <span class="save-choice-icon">🟢</span>
+        <div class="save-choice-text">
+          <strong id="saveVectorTitle">Save with text</strong>
+          <small id="saveVectorDesc">Text stays copyable. File is smaller. Fast.</small>
+        </div>
+      </button>
+
+      <button class="save-choice-item" id="saveRasterBtn">
+        <span class="save-choice-icon">🔴</span>
+        <div class="save-choice-text">
+          <strong id="saveRasterTitle">Save as image</strong>
+          <small id="saveRasterDesc">Exact look. Text becomes part of the image.</small>
+        </div>
+      </button>
+    </div>
+
+    <div class="status-msg hidden" id="saveChoiceStatus"></div>
   </div>
 </div>
 
@@ -925,7 +1001,7 @@ const translations = {
     "alarm.needTime": "Please choose a valid time",
     "alarm.ringing": "🔔 Alarm!",
     "rp.title": "🗑️ Remove Pages",
-    "rp.desc": "Click on pages you want to delete. Selected pages will be removed.",
+    "rp.desc": "Click on pages you want to delete.",
     "rp.drop": "Drop a PDF here or click to browse",
     "rp.hint": "Click pages to select them for deletion",
     "rp.run": "🗑️ Delete Selected & Download",
@@ -934,7 +1010,14 @@ const translations = {
     "editor.title": "✏️ Edit PDF",
     "editor.desc": "Draw, add shapes and arrows directly on your PDF, then save.",
     "editor.save": "💾 Save & Download",
-    "editor.saved": "Done! File downloaded."
+    "editor.saved": "Done! File downloaded.",
+    "editor.textPrompt": "Text:",
+    "saveChoice.title": "💾 Save PDF",
+    "saveChoice.desc": "Choose how you want to save your edited PDF.",
+    "saveChoice.vectorTitle": "Save with text",
+    "saveChoice.vectorDesc": "Text stays copyable. File is smaller. Fast.",
+    "saveChoice.rasterTitle": "Save as image",
+    "saveChoice.rasterDesc": "Exact look. Text becomes part of the image."
   },
   ru: {
     "lock.title": "🔒 Требуется доступ",
@@ -1006,7 +1089,7 @@ const translations = {
     "alarm.needTime": "Пожалуйста, введите корректное время",
     "alarm.ringing": "🔔 Будильник!",
     "rp.title": "🗑️ Удалить страницы",
-    "rp.desc": "Нажмите на страницы, которые хотите удалить. Выбранные страницы будут удалены.",
+    "rp.desc": "Нажмите на страницы, которые хотите удалить.",
     "rp.drop": "Перетащите PDF сюда или нажмите для выбора",
     "rp.hint": "Нажмите на страницы, чтобы отметить их для удаления",
     "rp.run": "🗑️ Удалить выбранные и скачать",
@@ -1015,7 +1098,14 @@ const translations = {
     "editor.title": "✏️ Редактор PDF",
     "editor.desc": "Рисуйте, добавляйте фигуры и стрелки прямо на PDF, потом сохраните.",
     "editor.save": "💾 Сохранить и скачать",
-    "editor.saved": "Готово! Файл скачан."
+    "editor.saved": "Готово! Файл скачан.",
+    "editor.textPrompt": "Текст:",
+    "saveChoice.title": "💾 Сохранить PDF",
+    "saveChoice.desc": "Выберите способ сохранения отредактированного PDF.",
+    "saveChoice.vectorTitle": "Сохранить с текстом",
+    "saveChoice.vectorDesc": "Текст остаётся копируемым. Файл меньше. Быстро.",
+    "saveChoice.rasterTitle": "Сохранить как картинку",
+    "saveChoice.rasterDesc": "Точное соответствие. Текст становится частью картинки."
   }
 };
 
@@ -1057,7 +1147,6 @@ function setLang(lang) {
   document.querySelectorAll('.lang-switch button').forEach(b => {
     b.classList.toggle('active', b.dataset.lang === lang);
   });
-  // Модалки таймера/будильника
   document.getElementById('timerTitle').textContent = t('timer.title');
   document.getElementById('timerDesc').textContent = t('timer.desc');
   document.getElementById('timerLabelH').textContent = t('timer.hours');
@@ -1070,17 +1159,21 @@ function setLang(lang) {
   document.getElementById('alarmLabelTime').textContent = t('alarm.timeLabel');
   document.getElementById('alarmLabelLabel').textContent = t('alarm.labelLabel');
   document.getElementById('alarmSetBtn').textContent = t('alarm.set');
-  // Модалка удаления страниц
   document.getElementById('removePagesTitle').textContent = t('rp.title');
   document.getElementById('removePagesDesc').textContent = t('rp.desc');
   document.getElementById('rpDropText').textContent = t('rp.drop');
   document.getElementById('rpHint').textContent = t('rp.hint');
   document.getElementById('rpRunBtn').textContent = t('rp.run');
-  // Модалка редактора
   document.getElementById('editorTitle').textContent = t('editor.title');
   document.getElementById('editorDesc').textContent = t('editor.desc');
   document.getElementById('editorDropText').textContent = t('common.drop');
   document.getElementById('editorSave').textContent = t('editor.save');
+  document.getElementById('saveChoiceTitle').textContent = t('saveChoice.title');
+  document.getElementById('saveChoiceDesc').textContent = t('saveChoice.desc');
+  document.getElementById('saveVectorTitle').textContent = t('saveChoice.vectorTitle');
+  document.getElementById('saveVectorDesc').textContent = t('saveChoice.vectorDesc');
+  document.getElementById('saveRasterTitle').textContent = t('saveChoice.rasterTitle');
+  document.getElementById('saveRasterDesc').textContent = t('saveChoice.rasterDesc');
   renderTools();
 }
 document.querySelectorAll('.lang-switch button').forEach(btn => {
@@ -1320,7 +1413,6 @@ function parseRange(str, max) {
    PDF TOOLS
    ========================================================== */
 
-/* ===== MERGE ===== */
 async function toolMerge() {
   const { PDFDocument } = PDFLib;
   const merged = await PDFDocument.create();
@@ -1334,7 +1426,6 @@ async function toolMerge() {
   downloadBlob(new Blob([out], { type: 'application/pdf' }), 'merged.pdf');
 }
 
-/* ===== SPLIT ===== */
 async function toolSplit() {
   const { PDFDocument } = PDFLib;
   const rangeStr = document.getElementById('pageRange').value;
@@ -1349,7 +1440,6 @@ async function toolSplit() {
   downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'split.pdf');
 }
 
-/* ===== EXTRACT ===== */
 async function toolExtract() {
   const { PDFDocument } = PDFLib;
   const rangeStr = document.getElementById('pageRange').value;
@@ -1364,7 +1454,6 @@ async function toolExtract() {
   downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'extracted.pdf');
 }
 
-/* ===== COMPRESS ===== */
 async function toolCompress() {
   const { PDFDocument } = PDFLib;
   const src = await PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
@@ -1372,7 +1461,6 @@ async function toolCompress() {
   downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'compressed.pdf');
 }
 
-/* ===== ROTATE ===== */
 async function toolRotate() {
   const { PDFDocument, degrees } = PDFLib;
   const angle = parseInt(document.getElementById('rotateAngle').value, 10);
@@ -1382,7 +1470,6 @@ async function toolRotate() {
   downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'rotated.pdf');
 }
 
-/* ===== WATERMARK ===== */
 async function toolWatermark() {
   const { PDFDocument, rgb, degrees, StandardFonts } = PDFLib;
   const text = document.getElementById('wmText').value || 'CONFIDENTIAL';
@@ -1400,7 +1487,6 @@ async function toolWatermark() {
   downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'watermarked.pdf');
 }
 
-/* ===== PAGE NUMBERS ===== */
 async function toolPageNum() {
   const { PDFDocument, rgb, StandardFonts } = PDFLib;
   const pos = document.getElementById('pnPosition').value;
@@ -1420,7 +1506,6 @@ async function toolPageNum() {
   downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'numbered.pdf');
 }
 
-/* ===== EXCEL → PDF ===== */
 async function toolExcel2Pdf() {
   const { jsPDF } = window.jspdf;
   const buffer = await currentFiles[0].arrayBuffer();
@@ -1444,7 +1529,6 @@ async function toolExcel2Pdf() {
   doc.save('excel.pdf');
 }
 
-/* ===== PDF → EXCEL ===== */
 async function toolPdf2Excel() {
   const buffer = await currentFiles[0].arrayBuffer();
   const pdf = await pdfjsLib.getDocument({ data: buffer }).promise;
@@ -1472,7 +1556,6 @@ async function toolPdf2Excel() {
   XLSX.writeFile(wb, 'extracted.xlsx');
 }
 
-/* ===== WORD → PDF ===== */
 async function toolWord2Pdf() {
   const { jsPDF } = window.jspdf;
   const buffer = await currentFiles[0].arrayBuffer();
@@ -1494,7 +1577,6 @@ async function toolWord2Pdf() {
   doc.save('word.pdf');
 }
 
-/* ===== IMAGES → PDF ===== */
 async function toolImg2Pdf() {
   const { PDFDocument } = PDFLib;
   const pdf = await PDFDocument.create();
@@ -1510,7 +1592,6 @@ async function toolImg2Pdf() {
   downloadBlob(new Blob([out], { type: 'application/pdf' }), 'images.pdf');
 }
 
-/* ===== PROTECT ===== */
 async function toolProtect() {
   const { PDFDocument } = PDFLib;
   const password = document.getElementById('pdfPassword').value;
@@ -1528,7 +1609,6 @@ async function toolProtect() {
   downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'protected.pdf');
 }
 
-/* ===== METADATA ===== */
 async function toolMetadata() {
   const { PDFDocument } = PDFLib;
   const src = await PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
@@ -1568,45 +1648,6 @@ themeBtn.addEventListener('click', () => {
   applyTheme(!document.body.classList.contains('dark'));
 });
 if (localStorage.getItem('pdfnest_theme') === 'dark') applyTheme(true);
-
-/* ==========================================================
-   💱 CURRENCY RATES
-   ========================================================== */
-// LVL больше не используется в Латвии (заменён на EUR в 2014), но оставим для истории:
-// 1 EUR = 0.702804 LVL (фиксированный исторический курс)
-const EUR_LVL_FIXED = 0.702804;
-
-async function loadCurrencies() {
-  try {
-    // Используем бесплатный API (open.er-api.com — без ключа)
-    const res = await fetch('https://open.er-api.com/v6/latest/EUR');
-    const data = await res.json();
-    const rates = data.rates;
-
-    const usd = rates.USD;        // USD за 1 EUR
-    const rub = rates.RUB;        // RUB за 1 EUR
-    const eurPerUsd = 1 / usd;    // EUR за 1 USD
-
-    document.getElementById('curEUR').textContent = EUR_LVL_FIXED.toFixed(6);
-    document.getElementById('curUSD').textContent = (rub).toFixed(2);       // USD/RUB — через EUR
-    document.getElementById('curEURRUB').textContent = rub.toFixed(2);
-    document.getElementById('curUSDEUR').textContent = eurPerUsd.toFixed(4);
-
-    // Исправляем USD/RUB — считаем через EUR
-    // 1 USD = (1/usd) EUR = (1/usd) * rub RUB
-    const usdRub = (1 / usd) * rub;
-    document.getElementById('curUSD').textContent = usdRub.toFixed(2);
-
-    const now = new Date();
-    const timeStr = now.toLocaleTimeString(currentLang === 'ru' ? 'ru-RU' : 'en-GB', {
-      hour: '2-digit', minute: '2-digit'
-    });
-    document.getElementById('currencyUpdated').textContent = '· ' + timeStr;
-  } catch (err) {
-    console.warn('Currency API error:', err);
-    document.getElementById('currencyUpdated').textContent = '· offline';
-  }
-}
 
 /* ==========================================================
    ⏱️ TIMER
@@ -1781,14 +1822,12 @@ const rpContent = document.getElementById('rpContent');
 const rpGrid = document.getElementById('rpGrid');
 const rpRunBtn = document.getElementById('rpRunBtn');
 const rpStatus = document.getElementById('rpStatus');
-let rpFile = null;
 let rpPdfDoc = null;
 let rpTotalPages = 0;
 let rpSelected = new Set();
 
 function openRemovePages() {
   removePagesOverlay.classList.add('active');
-  rpFile = null;
   rpPdfDoc = null;
   rpSelected = new Set();
   rpContent.classList.add('hidden');
@@ -1816,7 +1855,6 @@ rpFileInput.addEventListener('change', async e => {
 
 async function loadRpPdf(file) {
   const { PDFDocument } = PDFLib;
-  rpFile = file;
   rpPdfDoc = await PDFDocument.load(await file.arrayBuffer(), { ignoreEncryption: true });
   rpTotalPages = rpPdfDoc.getPageCount();
   rpSelected = new Set();
@@ -1870,7 +1908,45 @@ document.getElementById('timerBtn').addEventListener('click', openTimerModal);
 document.getElementById('alarmBtn').addEventListener('click', openAlarmModal);
 
 /* ==========================================================
-   ✏️ PDF EDITOR (рисование на PDF)
+   💱 CURRENCY RATES
+   Значения показывают: сколько EUR стоит 1 единица валюты
+   ========================================================== */
+const LVL_TO_EUR = 1 / 0.702804; // ≈ 1.42287
+
+async function loadCurrencies() {
+  try {
+    const res = await fetch('https://open.er-api.com/v6/latest/EUR');
+    const data = await res.json();
+    const rates = data.rates;
+
+    // EUR — базовая
+    document.getElementById('curEUR').textContent = '1.0000';
+
+    // USD: сколько EUR за 1 USD
+    const usdPerEur = rates.USD;
+    document.getElementById('curUSD').textContent = (1 / usdPerEur).toFixed(4);
+
+    // RUB: сколько EUR за 1 RUB
+    const rubPerEur = rates.RUB;
+    document.getElementById('curRUB').textContent = (1 / rubPerEur).toFixed(5);
+
+    // LVL — фиксированный исторический курс
+    document.getElementById('curLVL').textContent = LVL_TO_EUR.toFixed(5);
+
+  } catch (err) {
+    console.warn('Currency API error:', err);
+    document.getElementById('curEUR').textContent = '1.0000';
+    document.getElementById('curUSD').textContent = '—';
+    document.getElementById('curRUB').textContent = '—';
+    document.getElementById('curLVL').textContent = LVL_TO_EUR.toFixed(5);
+  }
+}
+
+/* ==========================================================
+   ✏️ PDF EDITOR — ЧАСТЬ А
+   Состояние + отрисовка + инструменты
+   Рисунки хранятся для КАЖДОЙ страницы отдельно
+   Также храним массив ВЕКТОРНЫХ операций для "Save with text"
    ========================================================== */
 const editorOverlay = document.getElementById('editorOverlay');
 const editorDropZone = document.getElementById('editorDropZone');
@@ -1885,24 +1961,31 @@ const editorUndo = document.getElementById('editorUndo');
 const editorClear = document.getElementById('editorClear');
 const editorSave = document.getElementById('editorSave');
 
-let edPdfBytes = null;       // оригинальные байты PDF
-let edPdfDoc = null;         // pdf.js документ
+let edPdfBytes = null;
+let edPdfDoc = null;
 let edTotalPages = 0;
 let edCurrentPage = 0;
 let edScale = 1.5;
 let edCanvasWidth = 0;
 let edCanvasHeight = 0;
 
-// Текущий инструмент
 let edTool = 'pen';
 let edColor = '#ef4444';
 let edLineWidth = 3;
 
-// История для undo (по страницам)
-const edHistory = {}; // { pageIndex: [ImageData, ...] }
+// История ImageData для undo (по страницам)
+const edHistory = {};
+// Финальное состояние canvas (по страницам)
+const edFinalState = {};
+
+// ВЕКТОРНЫЕ операции по страницам: для "Save with text"
+// Формат: { pageIndex: [ {type, ...}, ... ] }
+const edVectorOps = {};
+
 let edDrawing = false;
 let edStartX = 0, edStartY = 0;
-let edSnapshot = null; // снимок перед текущим штрихом
+let edSnapshot = null;
+let edCurrentPenPath = []; // массив точек для текущего штриха
 
 function openEditor() {
   editorOverlay.classList.add('active');
@@ -1911,6 +1994,8 @@ function openEditor() {
   edTotalPages = 0;
   edCurrentPage = 0;
   Object.keys(edHistory).forEach(k => delete edHistory[k]);
+  Object.keys(edFinalState).forEach(k => delete edFinalState[k]);
+  Object.keys(edVectorOps).forEach(k => delete edVectorOps[k]);
   editorContent.classList.add('hidden');
   editorDropZone.style.display = 'block';
   editorStatus.className = 'status-msg hidden';
@@ -1942,6 +2027,8 @@ async function loadEditorPdf(file) {
     edTotalPages = edPdfDoc.numPages;
     edCurrentPage = 0;
     Object.keys(edHistory).forEach(k => delete edHistory[k]);
+    Object.keys(edFinalState).forEach(k => delete edFinalState[k]);
+    Object.keys(edVectorOps).forEach(k => delete edVectorOps[k]);
     editorContent.classList.remove('hidden');
     editorDropZone.style.display = 'none';
     showStatus(editorStatus, '', 'info');
@@ -1961,16 +2048,34 @@ async function renderEditorPage() {
   editorCanvas.height = edCanvasHeight;
   editorCanvas.style.width = edCanvasWidth + 'px';
   editorCanvas.style.height = edCanvasHeight + 'px';
+
   const ctx = editorCanvas.getContext('2d');
   ctx.fillStyle = '#fff';
   ctx.fillRect(0, 0, edCanvasWidth, edCanvasHeight);
   await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+
+  // Восстанавливаем рисунки для этой страницы
+  const savedState = edFinalState[edCurrentPage];
+  if (savedState) {
+    ctx.putImageData(savedState, 0, 0);
+  }
+
   editorPageCounter.textContent = `${edCurrentPage + 1} / ${edTotalPages}`;
   editorPrev.disabled = edCurrentPage === 0;
   editorNext.disabled = edCurrentPage === edTotalPages - 1;
 }
 
-// ===== TOOLBAR =====
+function saveCurrentPageState() {
+  if (!edPdfDoc) return;
+  const ctx = editorCanvas.getContext('2d');
+  try {
+    edFinalState[edCurrentPage] = ctx.getImageData(0, 0, edCanvasWidth, edCanvasHeight);
+  } catch (e) {
+    console.warn('Cannot save canvas state', e);
+  }
+}
+
+/* ===== TOOLBAR ===== */
 document.querySelectorAll('.tool-btn[data-tool]').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.tool-btn[data-tool]').forEach(b => b.classList.remove('active'));
@@ -1986,31 +2091,45 @@ document.querySelectorAll('.color-swatch').forEach(sw => {
   });
 });
 
-// ===== UNDO / CLEAR =====
+/* ===== UNDO / CLEAR ===== */
 editorUndo.addEventListener('click', () => {
   const hist = edHistory[edCurrentPage];
   if (!hist || hist.length === 0) return;
   const last = hist.pop();
   const ctx = editorCanvas.getContext('2d');
   ctx.putImageData(last, 0, 0);
+  edFinalState[edCurrentPage] = ctx.getImageData(0, 0, edCanvasWidth, edCanvasHeight);
+  // Также снимаем последнюю векторную операцию
+  if (edVectorOps[edCurrentPage] && edVectorOps[edCurrentPage].length > 0) {
+    edVectorOps[edCurrentPage].pop();
+  }
 });
 
 editorClear.addEventListener('click', async () => {
-  if (!confirm('Очистить все рисунки на этой странице?')) return;
-  const ctx = editorCanvas.getContext('2d');
+  if (!confirm('Clear all drawings on this page?')) return;
   edHistory[edCurrentPage] = [];
+  edVectorOps[edCurrentPage] = [];
+  delete edFinalState[edCurrentPage];
   await renderEditorPage();
 });
 
-// ===== PAGE NAV =====
+/* ===== PAGE NAV ===== */
 editorPrev.addEventListener('click', async () => {
-  if (edCurrentPage > 0) { edCurrentPage--; await renderEditorPage(); }
+  if (edCurrentPage > 0) {
+    saveCurrentPageState();
+    edCurrentPage--;
+    await renderEditorPage();
+  }
 });
 editorNext.addEventListener('click', async () => {
-  if (edCurrentPage < edTotalPages - 1) { edCurrentPage++; await renderEditorPage(); }
+  if (edCurrentPage < edTotalPages - 1) {
+    saveCurrentPageState();
+    edCurrentPage++;
+    await renderEditorPage();
+  }
 });
 
-// ===== DRAWING =====
+/* ===== DRAWING ===== */
 function getCanvasPos(e) {
   const rect = editorCanvas.getBoundingClientRect();
   const scaleX = editorCanvas.width / rect.width;
@@ -2034,6 +2153,10 @@ function pushUndo() {
   if (!edHistory[edCurrentPage]) edHistory[edCurrentPage] = [];
   if (edSnapshot) edHistory[edCurrentPage].push(edSnapshot);
   if (edHistory[edCurrentPage].length > 30) edHistory[edCurrentPage].shift();
+}
+function pushVectorOp(op) {
+  if (!edVectorOps[edCurrentPage]) edVectorOps[edCurrentPage] = [];
+  edVectorOps[edCurrentPage].push(op);
 }
 
 function drawArrow(ctx, x1, y1, x2, y2) {
@@ -2067,17 +2190,21 @@ function startDraw(e) {
   const pos = getCanvasPos(e);
   edStartX = pos.x;
   edStartY = pos.y;
+  edCurrentPenPath = [{ x: pos.x, y: pos.y }];
   if (edTool === 'pen') {
     ctx.beginPath();
     ctx.moveTo(pos.x, pos.y);
   } else if (edTool === 'text') {
-    const txt = prompt('Текст / Text:', '');
+    const txt = prompt(t('editor.textPrompt'), '');
     if (txt) {
       ctx.font = '24px sans-serif';
       ctx.fillText(txt, pos.x, pos.y);
+      // Векторная операция
+      pushVectorOp({ type: 'text', x: pos.x, y: pos.y, text: txt, color: edColor });
     }
     edDrawing = false;
     pushUndo();
+    saveCurrentPageState();
   }
 }
 
@@ -2089,6 +2216,7 @@ function moveDraw(e) {
   if (edTool === 'pen') {
     ctx.lineTo(pos.x, pos.y);
     ctx.stroke();
+    edCurrentPenPath.push({ x: pos.x, y: pos.y });
   } else if (edTool === 'rect') {
     ctx.putImageData(edSnapshot, 0, 0);
     ctx.strokeRect(edStartX, edStartY, pos.x - edStartX, pos.y - edStartY);
@@ -2101,7 +2229,32 @@ function moveDraw(e) {
 function endDraw(e) {
   if (!edDrawing) return;
   edDrawing = false;
+  const ctx = editorCanvas.getContext('2d');
+  const pos = e.touches ? getCanvasPos(e) : getCanvasPos(e);
+
+  // Записываем векторную операцию
+  if (edTool === 'pen') {
+    if (edCurrentPenPath.length > 1) {
+      pushVectorOp({ type: 'pen', points: edCurrentPenPath.slice(), color: edColor, width: edLineWidth });
+    }
+  } else if (edTool === 'rect') {
+    pushVectorOp({
+      type: 'rect',
+      x: edStartX, y: edStartY,
+      w: pos.x - edStartX, h: pos.y - edStartY,
+      color: edColor, width: edLineWidth
+    });
+  } else if (edTool === 'arrow') {
+    pushVectorOp({
+      type: 'arrow',
+      x1: edStartX, y1: edStartY,
+      x2: pos.x, y2: pos.y,
+      color: edColor, width: edLineWidth
+    });
+  }
+  edCurrentPenPath = [];
   pushUndo();
+  saveCurrentPageState();
 }
 
 editorCanvas.addEventListener('mousedown', startDraw);
@@ -2112,57 +2265,192 @@ editorCanvas.addEventListener('touchstart', startDraw, { passive: false });
 editorCanvas.addEventListener('touchmove', moveDraw, { passive: false });
 editorCanvas.addEventListener('touchend', endDraw);
 
-// ===== SAVE =====
-editorSave.addEventListener('click', async () => {
-  editorSave.disabled = true;
-  showStatus(editorStatus, t('common.processing'), 'info');
+/* ==========================================================
+   ✏️ PDF EDITOR — ЧАСТЬ Б
+   Сохранение двумя способами
+   ========================================================== */
+const saveChoiceOverlay = document.getElementById('saveChoiceOverlay');
+const saveChoiceStatus = document.getElementById('saveChoiceStatus');
+
+// Клик на "💾 Save & Download" → открыть модалку выбора
+editorSave.addEventListener('click', () => {
+  if (!edPdfDoc) return;
+  saveCurrentPageState();
+  saveChoiceStatus.className = 'status-msg hidden';
+  saveChoiceOverlay.classList.add('active');
+});
+
+function closeSaveChoice() {
+  saveChoiceOverlay.classList.remove('active');
+}
+saveChoiceOverlay.addEventListener('click', e => { if (e.target === saveChoiceOverlay) closeSaveChoice(); });
+
+/* ===== СПОСОБ 1: ВЕКТОРНЫЙ — текст сохраняется ===== */
+document.getElementById('saveVectorBtn').addEventListener('click', async () => {
+  saveChoiceStatus.className = 'status-msg hidden';
+  showStatus(saveChoiceStatus, t('common.processing'), 'info');
   try {
-    // 1. Сохраняем все нарисованные слои (по страницам) в память
-    //    Для этого нужно перерендерить каждую страницу + наложить рисунки
-    //    Но рисунки сохранены только для текущей страницы. Для простоты — сохраним рисунки, которые есть.
-    //    Рисунки для непосещённых страниц недоступны, поскольку они не отрисованы.
+    saveCurrentPageState();
 
-    // Для каждой страницы, где есть изменения, получим canvas
+    const { PDFDocument, rgb, StandardFonts, degrees } = PDFLib;
+    // Загружаем ОРИГИНАЛЬНЫЙ PDF (не рендер, а исходник!)
+    const pdfDoc = await PDFDocument.load(edPdfBytes, { ignoreEncryption: true });
+
+    const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+
+    // Функция: hex → rgb (0-1)
+    function hexToRgb(hex) {
+      const h = hex.replace('#', '');
+      return rgb(
+        parseInt(h.substring(0, 2), 16) / 255,
+        parseInt(h.substring(2, 4), 16) / 255,
+        parseInt(h.substring(4, 6), 16) / 255
+      );
+    }
+
+    // Масштаб: вектора были в координатах canvas (умноженные на edScale).
+    // pdf-lib работает в единицах PDF. Оригинальные размеры страниц = canvas / edScale.
+    // Но при рисовании мы работали в canvas-координатах, а для pdf-lib нужно конвертировать.
+    // pdf-lib Y-ось снизу вверх, canvas — сверху вниз.
+    // Так как мы вставили canvas как есть (при растеризации размеры страниц равны), то используем ту же логику.
+
+    const pages = pdfDoc.getPages();
+
+    pages.forEach((page, pageIdx) => {
+      const ops = edVectorOps[pageIdx];
+      if (!ops || ops.length === 0) return;
+
+      const { width: pageW, height: pageH } = page.getSize();
+
+      // Координаты canvas были с учётом масштаба → делим на edScale
+      const sx = pageW / (edCanvasWidth / edScale) * 1; // множитель 1, т.к. width = edCanvasWidth / edScale
+      const sy = pageH / (edCanvasHeight / edScale);
+
+      ops.forEach(op => {
+        const color = hexToRgb(op.color || '#ef4444');
+        const lineWidth = (op.width || 3);
+
+        if (op.type === 'pen') {
+          // Рисуем ломаную линию
+          for (let i = 1; i < op.points.length; i++) {
+            const p1 = op.points[i - 1];
+            const p2 = op.points[i];
+            page.drawLine({
+              start: { x: p1.x / edScale, y: pageH - p1.y / edScale },
+              end:   { x: p2.x / edScale, y: pageH - p2.y / edScale },
+              thickness: lineWidth,
+              color: color
+            });
+          }
+                } else if (op.type === 'rect') {
+          const cx1 = op.x / edScale;
+          const cy1 = pageH - op.y / edScale;
+          const cx2 = (op.x + op.w) / edScale;
+          const cy2 = pageH - (op.y + op.h) / edScale;
+
+          const rectX = Math.min(cx1, cx2);
+          const rectY = Math.min(cy1, cy2);
+          const rectW = Math.abs(cx2 - cx1);
+          const rectH = Math.abs(cy2 - cy1);
+
+          page.drawRectangle({
+            x: rectX,
+            y: rectY,
+            width: rectW,
+            height: rectH,
+            borderColor: color,
+            borderWidth: lineWidth
+          });
+                } else if (op.type === 'arrow') {
+          // Основная линия стрелки
+          const ax1 = op.x1 / edScale;
+          const ay1 = pageH - op.y1 / edScale;
+          const ax2 = op.x2 / edScale;
+          const ay2 = pageH - op.y2 / edScale;
+
+          page.drawLine({
+            start: { x: ax1, y: ay1 },
+            end:   { x: ax2, y: ay2 },
+            thickness: lineWidth,
+            color: color
+          });
+
+          // Голова стрелки — вычисляем угол в PDF-координатах (Y вверх)
+          const adx = ax2 - ax1;
+          const ady = ay2 - ay1;
+          const aangle = Math.atan2(ady, adx);
+          const aheadlen = 14 / edScale;
+          const arrowAngle = Math.PI / 7;
+
+          const leftX  = ax2 - aheadlen * Math.cos(aangle - arrowAngle);
+          const leftY  = ay2 - aheadlen * Math.sin(aangle - arrowAngle);
+          const rightX = ax2 - aheadlen * Math.cos(aangle + arrowAngle);
+          const rightY = ay2 - aheadlen * Math.sin(aangle + arrowAngle);
+
+          page.drawLine({
+            start: { x: ax2, y: ay2 },
+            end:   { x: leftX, y: leftY },
+            thickness: lineWidth,
+            color: color
+          });
+          page.drawLine({
+            start: { x: ax2, y: ay2 },
+            end:   { x: rightX, y: rightY },
+            thickness: lineWidth,
+            color: color
+          });
+        }
+      });
+    });
+
+    const bytes = await pdfDoc.save();
+    downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'edited-text.pdf');
+
+    showStatus(saveChoiceStatus, t('editor.saved'), 'ok');
+    setTimeout(closeSaveChoice, 1200);
+  } catch (err) {
+    console.error(err);
+    showStatus(saveChoiceStatus, t('common.error') + err.message, 'err');
+  }
+});
+
+/* ===== СПОСОБ 2: РАСТЕРНЫЙ — сохраняем как картинки ===== */
+document.getElementById('saveRasterBtn').addEventListener('click', async () => {
+  saveChoiceStatus.className = 'status-msg hidden';
+  showStatus(saveChoiceStatus, t('common.processing'), 'info');
+  try {
+    saveCurrentPageState();
+
     const { PDFDocument } = PDFLib;
-    const original = await PDFDocument.load(edPdfBytes, { ignoreEncryption: true });
     const outDoc = await PDFDocument.create();
-
-    // Храним текущую страницу — потом вернём
     const savedPage = edCurrentPage;
 
     for (let i = 0; i < edTotalPages; i++) {
-      // Отрендерим страницу заново в canvas
       edCurrentPage = i;
       await renderEditorPage();
 
-      // Если для этой страницы есть история рисунков — восстановим последнее состояние
-      const hist = edHistory[i];
-      if (hist && hist.length > 0) {
-        // Восстанавливаем финальное состояние — нужно переиграть все штрихи.
-        // Но у нас хранится только snapshot ДО каждого штриха.
-        // Проще: у нас текущий canvas уже без рисунков. Тогда пропустим сложное.
-        // === Упрощение: рисуем заново последний snapshot не поможет ===
-        // Поэтому оставим текущее поведение — рисунки только с текущей страницы.
-      }
-
-      // Конвертируем canvas в PNG
       const dataUrl = editorCanvas.toDataURL('image/png');
       const pngBytes = await (await fetch(dataUrl)).arrayBuffer();
       const png = await outDoc.embedPng(pngBytes);
 
-      const page = outDoc.addPage([edCanvasWidth / edScale, edCanvasHeight / edScale]);
-      page.drawImage(png, { x: 0, y: 0, width: edCanvasWidth / edScale, height: edCanvasHeight / edScale });
+      const pageW = edCanvasWidth / edScale;
+      const pageH = edCanvasHeight / edScale;
+
+      const page = outDoc.addPage([pageW, pageH]);
+      page.drawImage(png, { x: 0, y: 0, width: pageW, height: pageH });
     }
 
     edCurrentPage = savedPage;
+    await renderEditorPage();
+
     const outBytes = await outDoc.save();
-    downloadBlob(new Blob([outBytes], { type: 'application/pdf' }), 'edited.pdf');
-    showStatus(editorStatus, t('editor.saved'), 'ok');
+    downloadBlob(new Blob([outBytes], { type: 'application/pdf' }), 'edited-image.pdf');
+
+    showStatus(saveChoiceStatus, t('editor.saved'), 'ok');
+    setTimeout(closeSaveChoice, 1200);
   } catch (err) {
     console.error(err);
-    showStatus(editorStatus, t('common.error') + err.message, 'err');
-  } finally {
-    editorSave.disabled = false;
+    showStatus(saveChoiceStatus, t('common.error') + err.message, 'err');
   }
 });
 
@@ -2179,9 +2467,9 @@ setInterval(updateLvClock, 1000);
 // Будильники
 setInterval(checkAlarms, 15000);
 
-// Курс валют
+// Курс валют — загрузка + автообновление каждые 30 минут
 loadCurrencies();
-setInterval(loadCurrencies, 30 * 60 * 1000); // обновление каждые 30 минут
+setInterval(loadCurrencies, 30 * 60 * 1000);
 
 // Инструменты
 renderTools();
