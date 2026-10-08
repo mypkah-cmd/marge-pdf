@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PDFNest — All-in-One PDF Toolkit</title>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-30RLVLY5JJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-30RLVLY5JJ', { 'anonymize_ip': true });
+</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐱%3C/text%3E%3C/svg%3E">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
@@ -986,6 +994,76 @@
     .why-item h3 { font-size: 12px; }
     .why-item p { font-size: 11px; }
   }
+  /* ===== COOKIE BANNER ===== */
+  .cookie-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    z-index: 9999;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+    animation: cookieSlide 0.3s ease;
+    flex-wrap: wrap;
+  }
+  @keyframes cookieSlide {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  .cookie-banner.hidden { display: none; }
+  .cookie-text {
+    font-size: 13px;
+    color: var(--text);
+    flex: 1;
+    min-width: 200px;
+  }
+  .cookie-buttons {
+    display: flex;
+    gap: 8px;
+  }
+  .cookie-btn {
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .cookie-accept {
+    background: var(--primary);
+    color: #fff;
+  }
+  .cookie-accept:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+  }
+  .cookie-decline {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .cookie-decline:hover {
+    background: var(--bg);
+  }
+  @media (max-width: 700px) {
+    .cookie-banner {
+      padding: 12px 16px;
+      flex-direction: column;
+      text-align: center;
+    }
+    .cookie-buttons {
+      width: 100%;
+      justify-content: center;
+    }
+  }
 </style>
 </head>
 <body>
@@ -1236,6 +1314,9 @@
 <script>
 const translations = {
   en: {
+    "cookie.text": "🍪 We use cookies to improve your experience.",
+    "cookie.accept": "Accept",
+    "cookie.decline": "Decline",
     "hero.title": "All Your PDF Tools in One Place",
     "hero.subtitle": "Merge, convert, compress, and manage PDFs — free, fast, and 100% private. Your files never leave your device.",
     "footer.text": "Made with ❤️ — All processing happens in your browser",
@@ -1337,6 +1418,9 @@ const translations = {
     "saveChoice.rasterDesc": "Exact look. Text becomes part of the image."
   },
   ru: {
+    "cookie.text": "🍪 Мы используем cookies для улучшения работы.",
+    "cookie.accept": "Принять",
+    "cookie.decline": "Отклонить",
     "hero.title": "Все PDF-инструменты в одном месте",
     "hero.subtitle": "Объединяйте, конвертируйте, сжимайте PDF — бесплатно, быстро и безопасно. Ваши файлы не покидают устройство.",
     "footer.text": "Сделано с ❤️ — вся обработка происходит в вашем браузере",
@@ -1439,6 +1523,9 @@ const translations = {
     "saveChoice.rasterDesc": "Точное соответствие. Текст становится частью картинки."
   },
   lv: {
+    "cookie.text": "🍪 Mēs izmantojam sīkfailus, lai uzlabotu jūsu pieredzi.",
+    "cookie.accept": "Pieņemt",
+    "cookie.decline": "Noraidīt",
     "hero.title": "Visi PDF rīki vienuviet",
     "hero.subtitle": "Apvienojiet, konvertējiet, saspiediet un pārvaldiet PDF — bez maksas, ātri un 100% privāti. Jūsu faili nekad neatstāj jūsu ierīci.",
     "footer.text": "Veidots ar ❤️ — visa apstrāde notiek jūsu pārlūkā",
@@ -1541,6 +1628,9 @@ const translations = {
     "saveChoice.rasterDesc": "Precīzs izskats. Teksts kļūst par attēla daļu."
   },
   de: {
+    "cookie.text": "🍪 Wir verwenden Cookies, um Ihr Erlebnis zu verbessern.",
+    "cookie.accept": "Akzeptieren",
+    "cookie.decline": "Ablehnen",
     "hero.title": "Alle PDF-Werkzeuge an einem Ort",
     "hero.subtitle": "PDFs zusammenführen, konvertieren, komprimieren und verwalten – kostenlos, schnell und 100 % privat. Ihre Dateien verlassen Ihr Gerät nie.",
     "footer.text": "Mit ❤️ erstellt – die gesamte Verarbeitung erfolgt in Ihrem Browser",
@@ -2634,6 +2724,50 @@ setInterval(updateLvClock, 1000);
 // Будильники
 setInterval(checkAlarms, 15000);
 
+
+/* ==========================================================
+   🍪 COOKIE CONSENT
+   ========================================================== */
+const GA_ID = 'G-30RLVLY5JJ';
+const cookieBanner = document.getElementById('cookieBanner');
+
+const cookieChoice = localStorage.getItem('pdfnest_cookies');
+
+if (!cookieChoice) {
+  cookieBanner.classList.remove('hidden');
+  window['ga-disable-' + GA_ID] = true; // По умолчанию — GA выключен
+} else if (cookieChoice === 'accepted') {
+  cookieBanner.classList.add('hidden');
+  // GA работает
+} else {
+  cookieBanner.classList.add('hidden');
+  window['ga-disable-' + GA_ID] = true;
+}
+
+function acceptCookies() {
+  localStorage.setItem('pdfnest_cookies', 'accepted');
+  cookieBanner.classList.add('hidden');
+  window['ga-disable-' + GA_ID] = false;
+}
+
+function declineCookies() {
+  localStorage.setItem('pdfnest_cookies', 'declined');
+  cookieBanner.classList.add('hidden');
+  window['ga-disable-' + GA_ID] = true;
+}
+
 </script>
+
+<!-- Cookie Consent Banner -->
+<div class="cookie-banner hidden" id="cookieBanner">
+  <div class="cookie-text">
+    <span data-i18n="cookie.text">🍪 We use cookies to improve your experience.</span>
+  </div>
+  <div class="cookie-buttons">
+    <button class="cookie-btn cookie-accept" onclick="acceptCookies()" data-i18n="cookie.accept">Accept</button>
+    <button class="cookie-btn cookie-decline" onclick="declineCookies()" data-i18n="cookie.decline">Decline</button>
+  </div>
+</div>
+
 </body>
 </html>
