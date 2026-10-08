@@ -67,24 +67,6 @@
     color: #fff;
     font-size: 18px;
   }
-  .lang-switch {
-    display: flex;
-    gap: 4px;
-    background: var(--bg);
-    padding: 4px;
-    border-radius: 8px;
-  }
-  .lang-switch button {
-    padding: 6px 12px;
-    border: none;
-    background: transparent;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 13px;
-    color: var(--muted);
-  }
-  .lang-switch button.active { background: var(--primary); color: #fff; }
   .hero { text-align: center; padding: 48px 24px 32px; max-width: 900px; margin: 0 auto; }
   .hero h1 {
     font-size: 38px;
@@ -204,7 +186,6 @@
   }
   .options input[type="text"],
   .options input[type="number"],
-  .options input[type="time"],
   .options select {
     width: 100%; padding: 10px 12px;
     border: 1px solid var(--border); border-radius: 8px;
@@ -212,30 +193,12 @@
     background: var(--card); color: var(--text);
   }
   .options input:focus, .options select:focus { outline: none; border-color: var(--primary); }
-  .lock-screen {
-    position: fixed; inset: 0;
-    background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 9999; padding: 20px;
-  }
-  .lock-box {
-    background: var(--card); border-radius: 18px; padding: 40px;
-    width: 100%; max-width: 380px; text-align: center;
-  }
-  .lock-box h1 { font-size: 22px; margin-bottom: 8px; }
-  .lock-box p { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
-  .lock-box input {
-    width: 100%; padding: 12px 16px; border: 2px solid var(--border);
-    border-radius: 10px; font-size: 15px; margin-bottom: 12px; text-align: center;
-    background: var(--card); color: var(--text);
-  }
-  .lock-box input:focus { outline: none; border-color: var(--primary); }
   footer {
     text-align: center; padding: 24px; color: var(--muted);
     font-size: 13px; border-top: 1px solid var(--border);
   }
 
-  /* ===== HEADER RIGHT (часы + кнопки) ===== */
+  /* ===== HEADER RIGHT ===== */
   .header-right {
     display: flex;
     flex-direction: row;
@@ -293,6 +256,154 @@
     50% { transform: scale(1.15); }
   }
 
+  /* ===== DONATE BUTTON ===== */
+  .donate-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+    animation: donatePulse 2.5s ease-in-out infinite;
+  }
+  .donate-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 22px rgba(239, 68, 68, 0.55);
+    animation: none;
+  }
+  .donate-btn::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%);
+    animation: donateBtnShine 3s linear infinite;
+    pointer-events: none;
+  }
+  @keyframes donateBtnShine {
+    0%   { transform: translateX(-100%) translateY(-100%); }
+    100% { transform: translateX(100%) translateY(100%); }
+  }
+  @keyframes donatePulse {
+    0%, 100% { box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35); }
+    50%      { box-shadow: 0 4px 20px rgba(239, 68, 68, 0.6); }
+  }
+  .donate-btn-icon {
+    font-size: 18px;
+    animation: donateHeart 1.5s ease-in-out infinite;
+    position: relative;
+    z-index: 1;
+  }
+  @keyframes donateHeart {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.2); }
+  }
+  .donate-btn-text {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===== LANGUAGE DROPDOWN ===== */
+  .lang-dropdown {
+    position: relative;
+  }
+  .lang-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border: none;
+    background: var(--bg);
+    border-radius: 9px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--text);
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .lang-btn:hover {
+    background: var(--primary);
+    color: #fff;
+  }
+  .lang-btn-icon { font-size: 15px; }
+  .lang-btn-label { font-size: 13px; }
+  #langCurrentCode {
+    font-weight: 700;
+    padding: 1px 6px;
+    background: var(--primary);
+    color: #fff;
+    border-radius: 4px;
+    font-size: 11px;
+    margin-left: 2px;
+  }
+  .lang-btn:hover #langCurrentCode {
+    background: rgba(255,255,255,0.25);
+  }
+  .lang-arrow {
+    font-size: 9px;
+    opacity: 0.7;
+    transition: transform 0.2s;
+  }
+  .lang-dropdown.open .lang-arrow {
+    transform: rotate(180deg);
+  }
+  .lang-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    min-width: 180px;
+    padding: 6px;
+    display: none;
+    z-index: 500;
+    animation: langFade 0.15s ease;
+  }
+  @keyframes langFade {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .lang-dropdown.open .lang-menu {
+    display: block;
+  }
+  .lang-menu button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    background: transparent;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text);
+    text-align: left;
+    transition: background 0.12s;
+    font-family: inherit;
+  }
+  .lang-menu button:hover {
+    background: var(--bg);
+  }
+  .lang-menu button.active {
+    background: var(--primary);
+    color: #fff;
+  }
+  .lang-flag { font-size: 16px; }
+
   /* ===== TIMER ===== */
   .timer-display {
     font-size: 48px;
@@ -326,7 +437,7 @@
     transform: translateY(-2px);
   }
 
-  /* ===== 24-HOUR TIME INPUT ===== */
+  /* ===== ALARM ===== */
   .time-24 {
     display: flex;
     align-items: center;
@@ -351,8 +462,6 @@
     font-weight: 700;
     color: var(--muted);
   }
-
-  /* ===== ALARM LIST ===== */
   .alarm-list {
     list-style: none;
     margin-top: 16px;
@@ -393,286 +502,130 @@
     padding: 0 6px;
   }
 
-  /* ===== ТЁМНАЯ ТЕМА ===== */
-  body.dark {
-    --bg: #0f172a;
-    --card: #1e293b;
-    --text: #f1f5f9;
-    --muted: #94a3b8;
-    --border: #334155;
-    --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  }
-  body.dark .tool-card:hover {
-    box-shadow: 0 12px 28px rgba(79, 70, 229, 0.3);
-  }
-  body.dark .drop-zone:hover,
-  body.dark .drop-zone.dragover {
-    background: #1e1b4b;
-  }
-  body.dark .file-list li {
-    background: #0f172a;
-  }
-  body.dark .lv-clock,
-  body.dark .icon-btn,
-  body.dark .lang-switch {
-    background: #0f172a;
-  }
-  body.dark .timer-display {
-    background: #0f172a;
-  }
-  body.dark .timer-display.running {
-    background: linear-gradient(135deg, #1e1b4b, #312e81);
-  }
-  body.dark .btn-secondary {
-    background: #1e293b;
-  }
-  body.dark .alarm-list li {
-    background: #0f172a;
-  }
-  body.dark .status-msg.ok { background: #064e3b; color: #6ee7b7; }
-  body.dark .status-msg.err { background: #7f1d1d; color: #fecaca; }
-  body.dark .status-msg.info { background: #1e1b4b; color: #a5b4fc; }
-
-  /* ===== CURRENCY BAR ===== */
-  .currency-bar {
+   /* ===== AD SLOT (в шапке) ===== */
+  .ad-slot {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 12px 24px;
+    gap: 8px;
+    padding: 8px 14px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: #fff;
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
+    margin-left: 0;
+  }
+  .ad-slot:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+  }
+  .ad-slot:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+  }
+  .ad-slot::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.25) 50%, transparent 70%);
+    animation: adSlotShine 3.5s linear infinite;
+    pointer-events: none;
+  }
+  @keyframes adSlotShine {
+    0%   { transform: translateX(-100%) translateY(-100%); }
+    100% { transform: translateX(100%) translateY(100%); }
+  }
+  .ad-slot-icon {
+    font-size: 14px;
+    animation: adSlotPulse 2s ease-in-out infinite;
+  }
+  @keyframes adSlotPulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.2); }
+  }
+  .ad-slot-text {
+    letter-spacing: 0.3px;
+    position: relative;
+    z-index: 1;
+  }
+  .ad-slot-arrow {
+    font-size: 14px;
+    font-weight: 700;
+    transition: transform 0.2s;
+    position: relative;
+    z-index: 1;
+  }
+  .ad-slot:hover .ad-slot-arrow {
+    transform: translateX(4px);
+  }
+
+  /* ===== WHY SECTION ===== */
+  .why-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    max-width: 1100px;
+    margin: 0 auto 40px;
+    padding: 0 24px;
+  }
+  .why-item {
     background: var(--card);
-    border-bottom: 1px solid var(--border);
-    overflow-x: auto;
-    font-size: 13px;
-    white-space: nowrap;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 18px;
+    text-align: center;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
   }
-  .currency-title {
+  .why-item::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .why-item:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary);
+    box-shadow: 0 12px 28px rgba(79, 70, 229, 0.15);
+  }
+  .why-item:hover::before {
+    transform: scaleX(1);
+  }
+  .why-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+    display: inline-block;
+    transition: transform 0.3s;
+  }
+  .why-item:hover .why-icon {
+    transform: scale(1.15) rotate(-5deg);
+  }
+  .why-item h3 {
+    font-size: 15px;
     font-weight: 700;
-    color: var(--muted);
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-right: 6px;
-  }
-  .currency-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 14px;
-    background: var(--bg);
-    border-radius: 8px;
-    font-variant-numeric: tabular-nums;
-  }
-  .currency-code {
-    font-weight: 700;
-    color: var(--primary);
-    font-family: 'SF Mono', Consolas, Monaco, monospace;
-    font-size: 12px;
-  }
-  .currency-value {
-    font-weight: 600;
     color: var(--text);
-    font-family: 'SF Mono', Consolas, Monaco, monospace;
+    margin-bottom: 6px;
+  }
+  .why-item p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
   }
 
-  /* ===== AD SLOT ===== */
-  .ad-slot {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 14px;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    color: #fff;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    text-decoration: none;
-    white-space: nowrap;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.2s;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
-  }
-  .ad-slot:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
-  }
-  .ad-slot::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.25) 50%, transparent 70%);
-    animation: adSlotShine 3.5s linear infinite;
-    pointer-events: none;
-  }
-  @keyframes adSlotShine {
-    0%   { transform: translateX(-100%) translateY(-100%); }
-    100% { transform: translateX(100%) translateY(100%); }
-  }
-  .ad-slot-icon {
-    font-size: 14px;
-    animation: adSlotPulse 2s ease-in-out infinite;
-  }
-  @keyframes adSlotPulse {
-    0%, 100% { transform: scale(1); }
-    50%      { transform: scale(1.2); }
-  }
-  .ad-slot-text {
-    letter-spacing: 0.3px;
-    position: relative;
-    z-index: 1;
-  }
-  .ad-slot-arrow {
-    font-size: 14px;
-    font-weight: 700;
-    transition: transform 0.2s;
-    position: relative;
-    z-index: 1;
-  }
-  .ad-slot:hover .ad-slot-arrow {
-    transform: translateX(4px);
-  }
-  body.dark .ad-slot {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-  }
-
-  /* ===== AD SLOT ===== */
-  .ad-slot {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 14px;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    color: #fff;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    text-decoration: none;
-    white-space: nowrap;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.2s;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
-  }
-  .ad-slot:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
-  }
-  .ad-slot::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.25) 50%, transparent 70%);
-    animation: adSlotShine 3.5s linear infinite;
-    pointer-events: none;
-  }
-  @keyframes adSlotShine {
-    0%   { transform: translateX(-100%) translateY(-100%); }
-    100% { transform: translateX(100%) translateY(100%); }
-  }
-  .ad-slot-icon {
-    font-size: 14px;
-    animation: adSlotPulse 2s ease-in-out infinite;
-  }
-  @keyframes adSlotPulse {
-    0%, 100% { transform: scale(1); }
-    50%      { transform: scale(1.2); }
-  }
-  .ad-slot-text {
-    letter-spacing: 0.3px;
-    position: relative;
-    z-index: 1;
-  }
-  .ad-slot-arrow {
-    font-size: 14px;
-    font-weight: 700;
-    transition: transform 0.2s;
-    position: relative;
-    z-index: 1;
-  }
-  .ad-slot:hover .ad-slot-arrow {
-    transform: translateX(4px);
-  }
-  body.dark .ad-slot {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-  }
-
-  /* ===== AD SLOT ===== */
-  .ad-slot {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 14px;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    color: #fff;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    text-decoration: none;
-    white-space: nowrap;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.2s;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
-  }
-  .ad-slot:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
-  }
-  .ad-slot::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.25) 50%, transparent 70%);
-    animation: adSlotShine 3.5s linear infinite;
-    pointer-events: none;
-  }
-  @keyframes adSlotShine {
-    0%   { transform: translateX(-100%) translateY(-100%); }
-    100% { transform: translateX(100%) translateY(100%); }
-  }
-  .ad-slot-icon {
-    font-size: 14px;
-    animation: adSlotPulse 2s ease-in-out infinite;
-  }
-  @keyframes adSlotPulse {
-    0%, 100% { transform: scale(1); }
-    50%      { transform: scale(1.2); }
-  }
-  .ad-slot-text {
-    letter-spacing: 0.3px;
-    position: relative;
-    z-index: 1;
-  }
-  .ad-slot-arrow {
-    font-size: 14px;
-    font-weight: 700;
-    transition: transform 0.2s;
-    position: relative;
-    z-index: 1;
-  }
-  .ad-slot:hover .ad-slot-arrow {
-    transform: translateX(4px);
-  }
-  body.dark .ad-slot {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-  }
-
-  /* ===== REMOVE PAGES LIST ===== */
+  /* ===== REMOVE PAGES ===== */
   .page-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
@@ -708,8 +661,7 @@
   .page-item.selected::after {
     content: '✕';
     position: absolute;
-    top: 2px;
-    right: 4px;
+    top: 2px; right: 4px;
     font-size: 10px;
     font-weight: bold;
   }
@@ -729,7 +681,7 @@
     margin-bottom: 12px;
   }
 
-  /* ===== PDF EDITOR (рисование) ===== */
+  /* ===== PDF EDITOR ===== */
   .editor-wrapper {
     max-width: 95vw !important;
     width: 100%;
@@ -758,9 +710,7 @@
     transition: all 0.15s;
     color: var(--text);
   }
-  .tool-btn:hover {
-    border-color: var(--primary);
-  }
+  .tool-btn:hover { border-color: var(--primary); }
   .tool-btn.active {
     background: var(--primary);
     border-color: var(--primary);
@@ -825,7 +775,7 @@
     padding: 0 12px;
   }
 
-  /* ===== SAVE CHOICE MODAL ===== */
+  /* ===== SAVE CHOICE ===== */
   .save-choice-list {
     display: flex;
     flex-direction: column;
@@ -852,10 +802,7 @@
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(79, 70, 229, 0.15);
   }
-  .save-choice-icon {
-    font-size: 24px;
-    flex-shrink: 0;
-  }
+  .save-choice-icon { font-size: 24px; flex-shrink: 0; }
   .save-choice-text {
     display: flex;
     flex-direction: column;
@@ -871,71 +818,6 @@
     color: var(--muted);
     line-height: 1.4;
   }
-
-
-  /* ===== BIG DONATE BUTTON ===== */
-  .donate-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 18px;
-    background: linear-gradient(135deg, #f59e0b, #ef4444);
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 14px;
-    font-family: inherit;
-    transition: all 0.2s;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
-    animation: donatePulse 2.5s ease-in-out infinite;
-  }
-  .donate-btn:hover {
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 8px 22px rgba(239, 68, 68, 0.55);
-    animation: none;
-  }
-  .donate-btn::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%);
-    animation: donateBtnShine 3s linear infinite;
-    pointer-events: none;
-  }
-  @keyframes donateBtnShine {
-    0%   { transform: translateX(-100%) translateY(-100%); }
-    100% { transform: translateX(100%) translateY(100%); }
-  }
-  @keyframes donatePulse {
-    0%, 100% { box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35); }
-    50%      { box-shadow: 0 4px 20px rgba(239, 68, 68, 0.6); }
-  }
-  .donate-btn-icon {
-    font-size: 18px;
-    animation: donateHeart 1.5s ease-in-out infinite;
-    position: relative;
-    z-index: 1;
-  }
-  @keyframes donateHeart {
-    0%, 100% { transform: scale(1); }
-    50%      { transform: scale(1.2); }
-  }
-  .donate-btn-text {
-    position: relative;
-    z-index: 1;
-    letter-spacing: 0.3px;
-  }
-  body.dark .donate-btn {
-    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.5);
-  }
-
 
   /* ===== DONATE MODAL ===== */
   .donate-list {
@@ -973,10 +855,8 @@
   .donate-item-premium::before {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
     background: linear-gradient(45deg, transparent 40%, rgba(79, 70, 229, 0.15) 50%, transparent 60%);
     animation: donateShine 3s linear infinite;
     pointer-events: none;
@@ -1035,11 +915,8 @@
     padding-top: 12px;
     border-top: 1px solid var(--border);
   }
-  body.dark .donate-item-premium {
-    background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(6, 182, 212, 0.15));
-  }
 
-  /* ===== FOOTER KOT ===== */
+  /* ===== FOOTER ===== */
   .footer-copy {
     display: inline-block;
     margin-top: 8px;
@@ -1049,8 +926,39 @@
     letter-spacing: 0.5px;
   }
 
+  /* ===== DARK THEME ===== */
+  body.dark {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #334155;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  }
+  body.dark .tool-card:hover { box-shadow: 0 12px 28px rgba(79, 70, 229, 0.3); }
+  body.dark .drop-zone:hover,
+  body.dark .drop-zone.dragover { background: #1e1b4b; }
+  body.dark .file-list li { background: #0f172a; }
+  body.dark .lv-clock,
+  body.dark .icon-btn,
+  body.dark .lang-btn { background: #0f172a; }
+  body.dark .timer-display { background: #0f172a; }
+  body.dark .timer-display.running { background: linear-gradient(135deg, #1e1b4b, #312e81); }
+  body.dark .btn-secondary { background: #1e293b; }
+  body.dark .alarm-list li { background: #0f172a; }
+  body.dark .status-msg.ok { background: #064e3b; color: #6ee7b7; }
+  body.dark .status-msg.err { background: #7f1d1d; color: #fecaca; }
+  body.dark .status-msg.info { background: #1e1b4b; color: #a5b4fc; }
+  body.dark .ad-slot { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4); }
+  body.dark .lang-menu { box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+  body.dark .lang-menu button:hover { background: #0f172a; }
+  body.dark .donate-btn { box-shadow: 0 4px 14px rgba(239, 68, 68, 0.5); }
+  body.dark .donate-item-premium {
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(6, 182, 212, 0.15));
+  }
+
   /* ===== MOBILE ===== */
-      @media (max-width: 700px) {
+  @media (max-width: 700px) {
     .hero h1 { font-size: 26px; }
     .tools-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 14px 40px; }
     .tool-card { padding: 16px 10px; }
@@ -1062,97 +970,102 @@
     .icon-btn { width: 34px; height: 34px; font-size: 16px; }
     .timer-display { font-size: 38px; }
     .header-right { gap: 6px; }
-    .currency-bar { padding: 8px 12px; font-size: 12px; }
-    .currency-title { display: none; }
-    .ad-slot { font-size: 11px; padding: 5px 10px; gap: 6px; }
+    .ad-slot { font-size: 11px; padding: 5px 8px; gap: 4px; }
     .ad-slot-icon { font-size: 12px; }
+    .ad-slot-text { display: none; }
+    .ad-slot-arrow { display: none; }
     .donate-btn { padding: 8px 12px; font-size: 12px; gap: 6px; }
     .donate-btn-icon { font-size: 16px; }
     .donate-btn-text { display: none; }
+    .lang-btn { padding: 6px 8px; font-size: 12px; gap: 4px; }
+    .lang-btn-label { display: none; }
+    #langCurrentCode { font-size: 10px; padding: 1px 4px; }
+    .why-section { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 14px; margin-bottom: 24px; }
+    .why-item { padding: 14px 10px; }
+    .why-icon { font-size: 26px; margin-bottom: 6px; }
+    .why-item h3 { font-size: 12px; }
+    .why-item p { font-size: 11px; }
   }
 </style>
 </head>
 <body>
 
-<!-- ===== ЭКРАН БЛОКИРОВКИ ===== -->
-<div class="lock-screen" id="lockScreen">
-  <div class="lock-box">
-    <h1 data-i18n="lock.title">🔒 Access Required</h1>
-    <p data-i18n="lock.subtitle">Enter password to continue</p>
-    <input type="password" id="lockPassword" placeholder="Password">
-    <button class="btn" id="lockBtn" data-i18n="lock.button">Unlock</button>
-    <div class="status-msg err hidden" id="lockError" data-i18n="lock.error">Wrong password</div>
-  </div>
-</div>
-
-<!-- ===== ШАПКА ===== -->
 <header>
   <div class="logo" onclick="location.reload()">
     <div class="logo-icon">🐱</div>
     <span>PDFNest</span>
   </div>
   <div class="header-right">
-    <div class="lv-clock" id="lvClock" title="Rīga / Latvia">
+    <div class="lv-clock" id="lvClock">
       <span class="clock-city">🇱🇻 Rīga</span>
       <span class="clock-time" id="lvTime">00:00:00</span>
     </div>
-    <button class="donate-btn" id="donateBtn" title="Support / Поддержать">
+    <a href="mailto:your@email.com" class="ad-slot" title="Your ad could be here">
+      <span class="ad-slot-icon">📢</span>
+      <span class="ad-slot-text" data-i18n="adSlot.text">Your ad could be here</span>
+      <span class="ad-slot-arrow">→</span>
+    </a>
+    <button class="donate-btn" id="donateBtn" title="Support">
       <span class="donate-btn-icon">💰</span>
       <span class="donate-btn-text" data-i18n="donate.btnText">Support</span>
     </button>
-    <button class="icon-btn" id="themeBtn" title="Theme / Тема">🌙</button>
-    <button class="icon-btn" id="timerBtn" title="Timer / Таймер">⏱️</button>
-    <button class="icon-btn" id="alarmBtn" title="Alarm / Будильник">🔔</button>
-    <div class="lang-switch">
-      <button data-lang="en" class="active">EN</button>
-      <button data-lang="ru">RU</button>
+    <button class="icon-btn" id="themeBtn" title="Theme">🌙</button>
+    <button class="icon-btn" id="timerBtn" title="Timer">⏱️</button>
+    <button class="icon-btn" id="alarmBtn" title="Alarm">🔔</button>
+    <div class="lang-dropdown" id="langDropdown">
+      <button class="lang-btn" id="langBtn">
+        <span class="lang-btn-icon">🌐</span>
+        <span class="lang-btn-label" data-i18n="lang.label">Language</span>
+        <span id="langCurrentCode">EN</span>
+        <span class="lang-arrow">▼</span>
+      </button>
+      <div class="lang-menu" id="langMenu">
+        <button data-lang="en" class="active"><span class="lang-flag">🇬🇧</span> English</button>
+        <button data-lang="ru"><span class="lang-flag">🇷🇺</span> Русский</button>
+        <button data-lang="lv"><span class="lang-flag">🇱🇻</span> Latviešu</button>
+        <button data-lang="de"><span class="lang-flag">🇩🇪</span> Deutsch</button>
+      </div>
     </div>
   </div>
 </header>
 
-<!-- ===== КУРС ВАЛЮТ ===== -->
-<div class="currency-bar" id="currencyBar">
-  <span class="currency-title" data-i18n="currency.title">Currency rates:</span>
-  <div class="currency-item">
-    <span class="currency-code">EUR</span>
-    <span class="currency-value" id="curEUR">1.0000</span>
-  </div>
-  <div class="currency-item">
-    <span class="currency-code">USD</span>
-    <span class="currency-value" id="curUSD">—</span>
-  </div>
-  <div class="currency-item">
-    <span class="currency-code">RUB</span>
-    <span class="currency-value" id="curRUB">—</span>
-  </div>
-  <div class="currency-item">
-    <span class="currency-code">LVL</span>
-    <span class="currency-value" id="curLVL">0.702804</span>
-  </div>
-  <a href="mailto:your@email.com" class="ad-slot">
-    <span class="ad-slot-icon">📢</span>
-    <span class="ad-slot-text" data-i18n="adSlot.text">Your ad could be here</span>
-    <span class="ad-slot-arrow">→</span>
-  </a>
-</div>
-
-<!-- ===== ЗАГОЛОВОК ===== -->
 <section class="hero">
   <h1 data-i18n="hero.title">All Your PDF Tools in One Place</h1>
   <p data-i18n="hero.subtitle">Merge, convert, compress, and manage PDFs — free, fast, and 100% private. Your files never leave your device.</p>
 </section>
 
-<!-- ===== СЕТКА ИНСТРУМЕНТОВ ===== -->
+<section class="why-section">
+  <div class="why-item">
+    <div class="why-icon">🔒</div>
+    <h3 data-i18n="why.privacy.title">100% Private</h3>
+    <p data-i18n="why.privacy.desc">Your files never leave your browser. No uploads, no servers, no tracking.</p>
+  </div>
+  <div class="why-item">
+    <div class="why-icon">⚡</div>
+    <h3 data-i18n="why.fast.title">Lightning Fast</h3>
+    <p data-i18n="why.fast.desc">No waiting, no queues. Works instantly, even offline after the first load.</p>
+  </div>
+  <div class="why-item">
+    <div class="why-icon">🆓</div>
+    <h3 data-i18n="why.free.title">Completely Free</h3>
+    <p data-i18n="why.free.desc">No registration, no SMS, no hidden fees. Just open and use — forever free.</p>
+  </div>
+  <div class="why-item">
+    <div class="why-icon">💻</div>
+    <h3 data-i18n="why.all.title">Works Everywhere</h3>
+    <p data-i18n="why.all.desc">Windows, Mac, Linux, Android, iOS — any device with a modern browser.</p>
+  </div>
+</section>
+
 <div class="tools-grid" id="toolsGrid"></div>
 
-<!-- ===== ПОДВАЛ ===== -->
 <footer>
   <span data-i18n="footer.text">Made with ❤️ — All processing happens in your browser</span>
   <br>
   <span class="footer-copy">© KoT — All rights reserved</span>
 </footer>
 
-<!-- ===== МОДАЛКА ИНСТРУМЕНТОВ ===== -->
+<!-- МОДАЛКА ИНСТРУМЕНТОВ -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
@@ -1162,12 +1075,12 @@
   </div>
 </div>
 
-<!-- ===== МОДАЛКА ТАЙМЕРА ===== -->
+<!-- МОДАЛКА ТАЙМЕРА -->
 <div class="modal-overlay" id="timerOverlay">
   <div class="modal" style="max-width: 420px;">
     <button class="modal-close" onclick="closeTimerModal()">✕</button>
     <h2 id="timerTitle">⏱️ Timer</h2>
-    <p class="desc" id="timerDesc">Set a countdown. Browser will play a sound when it ends.</p>
+    <p class="desc" id="timerDesc">Set a countdown.</p>
     <div class="timer-display" id="timerDisplay">00:00:00</div>
     <div class="options">
       <label id="timerLabelH">Hours</label>
@@ -1183,20 +1096,20 @@
   </div>
 </div>
 
-<!-- ===== МОДАЛКА БУДИЛЬНИКА ===== -->
+<!-- МОДАЛКА БУДИЛЬНИКА -->
 <div class="modal-overlay" id="alarmOverlay">
   <div class="modal" style="max-width: 420px;">
     <button class="modal-close" onclick="closeAlarmModal()">✕</button>
     <h2 id="alarmTitle">🔔 Alarm</h2>
-    <p class="desc" id="alarmDesc">Set a time — the browser will ring while the tab is open.</p>
+    <p class="desc" id="alarmDesc">Set a time.</p>
     <div class="options">
-      <label id="alarmLabelTime">Alarm time (Rīga, 24h)</label>
+      <label id="alarmLabelTime">Alarm time</label>
       <div class="time-24">
         <input type="number" id="alarmHour" value="7" min="0" max="23" placeholder="HH">
         <span>:</span>
         <input type="number" id="alarmMinute" value="0" min="0" max="59" placeholder="MM">
       </div>
-      <label id="alarmLabelLabel">Label (optional)</label>
+      <label id="alarmLabelLabel">Label</label>
       <input type="text" id="alarmLabel" placeholder="Wake up!">
     </div>
     <button class="btn" id="alarmSetBtn">🔔 Set Alarm</button>
@@ -1205,45 +1118,43 @@
   </div>
 </div>
 
-<!-- ===== МОДАЛКА УДАЛЕНИЯ СТРАНИЦ ===== -->
+<!-- МОДАЛКА УДАЛЕНИЯ СТРАНИЦ -->
 <div class="modal-overlay" id="removePagesOverlay">
   <div class="modal" style="max-width: 640px;">
     <button class="modal-close" onclick="closeRemovePages()">✕</button>
     <h2 id="removePagesTitle">🗑️ Remove Pages</h2>
-    <p class="desc" id="removePagesDesc">Click on pages you want to delete.</p>
+    <p class="desc" id="removePagesDesc">Click on pages to delete.</p>
     <div class="drop-zone" id="rpDropZone">
       <span class="big">📁</span>
-      <span id="rpDropText">Drop a PDF here or click to browse</span>
+      <span id="rpDropText">Drop a PDF here</span>
       <input type="file" id="rpFileInput" accept="application/pdf">
     </div>
     <div id="rpContent" class="hidden">
-      <p class="page-hint" id="rpHint">Click pages to select them for deletion</p>
+      <p class="page-hint" id="rpHint">Click pages</p>
       <div class="page-grid" id="rpGrid"></div>
-      <button class="btn" id="rpRunBtn">🗑️ Delete Selected & Download</button>
+      <button class="btn" id="rpRunBtn">🗑️ Delete Selected</button>
     </div>
     <div class="status-msg hidden" id="rpStatus"></div>
   </div>
 </div>
 
-<!-- ===== МОДАЛКА РИСОВАНИЯ ===== -->
+<!-- МОДАЛКА РИСОВАНИЯ -->
 <div class="modal-overlay" id="editorOverlay">
   <div class="modal editor-wrapper">
     <button class="modal-close" onclick="closeEditor()">✕</button>
     <h2 id="editorTitle">✏️ Edit PDF</h2>
-    <p class="desc" id="editorDesc">Draw, add shapes and arrows directly on your PDF, then save.</p>
-
+    <p class="desc" id="editorDesc">Draw on your PDF.</p>
     <div class="drop-zone" id="editorDropZone">
       <span class="big">📁</span>
-      <span id="editorDropText">Drop a PDF here or click to browse</span>
+      <span id="editorDropText">Drop a PDF here</span>
       <input type="file" id="editorFileInput" accept="application/pdf">
     </div>
-
     <div id="editorContent" class="hidden">
       <div class="editor-toolbar">
-        <button class="tool-btn active" data-tool="pen" title="Pen">✏️</button>
-        <button class="tool-btn" data-tool="rect" title="Rectangle">▭</button>
-        <button class="tool-btn" data-tool="arrow" title="Arrow">➜</button>
-        <button class="tool-btn" data-tool="text" title="Text">T</button>
+        <button class="tool-btn active" data-tool="pen">✏️</button>
+        <button class="tool-btn" data-tool="rect">▭</button>
+        <button class="tool-btn" data-tool="arrow">➜</button>
+        <button class="tool-btn" data-tool="text">T</button>
         <div class="tool-divider"></div>
         <div class="color-swatch active" data-color="#ef4444" style="background:#ef4444"></div>
         <div class="color-swatch" data-color="#4f46e5" style="background:#4f46e5"></div>
@@ -1251,107 +1162,94 @@
         <div class="color-swatch" data-color="#f59e0b" style="background:#f59e0b"></div>
         <div class="color-swatch" data-color="#000000" style="background:#000000"></div>
         <div class="tool-divider"></div>
-        <button class="tool-btn" id="editorUndo" title="Undo">↶</button>
-        <button class="tool-btn" id="editorClear" title="Clear">🗑️</button>
+        <button class="tool-btn" id="editorUndo">↶</button>
+        <button class="tool-btn" id="editorClear">🗑️</button>
       </div>
-
       <div class="editor-canvas-wrap">
         <canvas id="editorCanvas"></canvas>
       </div>
-
       <div class="editor-pages">
         <button class="page-nav-btn" id="editorPrev">◀ Prev</button>
         <span class="page-counter" id="editorPageCounter">1 / 1</span>
         <button class="page-nav-btn" id="editorNext">Next ▶</button>
       </div>
-
       <button class="btn" id="editorSave" style="margin-top:12px;">💾 Save & Download</button>
     </div>
     <div class="status-msg hidden" id="editorStatus"></div>
   </div>
 </div>
 
-<!-- ===== МОДАЛКА ДОНАТА ===== -->
+<!-- МОДАЛКА ДОНАТА -->
 <div class="modal-overlay" id="donateOverlay">
   <div class="modal" style="max-width: 460px;">
     <button class="modal-close" onclick="closeDonate()">✕</button>
     <h2 id="donateTitle">💰 Support the Project</h2>
-    <p class="desc" id="donateDesc">If you find this tool useful, you can support its development.</p>
-
+    <p class="desc" id="donateDesc">Support the development.</p>
     <div class="donate-list">
-      <a href="https://www.paypal.com/paypalme/YOUR_PAYPAL/1" target="_blank" class="donate-item" id="donateOneTime">
+      <a href="https://www.paypal.com/paypalme/YOUR_PAYPAL/1" target="_blank" class="donate-item">
         <span class="donate-icon">☕</span>
         <div class="donate-text">
           <strong id="donateOneTimeTitle">Donate $1</strong>
-          <small id="donateOneTimeDesc">One-time support via PayPal</small>
+          <small id="donateOneTimeDesc">One-time support</small>
         </div>
         <span class="donate-arrow">→</span>
       </a>
-
-      <a href="https://www.paypal.com/paypalme/YOUR_PAYPAL/5" target="_blank" class="donate-item donate-item-premium" id="donateSubscribe">
+      <a href="https://www.paypal.com/paypalme/YOUR_PAYPAL/5" target="_blank" class="donate-item donate-item-premium">
         <span class="donate-icon">⭐</span>
         <div class="donate-text">
           <strong id="donateSubTitle">Buy Subscription</strong>
-          <small id="donateSubDesc">Support monthly via PayPal</small>
+          <small id="donateSubDesc">Monthly support</small>
         </div>
         <span class="donate-arrow">→</span>
       </a>
     </div>
-
-    <p class="donate-thanks" id="donateThanks">Thank you for your support! ❤️</p>
+    <p class="donate-thanks" id="donateThanks">Thank you! ❤️</p>
   </div>
 </div>
 
-<!-- ===== МОДАЛКА ВЫБОРА СОХРАНЕНИЯ ===== -->
+<!-- МОДАЛКА СОХРАНЕНИЯ -->
 <div class="modal-overlay" id="saveChoiceOverlay">
   <div class="modal" style="max-width: 480px;">
     <button class="modal-close" onclick="closeSaveChoice()">✕</button>
     <h2 id="saveChoiceTitle">💾 Save PDF</h2>
-    <p class="desc" id="saveChoiceDesc">Choose how you want to save your edited PDF.</p>
-
+    <p class="desc" id="saveChoiceDesc">Choose method.</p>
     <div class="save-choice-list">
       <button class="save-choice-item" id="saveVectorBtn">
         <span class="save-choice-icon">🟢</span>
         <div class="save-choice-text">
           <strong id="saveVectorTitle">Save with text</strong>
-          <small id="saveVectorDesc">Text stays copyable. File is smaller. Fast.</small>
+          <small id="saveVectorDesc">Text stays copyable.</small>
         </div>
       </button>
-
       <button class="save-choice-item" id="saveRasterBtn">
         <span class="save-choice-icon">🔴</span>
         <div class="save-choice-text">
           <strong id="saveRasterTitle">Save as image</strong>
-          <small id="saveRasterDesc">Exact look. Text becomes part of the image.</small>
+          <small id="saveRasterDesc">Exact look.</small>
         </div>
       </button>
     </div>
-
     <div class="status-msg hidden" id="saveChoiceStatus"></div>
   </div>
 </div>
 
 <script>
-/* ==========================================================
-   🔐 ПАРОЛЬ — ИЗМЕНИТЕ ЗДЕСЬ
-   ========================================================== */
-const PASSWORD = "Bucher";
-
-/* ==========================================================
-   ПЕРЕВОДЫ
-   ========================================================== */
 const translations = {
   en: {
-    "lock.title": "🔒 Access Required",
-    "lock.subtitle": "Enter password to continue",
-    "lock.button": "Unlock",
-    "lock.error": "Wrong password",
     "hero.title": "All Your PDF Tools in One Place",
     "hero.subtitle": "Merge, convert, compress, and manage PDFs — free, fast, and 100% private. Your files never leave your device.",
     "footer.text": "Made with ❤️ — All processing happens in your browser",
-    "currency.title": "Currency rates:",
     "adSlot.text": "Your ad could be here",
     "donate.btnText": "Support",
+    "lang.label": "Language",
+    "why.privacy.title": "100% Private",
+    "why.privacy.desc": "Your files never leave your browser. No uploads, no servers, no tracking.",
+    "why.fast.title": "Lightning Fast",
+    "why.fast.desc": "No waiting, no queues. Works instantly, even offline after the first load.",
+    "why.free.title": "Completely Free",
+    "why.free.desc": "No registration, no SMS, no hidden fees. Just open and use — forever free.",
+    "why.all.title": "Works Everywhere",
+    "why.all.desc": "Windows, Mac, Linux, Android, iOS — any device with a modern browser.",
     "donate.title": "💰 Support the Project",
     "donate.desc": "If you find this tool useful, you can support its development.",
     "donate.oneTime": "Donate $1",
@@ -1439,21 +1337,26 @@ const translations = {
     "saveChoice.rasterDesc": "Exact look. Text becomes part of the image."
   },
   ru: {
-    "lock.title": "🔒 Требуется доступ",
-    "lock.subtitle": "Введите пароль для продолжения",
-    "lock.button": "Войти",
-    "lock.error": "Неверный пароль",
     "hero.title": "Все PDF-инструменты в одном месте",
     "hero.subtitle": "Объединяйте, конвертируйте, сжимайте PDF — бесплатно, быстро и безопасно. Ваши файлы не покидают устройство.",
     "footer.text": "Сделано с ❤️ — вся обработка происходит в вашем браузере",
     "currency.title": "Курс валют:",
     "adSlot.text": "Здесь могла бы быть ваша реклама",
     "donate.btnText": "Поддержать",
+    "lang.label": "Язык",
+    "why.privacy.title": "100% Приватно",
+    "why.privacy.desc": "Ваши файлы не покидают браузер. Без загрузки на сервер, без слежки.",
+    "why.fast.title": "Молниеносно",
+    "why.fast.desc": "Без ожидания, без очередей. Работает мгновенно, после первой загрузки — офлайн.",
+    "why.free.title": "Полностью Бесплатно",
+    "why.free.desc": "Без регистрации, без SMS, без скрытых платежей. Просто открыл и пользуйся.",
+    "why.all.title": "Работает Везде",
+    "why.all.desc": "Windows, Mac, Linux, Android, iOS — любое устройство с современным браузером.",
     "donate.title": "💰 Поддержать проект",
     "donate.desc": "Если вам полезен этот инструмент, вы можете поддержать его развитие.",
     "donate.oneTime": "Донат $1",
-    "donate.subscribe": "Купить подписку",
     "donate.oneTimeDesc": "Разовая поддержка через PayPal",
+    "donate.subscribe": "Купить подписку",
     "donate.subscribeDesc": "Ежемесячная поддержка через PayPal",
     "donate.thanks": "Спасибо за поддержку! ❤️",
     "common.drop": "Перетащите файлы сюда или нажмите для выбора",
@@ -1534,6 +1437,210 @@ const translations = {
     "saveChoice.vectorDesc": "Текст остаётся копируемым. Файл меньше. Быстро.",
     "saveChoice.rasterTitle": "Сохранить как картинку",
     "saveChoice.rasterDesc": "Точное соответствие. Текст становится частью картинки."
+  },
+  lv: {
+    "hero.title": "Visi PDF rīki vienuviet",
+    "hero.subtitle": "Apvienojiet, konvertējiet, saspiediet un pārvaldiet PDF — bez maksas, ātri un 100% privāti. Jūsu faili nekad neatstāj jūsu ierīci.",
+    "footer.text": "Veidots ar ❤️ — visa apstrāde notiek jūsu pārlūkā",
+    "currency.title": "Valūtas kursi:",
+    "adSlot.text": "Šeit varētu būt jūsu reklāma",
+    "donate.btnText": "Atbalstīt",
+    "lang.label": "Valoda",
+    "why.privacy.title": "100% Privāti",
+    "why.privacy.desc": "Jūsu faili nekad neatstāj pārlūku. Bez augšupielādes, bez serveriem, bez izsekošanas.",
+    "why.fast.title": "Zibens ātrs",
+    "why.fast.desc": "Bez gaidīšanas, bez rindām. Strādā acumirklī, pēc pirmās ielādes — bezsaistē.",
+    "why.free.title": "Pilnīgi Bezmaksas",
+    "why.free.desc": "Bez reģistrācijas, bez SMS, bez slēptām maksām. Vienkārši atver un lieto.",
+    "why.all.title": "Strādā Visur",
+    "why.all.desc": "Windows, Mac, Linux, Android, iOS — jebkura ierīce ar modernu pārlūku.",
+    "donate.title": "💰 Atbalstīt projektu",
+    "donate.desc": "Ja šis rīks jums ir noderīgs, varat atbalstīt tā attīstību.",
+    "donate.oneTime": "Ziedot $1",
+    "donate.oneTimeDesc": "Vienreizējs atbalsts caur PayPal",
+    "donate.subscribe": "Pirkt abonementu",
+    "donate.subscribeDesc": "Ikmēneša atbalsts caur PayPal",
+    "donate.thanks": "Paldies par atbalstu! ❤️",
+    "common.drop": "Ievelciet failus šeit vai noklikšķiniet",
+    "common.run": "Palaist",
+    "common.processing": "Apstrāde...",
+    "common.done": "Gatavs! Fails lejupielādēts.",
+    "common.error": "Kļūda: ",
+    "tool.merge.name": "Apvienot PDF",
+    "tool.merge.desc": "Apvienojiet vairākus PDF vienā failā.",
+    "tool.split.name": "Sadalīt PDF",
+    "tool.split.desc": "Izvelciet lappušu diapazonu jaunā PDF.",
+    "tool.compress.name": "Saspiest PDF",
+    "tool.compress.desc": "Samaziniet PDF faila izmēru.",
+    "tool.rotate.name": "Pagriezt PDF",
+    "tool.rotate.desc": "Pagrieziet visas lappuses par 90°, 180° vai 270°.",
+    "tool.extract.name": "Izvilkt lappuses",
+    "tool.extract.desc": "Izvelciet atzīmētās lappuses atsevišķā PDF.",
+    "tool.watermark.name": "Pievienot ūdenszīmi",
+    "tool.watermark.desc": "Uzspiediet tekstu uz katras lappuses.",
+    "tool.pagenum.name": "Lappušu numuri",
+    "tool.pagenum.desc": "Pievienojiet numurus katras lappuses apakšā.",
+    "tool.excel2pdf.name": "Excel → PDF",
+    "tool.excel2pdf.desc": "Konvertējiet Excel failu (.xlsx/.xls) uz PDF tabulu.",
+    "tool.pdf2excel.name": "PDF → Excel",
+    "tool.pdf2excel.desc": "Izvelciet tekstu no PDF uz Excel failu.",
+    "tool.word2pdf.name": "Word → PDF",
+    "tool.word2pdf.desc": "Konvertējiet .docx uz PDF.",
+    "tool.img2pdf.name": "Attēli → PDF",
+    "tool.img2pdf.desc": "Apvienojiet JPG/PNG attēlus vienā PDF.",
+    "tool.protect.name": "Aizsargāt PDF",
+    "tool.protect.desc": "Pievienojiet paroles aizsardzību PDF.",
+    "tool.metadata.name": "Rediģēt metadatus",
+    "tool.metadata.desc": "Mainiet PDF nosaukumu, autoru un tēmu.",
+    "tool.removepages.name": "Noņemt lappuses",
+    "tool.removepages.desc": "Noklikšķiniet uz lappusēm, lai tās noņemtu.",
+    "tool.editor.name": "Rediģēt PDF (Zīmēt)",
+    "tool.editor.desc": "Zīmējiet un pievienojiet formas uz PDF.",
+    "opt.range": "Lappušu diapazons (piem. 1-3,5)",
+    "opt.angle": "Leņķis",
+    "opt.text": "Ūdenszīmes teksts",
+    "opt.opacity": "Necaurredzamība (0.1 – 1)",
+    "opt.position": "Pozīcija",
+    "opt.password": "Parole",
+    "opt.title": "Nosaukums",
+    "opt.author": "Autors",
+    "opt.subject": "Tēma",
+    "timer.title": "⏱️ Taimeris",
+    "timer.desc": "Iestatiet atskaiti. Pēc beigām — skaņa.",
+    "timer.hours": "Stundas",
+    "timer.minutes": "Minūtes",
+    "timer.seconds": "Sekundes",
+    "timer.start": "▶ Sākt",
+    "timer.stop": "⏹ Apturēt",
+    "timer.finished": "⏰ Laiks beidzās!",
+    "alarm.title": "🔔 Modinātājs",
+    "alarm.desc": "Iestatiet laiku — pārlūks zvanīs, kamēr cilne ir atvērta.",
+    "alarm.timeLabel": "Modinātāja laiks (Rīga, 24h)",
+    "alarm.labelLabel": "Apzīmējums (neobligāti)",
+    "alarm.set": "🔔 Iestatīt modinātāju",
+    "alarm.added": "Modinātājs iestatīts uz",
+    "alarm.needTime": "Lūdzu, ievadiet derīgu laiku",
+    "alarm.ringing": "🔔 Modinātājs!",
+    "rp.title": "🗑️ Noņemt lappuses",
+    "rp.desc": "Noklikšķiniet uz lappusēm, ko vēlaties dzēst.",
+    "rp.drop": "Ievelciet PDF šeit vai noklikšķiniet",
+    "rp.hint": "Noklikšķiniet uz lappusēm, lai atzīmētu dzēšanai",
+    "rp.run": "🗑️ Dzēst atzīmētās un lejupielādēt",
+    "rp.selectOne": "Lūdzu, izvēlieties vismaz vienu lappusi",
+    "rp.all": "Nevar dzēst visas lappuses",
+    "editor.title": "✏️ Rediģēt PDF",
+    "editor.desc": "Zīmējiet, pievienojiet formas un bultas uz PDF, pēc tam saglabājiet.",
+    "editor.save": "💾 Saglabāt un lejupielādēt",
+    "editor.saved": "Gatavs! Fails lejupielādēts.",
+    "editor.textPrompt": "Teksts:",
+    "saveChoice.title": "💾 Saglabāt PDF",
+    "saveChoice.desc": "Izvēlieties, kā saglabāt rediģēto PDF.",
+    "saveChoice.vectorTitle": "Saglabāt ar tekstu",
+    "saveChoice.vectorDesc": "Teksts paliek kopējams. Fails mazāks. Ātri.",
+    "saveChoice.rasterTitle": "Saglabāt kā attēlu",
+    "saveChoice.rasterDesc": "Precīzs izskats. Teksts kļūst par attēla daļu."
+  },
+  de: {
+    "hero.title": "Alle PDF-Werkzeuge an einem Ort",
+    "hero.subtitle": "PDFs zusammenführen, konvertieren, komprimieren und verwalten – kostenlos, schnell und 100 % privat. Ihre Dateien verlassen Ihr Gerät nie.",
+    "footer.text": "Mit ❤️ erstellt – die gesamte Verarbeitung erfolgt in Ihrem Browser",
+    "currency.title": "Wechselkurse:",
+    "adSlot.text": "Hier könnte Ihre Werbung stehen",
+    "donate.btnText": "Unterstützen",
+    "lang.label": "Sprache",
+    "why.privacy.title": "100% Privat",
+    "why.privacy.desc": "Ihre Dateien verlassen den Browser nie. Keine Uploads, keine Server, kein Tracking.",
+    "why.fast.title": "Blitzschnell",
+    "why.fast.desc": "Kein Warten, keine Warteschlangen. Funktioniert sofort, nach dem ersten Laden auch offline.",
+    "why.free.title": "Völlig Kostenlos",
+    "why.free.desc": "Keine Registrierung, keine SMS, keine versteckten Gebühren. Einfach öffnen und nutzen.",
+    "why.all.title": "Funktioniert Überall",
+    "why.all.desc": "Windows, Mac, Linux, Android, iOS — jedes Gerät mit einem modernen Browser.",
+    "donate.title": "💰 Das Projekt unterstützen",
+    "donate.desc": "Wenn Ihnen dieses Tool nützlich ist, können Sie seine Entwicklung unterstützen.",
+    "donate.oneTime": "$1 spenden",
+    "donate.oneTimeDesc": "Einmalige Unterstützung über PayPal",
+    "donate.subscribe": "Abo kaufen",
+    "donate.subscribeDesc": "Monatliche Unterstützung über PayPal",
+    "donate.thanks": "Vielen Dank für Ihre Unterstützung! ❤️",
+    "common.drop": "Dateien hier ablegen oder klicken",
+    "common.run": "Ausführen",
+    "common.processing": "Verarbeitung...",
+    "common.done": "Fertig! Datei heruntergeladen.",
+    "common.error": "Fehler: ",
+    "tool.merge.name": "PDF zusammenführen",
+    "tool.merge.desc": "Mehrere PDFs zu einer Datei kombinieren.",
+    "tool.split.name": "PDF teilen",
+    "tool.split.desc": "Einen Seitenbereich in ein neues PDF extrahieren.",
+    "tool.compress.name": "PDF komprimieren",
+    "tool.compress.desc": "PDF-Dateigröße reduzieren.",
+    "tool.rotate.name": "PDF drehen",
+    "tool.rotate.desc": "Alle Seiten um 90°, 180° oder 270° drehen.",
+    "tool.extract.name": "Seiten extrahieren",
+    "tool.extract.desc": "Ausgewählte Seiten in ein separates PDF ziehen.",
+    "tool.watermark.name": "Wasserzeichen hinzufügen",
+    "tool.watermark.desc": "Text auf jeder Seite stempeln.",
+    "tool.pagenum.name": "Seitennummern",
+    "tool.pagenum.desc": "Seitennummern am unteren Rand hinzufügen.",
+    "tool.excel2pdf.name": "Excel → PDF",
+    "tool.excel2pdf.desc": "Excel-Datei (.xlsx/.xls) in PDF-Tabelle konvertieren.",
+    "tool.pdf2excel.name": "PDF → Excel",
+    "tool.pdf2excel.desc": "Text aus PDF in Excel-Datei extrahieren.",
+    "tool.word2pdf.name": "Word → PDF",
+    "tool.word2pdf.desc": ".docx in PDF konvertieren.",
+    "tool.img2pdf.name": "Bilder → PDF",
+    "tool.img2pdf.desc": "JPG/PNG-Bilder zu einem PDF kombinieren.",
+    "tool.protect.name": "PDF schützen",
+    "tool.protect.desc": "Passwortschutz zu PDF hinzufügen.",
+    "tool.metadata.name": "Metadaten bearbeiten",
+    "tool.metadata.desc": "Titel, Autor und Betreff eines PDFs ändern.",
+    "tool.removepages.name": "Seiten entfernen",
+    "tool.removepages.desc": "Auf Seiten klicken, um sie zu entfernen.",
+    "tool.editor.name": "PDF bearbeiten (Zeichnen)",
+    "tool.editor.desc": "Zeichnen und Formen auf PDF hinzufügen.",
+    "opt.range": "Seitenbereich (z. B. 1-3,5)",
+    "opt.angle": "Winkel",
+    "opt.text": "Wasserzeichen-Text",
+    "opt.opacity": "Deckkraft (0.1 – 1)",
+    "opt.position": "Position",
+    "opt.password": "Passwort",
+    "opt.title": "Titel",
+    "opt.author": "Autor",
+    "opt.subject": "Betreff",
+    "timer.title": "⏱️ Timer",
+    "timer.desc": "Countdown einstellen. Am Ende — Ton.",
+    "timer.hours": "Stunden",
+    "timer.minutes": "Minuten",
+    "timer.seconds": "Sekunden",
+    "timer.start": "▶ Start",
+    "timer.stop": "⏹ Stopp",
+    "timer.finished": "⏰ Zeit abgelaufen!",
+    "alarm.title": "🔔 Wecker",
+    "alarm.desc": "Zeit einstellen — der Browser klingelt, solange der Tab offen ist.",
+    "alarm.timeLabel": "Weckzeit (Riga, 24h)",
+    "alarm.labelLabel": "Bezeichnung (optional)",
+    "alarm.set": "🔔 Wecker stellen",
+    "alarm.added": "Wecker gestellt für",
+    "alarm.needTime": "Bitte gültige Zeit eingeben",
+    "alarm.ringing": "🔔 Wecker!",
+    "rp.title": "🗑️ Seiten entfernen",
+    "rp.desc": "Auf die Seiten klicken, die gelöscht werden sollen.",
+    "rp.drop": "PDF hier ablegen oder klicken",
+    "rp.hint": "Seiten anklicken zum Löschen",
+    "rp.run": "🗑️ Ausgewählte löschen & herunterladen",
+    "rp.selectOne": "Bitte mindestens eine Seite auswählen",
+    "rp.all": "Nicht alle Seiten können gelöscht werden",
+    "editor.title": "✏️ PDF bearbeiten",
+    "editor.desc": "Zeichnen, Formen und Pfeile auf PDF hinzufügen, dann speichern.",
+    "editor.save": "💾 Speichern & herunterladen",
+    "editor.saved": "Fertig! Datei heruntergeladen.",
+    "editor.textPrompt": "Text:",
+    "saveChoice.title": "💾 PDF speichern",
+    "saveChoice.desc": "Wählen Sie, wie das PDF gespeichert werden soll.",
+    "saveChoice.vectorTitle": "Mit Text speichern",
+    "saveChoice.vectorDesc": "Text bleibt kopierbar. Datei kleiner. Schnell.",
+    "saveChoice.rasterTitle": "Als Bild speichern",
+    "saveChoice.rasterDesc": "Genaues Aussehen. Text wird Teil des Bildes."
   }
 };
 
@@ -1541,83 +1648,71 @@ let currentLang = "en";
 const t = (key) => translations[currentLang][key] || key;
 
 /* ==========================================================
-   LOCK SCREEN
-   ========================================================== */
-const lockScreen = document.getElementById('lockScreen');
-const lockPassword = document.getElementById('lockPassword');
-const lockBtn = document.getElementById('lockBtn');
-const lockError = document.getElementById('lockError');
-
-function tryUnlock() {
-  if (lockPassword.value === PASSWORD) {
-    lockScreen.classList.add('hidden');
-    sessionStorage.setItem('pdfnest_unlocked', '1');
-  } else {
-    lockError.classList.remove('hidden');
-    lockPassword.value = '';
-    lockPassword.focus();
-  }
-}
-lockBtn.addEventListener('click', tryUnlock);
-lockPassword.addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
-if (sessionStorage.getItem('pdfnest_unlocked') === '1') lockScreen.classList.add('hidden');
-
-/* ==========================================================
    LANGUAGE
    ========================================================== */
+const LANG_CODES = { en: 'EN', ru: 'RU', lv: 'LV', de: 'DE' };
+
 function setLang(lang) {
+  if (!translations[lang]) lang = 'en';
   currentLang = lang;
   document.documentElement.lang = lang;
+  localStorage.setItem('pdfnest_lang', lang);
+
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     if (translations[lang][key]) el.textContent = translations[lang][key];
   });
-  document.querySelectorAll('.lang-switch button').forEach(b => {
+
+  document.querySelectorAll('.lang-menu button').forEach(b => {
     b.classList.toggle('active', b.dataset.lang === lang);
   });
-  document.getElementById('timerTitle').textContent = t('timer.title');
-  document.getElementById('timerDesc').textContent = t('timer.desc');
-  document.getElementById('timerLabelH').textContent = t('timer.hours');
-  document.getElementById('timerLabelM').textContent = t('timer.minutes');
-  document.getElementById('timerLabelS').textContent = t('timer.seconds');
-  document.getElementById('timerStartBtn').textContent = t('timer.start');
-  document.getElementById('timerStopBtn').textContent = t('timer.stop');
-  document.getElementById('alarmTitle').textContent = t('alarm.title');
-  document.getElementById('alarmDesc').textContent = t('alarm.desc');
-  document.getElementById('alarmLabelTime').textContent = t('alarm.timeLabel');
-  document.getElementById('alarmLabelLabel').textContent = t('alarm.labelLabel');
-  document.getElementById('alarmSetBtn').textContent = t('alarm.set');
-  document.getElementById('removePagesTitle').textContent = t('rp.title');
-  document.getElementById('removePagesDesc').textContent = t('rp.desc');
-  document.getElementById('rpDropText').textContent = t('rp.drop');
-  document.getElementById('rpHint').textContent = t('rp.hint');
-  document.getElementById('rpRunBtn').textContent = t('rp.run');
-  document.getElementById('editorTitle').textContent = t('editor.title');
-  document.getElementById('editorDesc').textContent = t('editor.desc');
-  document.getElementById('editorDropText').textContent = t('common.drop');
-  document.getElementById('editorSave').textContent = t('editor.save');
-  document.getElementById('saveChoiceTitle').textContent = t('saveChoice.title');
-  document.getElementById('saveChoiceDesc').textContent = t('saveChoice.desc');
-  document.getElementById('saveVectorTitle').textContent = t('saveChoice.vectorTitle');
-  document.getElementById('saveVectorDesc').textContent = t('saveChoice.vectorDesc');
-  document.getElementById('saveRasterTitle').textContent = t('saveChoice.rasterTitle');
-  document.getElementById('saveRasterDesc').textContent = t('saveChoice.rasterDesc');
-  // Donate modal translations
-  document.getElementById('donateTitle').textContent = t('donate.title');
-  document.getElementById('donateDesc').textContent = t('donate.desc');
-  document.getElementById('donateOneTimeTitle').textContent = t('donate.oneTime');
-  document.getElementById('donateOneTimeDesc').textContent = t('donate.oneTimeDesc');
-  document.getElementById('donateSubTitle').textContent = t('donate.subscribe');
-  document.getElementById('donateSubDesc').textContent = t('donate.subscribeDesc');
-  document.getElementById('donateThanks').textContent = t('donate.thanks');
+
+  const codeEl = document.getElementById('langCurrentCode');
+  if (codeEl) codeEl.textContent = LANG_CODES[lang] || 'EN';
+
+  const ids = {
+    timerTitle: 'timer.title', timerDesc: 'timer.desc',
+    timerLabelH: 'timer.hours', timerLabelM: 'timer.minutes', timerLabelS: 'timer.seconds',
+    timerStartBtn: 'timer.start', timerStopBtn: 'timer.stop',
+    alarmTitle: 'alarm.title', alarmDesc: 'alarm.desc',
+    alarmLabelTime: 'alarm.timeLabel', alarmLabelLabel: 'alarm.labelLabel', alarmSetBtn: 'alarm.set',
+    removePagesTitle: 'rp.title', removePagesDesc: 'rp.desc',
+    rpDropText: 'rp.drop', rpHint: 'rp.hint', rpRunBtn: 'rp.run',
+    editorTitle: 'editor.title', editorDesc: 'editor.desc', editorDropText: 'common.drop', editorSave: 'editor.save',
+    saveChoiceTitle: 'saveChoice.title', saveChoiceDesc: 'saveChoice.desc',
+    saveVectorTitle: 'saveChoice.vectorTitle', saveVectorDesc: 'saveChoice.vectorDesc',
+    saveRasterTitle: 'saveChoice.rasterTitle', saveRasterDesc: 'saveChoice.rasterDesc',
+    donateTitle: 'donate.title', donateDesc: 'donate.desc',
+    donateOneTimeTitle: 'donate.oneTime', donateOneTimeDesc: 'donate.oneTimeDesc',
+    donateSubTitle: 'donate.subscribe', donateSubDesc: 'donate.subscribeDesc',
+    donateThanks: 'donate.thanks'
+  };
+  Object.keys(ids).forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = t(ids[id]);
+  });
+
   renderTools();
 }
-document.querySelectorAll('.lang-switch button').forEach(btn => {
-  btn.addEventListener('click', () => setLang(btn.dataset.lang));
+
+const langDropdown = document.getElementById('langDropdown');
+const langBtn = document.getElementById('langBtn');
+
+langBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  langDropdown.classList.toggle('open');
+});
+document.addEventListener('click', () => langDropdown.classList.remove('open'));
+document.getElementById('langMenu').addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-lang]');
+  if (btn) {
+    setLang(btn.dataset.lang);
+    langDropdown.classList.remove('open');
+  }
 });
 
 /* ==========================================================
-   TOOLS LIST (15 инструментов)
+   TOOLS
    ========================================================== */
 const TOOLS = [
   { id: 'merge',      icon: '🔗', needs: 2 },
@@ -1639,11 +1734,12 @@ const TOOLS = [
 
 function renderTools() {
   const grid = document.getElementById('toolsGrid');
+  if (!grid) return;
   grid.innerHTML = '';
   TOOLS.forEach(tool => {
     const card = document.createElement('div');
     card.className = 'tool-card';
-    card.innerHTML = `<span class="tool-icon">${tool.icon}</span><h3>${t('tool.' + tool.id + '.name')}</h3>`;
+    card.innerHTML = '<span class="tool-icon">' + tool.icon + '</span><h3>' + t('tool.' + tool.id + '.name') + '</h3>';
     card.addEventListener('click', () => {
       if (tool.custom === 'removePages') openRemovePages();
       else if (tool.custom === 'editor') openEditor();
@@ -1654,7 +1750,7 @@ function renderTools() {
 }
 
 /* ==========================================================
-   MODAL (инструменты)
+   MODAL
    ========================================================== */
 const overlay = document.getElementById('modalOverlay');
 const modalTitle = document.getElementById('modalTitle');
@@ -1679,59 +1775,31 @@ function closeModal() {
 }
 overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
 
-/* ==========================================================
-   FORM BUILDER
-   ========================================================== */
 function buildToolForm(tool) {
   let extra = '';
   if (tool.id === 'split' || tool.id === 'extract') {
-    extra = `<div class="options"><label>${t('opt.range')}</label><input type="text" id="pageRange" placeholder="1-3,5"></div>`;
+    extra = '<div class="options"><label>' + t('opt.range') + '</label><input type="text" id="pageRange" placeholder="1-3,5"></div>';
   }
   if (tool.id === 'rotate') {
-    extra = `<div class="options"><label>${t('opt.angle')}</label>
-      <select id="rotateAngle"><option value="90">90°</option><option value="180">180°</option><option value="270">270°</option></select></div>`;
+    extra = '<div class="options"><label>' + t('opt.angle') + '</label><select id="rotateAngle"><option value="90">90°</option><option value="180">180°</option><option value="270">270°</option></select></div>';
   }
   if (tool.id === 'watermark') {
-    extra = `<div class="options">
-      <label>${t('opt.text')}</label><input type="text" id="wmText" value="CONFIDENTIAL">
-      <label>${t('opt.opacity')}</label><input type="number" id="wmOpacity" value="0.3" step="0.1" min="0.1" max="1"></div>`;
+    extra = '<div class="options"><label>' + t('opt.text') + '</label><input type="text" id="wmText" value="CONFIDENTIAL"><label>' + t('opt.opacity') + '</label><input type="number" id="wmOpacity" value="0.3" step="0.1" min="0.1" max="1"></div>';
   }
   if (tool.id === 'pagenum') {
-    extra = `<div class="options"><label>${t('opt.position')}</label>
-      <select id="pnPosition"><option value="bottom-center">↓ center</option><option value="bottom-right">↘ right</option><option value="bottom-left">↙ left</option></select></div>`;
+    extra = '<div class="options"><label>' + t('opt.position') + '</label><select id="pnPosition"><option value="bottom-center">↓ center</option><option value="bottom-right">↘ right</option><option value="bottom-left">↙ left</option></select></div>';
   }
   if (tool.id === 'protect') {
-    extra = `<div class="options"><label>${t('opt.password')}</label><input type="text" id="pdfPassword" value=""></div>`;
+    extra = '<div class="options"><label>' + t('opt.password') + '</label><input type="text" id="pdfPassword" value=""></div>';
   }
   if (tool.id === 'metadata') {
-    extra = `<div class="options">
-      <label>${t('opt.title')}</label><input type="text" id="metaTitle">
-      <label>${t('opt.author')}</label><input type="text" id="metaAuthor">
-      <label>${t('opt.subject')}</label><input type="text" id="metaSubject"></div>`;
+    extra = '<div class="options"><label>' + t('opt.title') + '</label><input type="text" id="metaTitle"><label>' + t('opt.author') + '</label><input type="text" id="metaAuthor"><label>' + t('opt.subject') + '</label><input type="text" id="metaSubject"></div>';
   }
-
-  const accept = tool.id === 'excel2pdf' ? '.xlsx,.xls'
-              : tool.id === 'word2pdf' ? '.docx'
-              : tool.id === 'img2pdf' ? 'image/*'
-              : tool.id === 'pdf2excel' ? '.pdf'
-              : 'application/pdf';
+  const accept = tool.id === 'excel2pdf' ? '.xlsx,.xls' : tool.id === 'word2pdf' ? '.docx' : tool.id === 'img2pdf' ? 'image/*' : tool.id === 'pdf2excel' ? '.pdf' : 'application/pdf';
   const multiple = (tool.id === 'merge' || tool.id === 'img2pdf') ? 'multiple' : '';
-
-  return `
-    <div class="drop-zone" id="dropZone">
-      <span class="big">📁</span>
-      <span>${t('common.drop')}</span>
-      <input type="file" id="fileInput" accept="${accept}" ${multiple}>
-    </div>
-    <ul class="file-list" id="fileList"></ul>
-    ${extra}
-    <button class="btn" id="runBtn" disabled>${t('common.run')}</button>
-    <div class="status-msg hidden" id="statusMsg"></div>`;
+  return '<div class="drop-zone" id="dropZone"><span class="big">📁</span><span>' + t('common.drop') + '</span><input type="file" id="fileInput" accept="' + accept + '" ' + multiple + '></div><ul class="file-list" id="fileList"></ul>' + extra + '<button class="btn" id="runBtn" disabled>' + t('common.run') + '</button><div class="status-msg hidden" id="statusMsg"></div>';
 }
 
-/* ==========================================================
-   EVENTS
-   ========================================================== */
 function bindToolEvents(tool) {
   const dropZone = document.getElementById('dropZone');
   const fileInput = document.getElementById('fileInput');
@@ -1753,15 +1821,14 @@ function bindToolEvents(tool) {
     const filtered = newFiles.filter(f => {
       const n = f.name.toLowerCase();
       if (tool.id === 'excel2pdf') return n.endsWith('.xlsx') || n.endsWith('.xls');
-      if (tool.id === 'word2pdf')  return n.endsWith('.docx');
-      if (tool.id === 'img2pdf')   return f.type.startsWith('image/');
+      if (tool.id === 'word2pdf') return n.endsWith('.docx');
+      if (tool.id === 'img2pdf') return f.type.startsWith('image/');
       return f.type === 'application/pdf' || n.endsWith('.pdf');
     });
     if (tool.id === 'merge' || tool.id === 'img2pdf') currentFiles.push(...filtered);
     else currentFiles = filtered.slice(0, 1);
     renderFileList(tool, fileList, runBtn);
   }
-
   runBtn.addEventListener('click', () => executeTool(tool, statusMsg));
 }
 
@@ -1769,7 +1836,7 @@ function renderFileList(tool, fileList, runBtn) {
   fileList.innerHTML = '';
   currentFiles.forEach((f, i) => {
     const li = document.createElement('li');
-    li.innerHTML = `<span>📎 ${f.name}</span>`;
+    li.innerHTML = '<span>📎 ' + f.name + '</span>';
     const btn = document.createElement('button');
     btn.className = 'remove';
     btn.textContent = '×';
@@ -1783,34 +1850,30 @@ function renderFileList(tool, fileList, runBtn) {
   runBtn.disabled = currentFiles.length < (tool.needs || 1);
 }
 
-function showStatus(el, text, type = 'info') {
+function showStatus(el, text, type) {
+  if (!type) type = 'info';
   el.textContent = text;
   el.className = 'status-msg ' + type;
 }
 
-/* ==========================================================
-   EXECUTE
-   ========================================================== */
 async function executeTool(tool, statusMsg) {
   const runBtn = document.getElementById('runBtn');
   runBtn.disabled = true;
   showStatus(statusMsg, t('common.processing'), 'info');
   try {
-    switch (tool.id) {
-      case 'merge':     await toolMerge();     break;
-      case 'split':     await toolSplit();     break;
-      case 'compress':  await toolCompress();  break;
-      case 'rotate':    await toolRotate();    break;
-      case 'extract':   await toolExtract();   break;
-      case 'watermark': await toolWatermark(); break;
-      case 'pagenum':   await toolPageNum();   break;
-      case 'excel2pdf': await toolExcel2Pdf(); break;
-      case 'pdf2excel': await toolPdf2Excel(); break;
-      case 'word2pdf':  await toolWord2Pdf();  break;
-      case 'img2pdf':   await toolImg2Pdf();   break;
-      case 'protect':   await toolProtect();   break;
-      case 'metadata':  await toolMetadata();  break;
-    }
+    if (tool.id === 'merge') await toolMerge();
+    else if (tool.id === 'split') await toolSplit();
+    else if (tool.id === 'compress') await toolCompress();
+    else if (tool.id === 'rotate') await toolRotate();
+    else if (tool.id === 'extract') await toolExtract();
+    else if (tool.id === 'watermark') await toolWatermark();
+    else if (tool.id === 'pagenum') await toolPageNum();
+    else if (tool.id === 'excel2pdf') await toolExcel2Pdf();
+    else if (tool.id === 'pdf2excel') await toolPdf2Excel();
+    else if (tool.id === 'word2pdf') await toolWord2Pdf();
+    else if (tool.id === 'img2pdf') await toolImg2Pdf();
+    else if (tool.id === 'protect') await toolProtect();
+    else if (tool.id === 'metadata') await toolMetadata();
     showStatus(statusMsg, t('common.done'), 'ok');
   } catch (err) {
     console.error(err);
@@ -1820,9 +1883,6 @@ async function executeTool(tool, statusMsg) {
   }
 }
 
-/* ==========================================================
-   HELPERS
-   ========================================================== */
 function downloadBlob(blob, filename) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -1835,7 +1895,8 @@ function parseRange(str, max) {
   str.split(',').forEach(part => {
     part = part.trim(); if (!part) return;
     if (part.includes('-')) {
-      const [a, b] = part.split('-').map(n => parseInt(n, 10));
+      const ab = part.split('-');
+      const a = parseInt(ab[0], 10), b = parseInt(ab[1], 10);
       for (let i = a; i <= Math.min(b, max); i++) pages.add(i - 1);
     } else {
       const n = parseInt(part, 10);
@@ -1848,227 +1909,166 @@ function parseRange(str, max) {
 /* ==========================================================
    PDF TOOLS
    ========================================================== */
-
 async function toolMerge() {
-  const { PDFDocument } = PDFLib;
-  const merged = await PDFDocument.create();
+  const merged = await PDFLib.PDFDocument.create();
   for (const file of currentFiles) {
     const bytes = await file.arrayBuffer();
-    const pdf = await PDFDocument.load(bytes, { ignoreEncryption: true });
+    const pdf = await PDFLib.PDFDocument.load(bytes, { ignoreEncryption: true });
     const pages = await merged.copyPages(pdf, pdf.getPageIndices());
     pages.forEach(p => merged.addPage(p));
   }
-  const out = await merged.save();
-  downloadBlob(new Blob([out], { type: 'application/pdf' }), 'merged.pdf');
+  downloadBlob(new Blob([await merged.save()], { type: 'application/pdf' }), 'merged.pdf');
 }
-
 async function toolSplit() {
-  const { PDFDocument } = PDFLib;
   const rangeStr = document.getElementById('pageRange').value;
-  const src = await PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
-  const total = src.getPageCount();
-  const idx = parseRange(rangeStr, total);
+  const src = await PDFLib.PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
+  const idx = parseRange(rangeStr, src.getPageCount());
   if (!idx.length) throw new Error('No valid pages');
-  const out = await PDFDocument.create();
+  const out = await PDFLib.PDFDocument.create();
   const pages = await out.copyPages(src, idx);
   pages.forEach(p => out.addPage(p));
-  const bytes = await out.save();
-  downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'split.pdf');
+  downloadBlob(new Blob([await out.save()], { type: 'application/pdf' }), 'split.pdf');
 }
-
 async function toolExtract() {
-  const { PDFDocument } = PDFLib;
   const rangeStr = document.getElementById('pageRange').value;
-  const src = await PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
-  const total = src.getPageCount();
-  const idx = parseRange(rangeStr, total);
+  const src = await PDFLib.PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
+  const idx = parseRange(rangeStr, src.getPageCount());
   if (!idx.length) throw new Error('No valid pages');
-  const out = await PDFDocument.create();
+  const out = await PDFLib.PDFDocument.create();
   const pages = await out.copyPages(src, idx);
   pages.forEach(p => out.addPage(p));
-  const bytes = await out.save();
-  downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'extracted.pdf');
+  downloadBlob(new Blob([await out.save()], { type: 'application/pdf' }), 'extracted.pdf');
 }
-
 async function toolCompress() {
-  const { PDFDocument } = PDFLib;
-  const src = await PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
+  const src = await PDFLib.PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
   const bytes = await src.save({ useObjectStreams: true });
   downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'compressed.pdf');
 }
-
 async function toolRotate() {
-  const { PDFDocument, degrees } = PDFLib;
   const angle = parseInt(document.getElementById('rotateAngle').value, 10);
-  const src = await PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
-  src.getPages().forEach(p => p.setRotation(degrees(angle)));
-  const bytes = await src.save();
-  downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'rotated.pdf');
+  const src = await PDFLib.PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
+  src.getPages().forEach(p => p.setRotation(PDFLib.degrees(angle)));
+  downloadBlob(new Blob([await src.save()], { type: 'application/pdf' }), 'rotated.pdf');
 }
-
 async function toolWatermark() {
-  const { PDFDocument, rgb, degrees, StandardFonts } = PDFLib;
   const text = document.getElementById('wmText').value || 'CONFIDENTIAL';
   const opacity = parseFloat(document.getElementById('wmOpacity').value) || 0.3;
-  const src = await PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
-  const font = await src.embedFont(StandardFonts.HelveticaBold);
+  const src = await PDFLib.PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
+  const font = await src.embedFont(PDFLib.StandardFonts.HelveticaBold);
   src.getPages().forEach(page => {
-    const { width, height } = page.getSize();
-    page.drawText(text, {
-      x: width / 4, y: height / 2, size: 60, font: font,
-      color: rgb(0.5, 0.5, 0.5), opacity: opacity, rotate: degrees(45)
-    });
+    const wh = page.getSize();
+    page.drawText(text, { x: wh.width / 4, y: wh.height / 2, size: 60, font: font, color: PDFLib.rgb(0.5, 0.5, 0.5), opacity: opacity, rotate: PDFLib.degrees(45) });
   });
-  const bytes = await src.save();
-  downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'watermarked.pdf');
+  downloadBlob(new Blob([await src.save()], { type: 'application/pdf' }), 'watermarked.pdf');
 }
-
 async function toolPageNum() {
-  const { PDFDocument, rgb, StandardFonts } = PDFLib;
   const pos = document.getElementById('pnPosition').value;
-  const src = await PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
-  const font = await src.embedFont(StandardFonts.Helvetica);
+  const src = await PDFLib.PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
+  const font = await src.embedFont(PDFLib.StandardFonts.Helvetica);
   const pages = src.getPages();
   pages.forEach((page, i) => {
-    const { width } = page.getSize();
-    const label = `${i + 1} / ${pages.length}`;
-    const textWidth = font.widthOfTextAtSize(label, 12);
-    let x = (width - textWidth) / 2;
-    if (pos === 'bottom-right') x = width - textWidth - 40;
-    if (pos === 'bottom-left')  x = 40;
-    page.drawText(label, { x: x, y: 20, size: 12, font: font, color: rgb(0.3, 0.3, 0.3) });
+    const label = (i + 1) + ' / ' + pages.length;
+    const w = page.getSize().width;
+    const tw = font.widthOfTextAtSize(label, 12);
+    let x = (w - tw) / 2;
+    if (pos === 'bottom-right') x = w - tw - 40;
+    if (pos === 'bottom-left') x = 40;
+    page.drawText(label, { x: x, y: 20, size: 12, font: font, color: PDFLib.rgb(0.3, 0.3, 0.3) });
   });
-  const bytes = await src.save();
-  downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'numbered.pdf');
+  downloadBlob(new Blob([await src.save()], { type: 'application/pdf' }), 'numbered.pdf');
 }
-
 async function toolExcel2Pdf() {
-  const { jsPDF } = window.jspdf;
-  const buffer = await currentFiles[0].arrayBuffer();
-  const workbook = XLSX.read(buffer, { type: 'array' });
+  const jsPDF = window.jspdf.jsPDF;
+  const workbook = XLSX.read(await currentFiles[0].arrayBuffer(), { type: 'array' });
   const doc = new jsPDF({ orientation: 'landscape' });
-  let firstSheet = true;
+  let first = true;
   workbook.SheetNames.forEach(sheetName => {
-    const sheet = workbook.Sheets[sheetName];
-    const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
-    if (!firstSheet) doc.addPage();
-    firstSheet = false;
+    const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1, defval: '' });
+    if (!first) doc.addPage();
+    first = false;
     doc.setFontSize(14);
     doc.text(sheetName, 14, 14);
-    doc.autoTable({
-      head: rows.length ? [rows[0]] : [],
-      body: rows.slice(1),
-      startY: 20, styles: { fontSize: 9 },
-      headStyles: { fillColor: [79, 70, 229] }
-    });
+    doc.autoTable({ head: rows.length ? [rows[0]] : [], body: rows.slice(1), startY: 20, styles: { fontSize: 9 }, headStyles: { fillColor: [79, 70, 229] } });
   });
   doc.save('excel.pdf');
 }
-
 async function toolPdf2Excel() {
-  const buffer = await currentFiles[0].arrayBuffer();
-  const pdf = await pdfjsLib.getDocument({ data: buffer }).promise;
+  const pdf = await pdfjsLib.getDocument({ data: await currentFiles[0].arrayBuffer() }).promise;
   const allRows = [];
   for (let i = 1; i <= pdf.numPages; i++) {
-    const page = await pdf.getPage(i);
-    const content = await page.getTextContent();
+    const content = await (await pdf.getPage(i)).getTextContent();
     const lines = {};
     content.items.forEach(item => {
       const y = Math.round(item.transform[5]);
       if (!lines[y]) lines[y] = [];
       lines[y].push({ x: item.transform[4], text: item.str });
     });
-    const sortedY = Object.keys(lines).map(Number).sort((a, b) => b - a);
-    sortedY.forEach(y => {
+    Object.keys(lines).map(Number).sort((a, b) => b - a).forEach(y => {
       lines[y].sort((a, b) => a.x - b.x);
       const row = lines[y].map(o => o.text).join(' ').trim();
       if (row) allRows.push([row]);
     });
-    allRows.push([`--- Page ${i} ---`]);
+    allRows.push(['--- Page ' + i + ' ---']);
   }
-  const ws = XLSX.utils.aoa_to_sheet(allRows);
   const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Extracted');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(allRows), 'Extracted');
   XLSX.writeFile(wb, 'extracted.xlsx');
 }
-
 async function toolWord2Pdf() {
-  const { jsPDF } = window.jspdf;
-  const buffer = await currentFiles[0].arrayBuffer();
-  const result = await mammoth.extractRawText({ arrayBuffer: buffer });
-  const text = result.value || '';
+  const jsPDF = window.jspdf.jsPDF;
+  const result = await mammoth.extractRawText({ arrayBuffer: await currentFiles[0].arrayBuffer() });
   const doc = new jsPDF({ unit: 'pt', format: 'a4' });
   doc.setFontSize(11);
-  const margin = 40;
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const pageHeight = doc.internal.pageSize.getHeight();
-  const maxWidth = pageWidth - margin * 2;
-  const lines = doc.splitTextToSize(text, maxWidth);
+  const margin = 40, pw = doc.internal.pageSize.getWidth(), ph = doc.internal.pageSize.getHeight();
+  const lines = doc.splitTextToSize(result.value || '', pw - margin * 2);
   let y = margin;
   lines.forEach(line => {
-    if (y > pageHeight - margin) { doc.addPage(); y = margin; }
+    if (y > ph - margin) { doc.addPage(); y = margin; }
     doc.text(line, margin, y);
     y += 16;
   });
   doc.save('word.pdf');
 }
-
 async function toolImg2Pdf() {
-  const { PDFDocument } = PDFLib;
-  const pdf = await PDFDocument.create();
+  const pdf = await PDFLib.PDFDocument.create();
   for (const file of currentFiles) {
     const bytes = await file.arrayBuffer();
-    let img;
-    if (file.type === 'image/png') img = await pdf.embedPng(bytes);
-    else img = await pdf.embedJpg(bytes);
+    const img = file.type === 'image/png' ? await pdf.embedPng(bytes) : await pdf.embedJpg(bytes);
     const page = pdf.addPage([img.width, img.height]);
     page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
   }
-  const out = await pdf.save();
-  downloadBlob(new Blob([out], { type: 'application/pdf' }), 'images.pdf');
+  downloadBlob(new Blob([await pdf.save()], { type: 'application/pdf' }), 'images.pdf');
 }
-
 async function toolProtect() {
-  const { PDFDocument } = PDFLib;
   const password = document.getElementById('pdfPassword').value;
   if (!password) throw new Error('Password required');
-  const src = await PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
+  const src = await PDFLib.PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
   const bytes = await src.save({
-    userPassword: password,
-    ownerPassword: password,
-    permissions: {
-      printing: 'highResolution', modifying: false, copying: false,
-      annotating: false, fillingForms: false,
-      contentAccessibility: true, documentAssembly: false
-    }
+    userPassword: password, ownerPassword: password,
+    permissions: { printing: 'highResolution', modifying: false, copying: false, annotating: false, fillingForms: false, contentAccessibility: true, documentAssembly: false }
   });
   downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'protected.pdf');
 }
-
 async function toolMetadata() {
-  const { PDFDocument } = PDFLib;
-  const src = await PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
+  const src = await PDFLib.PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
   const title = document.getElementById('metaTitle').value;
   const author = document.getElementById('metaAuthor').value;
   const subject = document.getElementById('metaSubject').value;
   if (title) src.setTitle(title);
   if (author) src.setAuthor(author);
   if (subject) src.setSubject(subject);
-  const bytes = await src.save();
-  downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'metadata.pdf');
+  downloadBlob(new Blob([await src.save()], { type: 'application/pdf' }), 'metadata.pdf');
 }
 
 /* ==========================================================
    🕐 LV CLOCK
    ========================================================== */
 function updateLvClock() {
-  const now = new Date();
-  const formatted = new Intl.DateTimeFormat('ru-RU', {
+  const el = document.getElementById('lvTime');
+  if (el) el.textContent = new Intl.DateTimeFormat('ru-RU', {
     timeZone: 'Europe/Riga',
     hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
-  }).format(now);
-  const el = document.getElementById('lvTime');
-  if (el) el.textContent = formatted;
+  }).format(new Date());
 }
 
 /* ==========================================================
@@ -2080,9 +2080,7 @@ function applyTheme(dark) {
   themeBtn.textContent = dark ? '☀️' : '🌙';
   localStorage.setItem('pdfnest_theme', dark ? 'dark' : 'light');
 }
-themeBtn.addEventListener('click', () => {
-  applyTheme(!document.body.classList.contains('dark'));
-});
+themeBtn.addEventListener('click', () => applyTheme(!document.body.classList.contains('dark')));
 if (localStorage.getItem('pdfnest_theme') === 'dark') applyTheme(true);
 
 /* ==========================================================
@@ -2093,69 +2091,47 @@ const timerDisplay = document.getElementById('timerDisplay');
 const timerStartBtn = document.getElementById('timerStartBtn');
 const timerStopBtn = document.getElementById('timerStopBtn');
 const timerStatus = document.getElementById('timerStatus');
-let timerInterval = null;
-let timerRemaining = 0;
+let timerInterval = null, timerRemaining = 0;
 
-function openTimerModal() {
-  timerOverlay.classList.add('active');
-  timerDisplay.classList.remove('running');
-}
-function closeTimerModal() {
-  timerOverlay.classList.remove('active');
-}
+function openTimerModal() { timerOverlay.classList.add('active'); timerDisplay.classList.remove('running'); }
+function closeTimerModal() { timerOverlay.classList.remove('active'); }
 timerOverlay.addEventListener('click', e => { if (e.target === timerOverlay) closeTimerModal(); });
 
 function formatHMS(sec) {
   const h = String(Math.floor(sec / 3600)).padStart(2, '0');
   const m = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
   const s = String(sec % 60).padStart(2, '0');
-  return `${h}:${m}:${s}`;
+  return h + ':' + m + ':' + s;
 }
-
 function playBeep() {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     const beep = () => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain); gain.connect(ctx.destination);
+      const osc = ctx.createOscillator(), g = ctx.createGain();
+      osc.connect(g); g.connect(ctx.destination);
       osc.type = 'sine'; osc.frequency.value = 880;
-      gain.gain.setValueAtTime(0.3, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.5);
+      g.gain.setValueAtTime(0.3, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.5);
       osc.start(); osc.stop(ctx.currentTime + 1.5);
     };
     beep();
     let count = 0;
-    const repeat = setInterval(() => {
-      count++;
-      if (count >= 3) { clearInterval(repeat); return; }
-      beep();
-    }, 600);
-  } catch (e) { console.warn('Audio error', e); }
+    const r = setInterval(() => { count++; if (count >= 3) { clearInterval(r); return; } beep(); }, 600);
+  } catch (e) { console.warn(e); }
 }
-
 function tickTimer() {
   timerRemaining--;
   timerDisplay.textContent = formatHMS(timerRemaining);
   if (timerRemaining <= 0) {
-    clearInterval(timerInterval);
-    timerInterval = null;
+    clearInterval(timerInterval); timerInterval = null;
     timerDisplay.classList.remove('running');
     timerDisplay.textContent = '00:00:00';
     timerStartBtn.style.display = 'block';
     timerStopBtn.style.display = 'none';
     showStatus(timerStatus, t('timer.finished'), 'ok');
     playBeep();
-    let blink = 0;
-    const origTitle = document.title;
-    const blinkInt = setInterval(() => {
-      document.title = blink % 2 === 0 ? '⏰ TIME UP!' : origTitle;
-      blink++;
-      if (blink >= 10) { clearInterval(blinkInt); document.title = origTitle; }
-    }, 700);
   }
 }
-
 timerStartBtn.addEventListener('click', () => {
   const h = parseInt(document.getElementById('timerH').value, 10) || 0;
   const m = parseInt(document.getElementById('timerM').value, 10) || 0;
@@ -2165,20 +2141,16 @@ timerStartBtn.addEventListener('click', () => {
   timerRemaining = total;
   timerDisplay.textContent = formatHMS(timerRemaining);
   timerDisplay.classList.add('running');
-  showStatus(timerStatus, t('common.processing'), 'info');
   timerStartBtn.style.display = 'none';
   timerStopBtn.style.display = 'block';
   timerInterval = setInterval(tickTimer, 1000);
 });
-
 timerStopBtn.addEventListener('click', () => {
-  clearInterval(timerInterval);
-  timerInterval = null;
+  clearInterval(timerInterval); timerInterval = null;
   timerDisplay.classList.remove('running');
   timerDisplay.textContent = '00:00:00';
   timerStartBtn.style.display = 'block';
   timerStopBtn.style.display = 'none';
-  showStatus(timerStatus, '', 'info');
 });
 
 /* ==========================================================
@@ -2190,60 +2162,46 @@ const alarmStatus = document.getElementById('alarmStatus');
 const alarmList = document.getElementById('alarmList');
 let alarms = [];
 
-function openAlarmModal() {
-  alarmOverlay.classList.add('active');
-  renderAlarms();
-}
-function closeAlarmModal() {
-  alarmOverlay.classList.remove('active');
-}
+function openAlarmModal() { alarmOverlay.classList.add('active'); renderAlarms(); }
+function closeAlarmModal() { alarmOverlay.classList.remove('active'); }
 alarmOverlay.addEventListener('click', e => { if (e.target === alarmOverlay) closeAlarmModal(); });
 
 function renderAlarms() {
   alarmList.innerHTML = '';
-  alarms.forEach((alarm, i) => {
+  alarms.forEach((a, i) => {
     const li = document.createElement('li');
-    if (alarm.active) li.classList.add('active');
-    li.innerHTML = `<span><span class="alarm-time">${alarm.time}</span>
-      <span class="alarm-label">${alarm.label || ''}</span></span>`;
+    if (a.active) li.classList.add('active');
+    li.innerHTML = '<span><span class="alarm-time">' + a.time + '</span><span class="alarm-label">' + (a.label || '') + '</span></span>';
     const del = document.createElement('button');
-    del.className = 'alarm-del';
-    del.textContent = '×';
+    del.className = 'alarm-del'; del.textContent = '×';
     del.addEventListener('click', () => { alarms.splice(i, 1); renderAlarms(); });
     li.appendChild(del);
     alarmList.appendChild(li);
   });
 }
-
 alarmSetBtn.addEventListener('click', () => {
   const h = parseInt(document.getElementById('alarmHour').value, 10);
   const m = parseInt(document.getElementById('alarmMinute').value, 10);
-  if (isNaN(h) || isNaN(m) || h < 0 || h > 23 || m < 0 || m > 59) {
-    showStatus(alarmStatus, t('alarm.needTime'), 'err');
-    return;
-  }
+  if (isNaN(h) || isNaN(m) || h < 0 || h > 23 || m < 0 || m > 59) { showStatus(alarmStatus, t('alarm.needTime'), 'err'); return; }
   const time = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
-  alarms.push({ time, label: document.getElementById('alarmLabel').value || '', active: true, fired: false });
+  alarms.push({ time: time, label: document.getElementById('alarmLabel').value || '', active: true, fired: false });
   showStatus(alarmStatus, t('alarm.added') + ' ' + time, 'ok');
   document.getElementById('alarmLabel').value = '';
   renderAlarms();
 });
-
 function checkAlarms() {
-  const now = new Date();
   const lvTime = new Intl.DateTimeFormat('ru-RU', {
     timeZone: 'Europe/Riga', hour: '2-digit', minute: '2-digit', hour12: false
-  }).format(now);
-  alarms.forEach(alarm => {
-    if (!alarm.fired && alarm.active && alarm.time === lvTime) {
-      alarm.fired = true;
-      alarm.active = false;
+  }).format(new Date());
+  alarms.forEach(a => {
+    if (!a.fired && a.active && a.time === lvTime) {
+      a.fired = true; a.active = false;
       playBeep();
-      alert(`🔔 ${t('alarm.ringing')} ${alarm.label || alarm.time}`);
+      alert('🔔 ' + t('alarm.ringing') + ' ' + (a.label || a.time));
       renderAlarms();
-      const alarmBtn = document.getElementById('alarmBtn');
-      alarmBtn.classList.add('ringing');
-      setTimeout(() => alarmBtn.classList.remove('ringing'), 5000);
+      const ab = document.getElementById('alarmBtn');
+      ab.classList.add('ringing');
+      setTimeout(() => ab.classList.remove('ringing'), 5000);
     }
   });
 }
@@ -2258,29 +2216,23 @@ const rpContent = document.getElementById('rpContent');
 const rpGrid = document.getElementById('rpGrid');
 const rpRunBtn = document.getElementById('rpRunBtn');
 const rpStatus = document.getElementById('rpStatus');
-let rpPdfDoc = null;
-let rpTotalPages = 0;
-let rpSelected = new Set();
+let rpPdfDoc = null, rpTotalPages = 0, rpSelected = new Set();
 
 function openRemovePages() {
   removePagesOverlay.classList.add('active');
-  rpPdfDoc = null;
-  rpSelected = new Set();
+  rpPdfDoc = null; rpSelected = new Set();
   rpContent.classList.add('hidden');
   rpGrid.innerHTML = '';
   rpStatus.className = 'status-msg hidden';
 }
-function closeRemovePages() {
-  removePagesOverlay.classList.remove('active');
-}
+function closeRemovePages() { removePagesOverlay.classList.remove('active'); }
 removePagesOverlay.addEventListener('click', e => { if (e.target === removePagesOverlay) closeRemovePages(); });
 
 rpDropZone.addEventListener('click', () => rpFileInput.click());
 rpDropZone.addEventListener('dragover', e => { e.preventDefault(); rpDropZone.classList.add('dragover'); });
 rpDropZone.addEventListener('dragleave', () => rpDropZone.classList.remove('dragover'));
 rpDropZone.addEventListener('drop', async e => {
-  e.preventDefault();
-  rpDropZone.classList.remove('dragover');
+  e.preventDefault(); rpDropZone.classList.remove('dragover');
   const f = [...e.dataTransfer.files].find(x => x.name.toLowerCase().endsWith('.pdf'));
   if (f) await loadRpPdf(f);
 });
@@ -2288,23 +2240,20 @@ rpFileInput.addEventListener('change', async e => {
   if (e.target.files[0]) await loadRpPdf(e.target.files[0]);
   rpFileInput.value = '';
 });
-
 async function loadRpPdf(file) {
-  const { PDFDocument } = PDFLib;
-  rpPdfDoc = await PDFDocument.load(await file.arrayBuffer(), { ignoreEncryption: true });
+  rpPdfDoc = await PDFLib.PDFDocument.load(await file.arrayBuffer(), { ignoreEncryption: true });
   rpTotalPages = rpPdfDoc.getPageCount();
   rpSelected = new Set();
   renderRpGrid();
   rpContent.classList.remove('hidden');
   rpDropZone.style.display = 'none';
 }
-
 function renderRpGrid() {
   rpGrid.innerHTML = '';
   for (let i = 0; i < rpTotalPages; i++) {
     const item = document.createElement('div');
     item.className = 'page-item' + (rpSelected.has(i) ? ' selected' : '');
-    item.innerHTML = `<span class="page-num">${i + 1}</span>`;
+    item.innerHTML = '<span class="page-num">' + (i + 1) + '</span>';
     item.addEventListener('click', () => {
       if (rpSelected.has(i)) rpSelected.delete(i);
       else rpSelected.add(i);
@@ -2313,21 +2262,18 @@ function renderRpGrid() {
     rpGrid.appendChild(item);
   }
 }
-
 rpRunBtn.addEventListener('click', async () => {
   if (rpSelected.size === 0) { showStatus(rpStatus, t('rp.selectOne'), 'err'); return; }
   if (rpSelected.size === rpTotalPages) { showStatus(rpStatus, t('rp.all'), 'err'); return; }
   rpRunBtn.disabled = true;
   showStatus(rpStatus, t('common.processing'), 'info');
   try {
-    const { PDFDocument } = PDFLib;
-    const newDoc = await PDFDocument.create();
+    const newDoc = await PDFLib.PDFDocument.create();
     const keepIdx = [];
     for (let i = 0; i < rpTotalPages; i++) if (!rpSelected.has(i)) keepIdx.push(i);
     const pages = await newDoc.copyPages(rpPdfDoc, keepIdx);
     pages.forEach(p => newDoc.addPage(p));
-    const bytes = await newDoc.save();
-    downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'pages-removed.pdf');
+    downloadBlob(new Blob([await newDoc.save()], { type: 'application/pdf' }), 'pages-removed.pdf');
     showStatus(rpStatus, t('common.done'), 'ok');
   } catch (err) {
     console.error(err);
@@ -2338,65 +2284,23 @@ rpRunBtn.addEventListener('click', async () => {
 });
 
 /* ==========================================================
+   💰 DONATE
+   ========================================================== */
+const donateOverlay = document.getElementById('donateOverlay');
+function openDonate() { donateOverlay.classList.add('active'); }
+function closeDonate() { donateOverlay.classList.remove('active'); }
+donateOverlay.addEventListener('click', e => { if (e.target === donateOverlay) closeDonate(); });
+document.getElementById('donateBtn').addEventListener('click', openDonate);
+
+
+/* ==========================================================
    BUTTONS — Timer / Alarm
    ========================================================== */
 document.getElementById('timerBtn').addEventListener('click', openTimerModal);
 document.getElementById('alarmBtn').addEventListener('click', openAlarmModal);
 
 /* ==========================================================
-   💰 DONATE MODAL
-   ========================================================== */
-const donateOverlay = document.getElementById('donateOverlay');
-
-function openDonate() {
-  donateOverlay.classList.add('active');
-}
-function closeDonate() {
-  donateOverlay.classList.remove('active');
-}
-donateOverlay.addEventListener('click', e => { if (e.target === donateOverlay) closeDonate(); });
-document.getElementById('donateBtn').addEventListener('click', openDonate);
-
-/* ==========================================================
-   💱 CURRENCY RATES
-   Значения показывают: сколько EUR стоит 1 единица валюты
-   ========================================================== */
-const LVL_TO_EUR = 1 / 0.702804; // ≈ 1.42287
-
-async function loadCurrencies() {
-  try {
-    const res = await fetch('https://open.er-api.com/v6/latest/EUR');
-    const data = await res.json();
-    const rates = data.rates;
-
-    // EUR — базовая
-    document.getElementById('curEUR').textContent = '1.0000';
-
-    // USD: сколько EUR за 1 USD
-    const usdPerEur = rates.USD;
-    document.getElementById('curUSD').textContent = (1 / usdPerEur).toFixed(4);
-
-    // RUB: сколько EUR за 1 RUB
-    const rubPerEur = rates.RUB;
-    document.getElementById('curRUB').textContent = (1 / rubPerEur).toFixed(5);
-
-    // LVL — фиксированный исторический курс
-    document.getElementById('curLVL').textContent = LVL_TO_EUR.toFixed(5);
-
-  } catch (err) {
-    console.warn('Currency API error:', err);
-    document.getElementById('curEUR').textContent = '1.0000';
-    document.getElementById('curUSD').textContent = '—';
-    document.getElementById('curRUB').textContent = '—';
-    document.getElementById('curLVL').textContent = LVL_TO_EUR.toFixed(5);
-  }
-}
-
-/* ==========================================================
-   ✏️ PDF EDITOR — ЧАСТЬ А
-   Состояние + отрисовка + инструменты
-   Рисунки хранятся для КАЖДОЙ страницы отдельно
-   Также храним массив ВЕКТОРНЫХ операций для "Save with text"
+   ✏️ PDF EDITOR
    ========================================================== */
 const editorOverlay = document.getElementById('editorOverlay');
 const editorDropZone = document.getElementById('editorDropZone');
@@ -2411,38 +2315,15 @@ const editorUndo = document.getElementById('editorUndo');
 const editorClear = document.getElementById('editorClear');
 const editorSave = document.getElementById('editorSave');
 
-let edPdfBytes = null;
-let edPdfDoc = null;
-let edTotalPages = 0;
-let edCurrentPage = 0;
-let edScale = 1.5;
-let edCanvasWidth = 0;
-let edCanvasHeight = 0;
-
-let edTool = 'pen';
-let edColor = '#ef4444';
-let edLineWidth = 3;
-
-// История ImageData для undo (по страницам)
-const edHistory = {};
-// Финальное состояние canvas (по страницам)
-const edFinalState = {};
-
-// ВЕКТОРНЫЕ операции по страницам: для "Save with text"
-// Формат: { pageIndex: [ {type, ...}, ... ] }
-const edVectorOps = {};
-
-let edDrawing = false;
-let edStartX = 0, edStartY = 0;
-let edSnapshot = null;
-let edCurrentPenPath = []; // массив точек для текущего штриха
+let edPdfBytes = null, edPdfDoc = null, edTotalPages = 0, edCurrentPage = 0;
+let edScale = 1.5, edCanvasWidth = 0, edCanvasHeight = 0;
+let edTool = 'pen', edColor = '#ef4444', edLineWidth = 3;
+const edHistory = {}, edFinalState = {}, edVectorOps = {};
+let edDrawing = false, edStartX = 0, edStartY = 0, edSnapshot = null, edCurrentPenPath = [];
 
 function openEditor() {
   editorOverlay.classList.add('active');
-  edPdfBytes = null;
-  edPdfDoc = null;
-  edTotalPages = 0;
-  edCurrentPage = 0;
+  edPdfBytes = null; edPdfDoc = null; edTotalPages = 0; edCurrentPage = 0;
   Object.keys(edHistory).forEach(k => delete edHistory[k]);
   Object.keys(edFinalState).forEach(k => delete edFinalState[k]);
   Object.keys(edVectorOps).forEach(k => delete edVectorOps[k]);
@@ -2450,17 +2331,14 @@ function openEditor() {
   editorDropZone.style.display = 'block';
   editorStatus.className = 'status-msg hidden';
 }
-function closeEditor() {
-  editorOverlay.classList.remove('active');
-}
+function closeEditor() { editorOverlay.classList.remove('active'); }
 editorOverlay.addEventListener('click', e => { if (e.target === editorOverlay) closeEditor(); });
 
 editorDropZone.addEventListener('click', () => editorFileInput.click());
 editorDropZone.addEventListener('dragover', e => { e.preventDefault(); editorDropZone.classList.add('dragover'); });
 editorDropZone.addEventListener('dragleave', () => editorDropZone.classList.remove('dragover'));
 editorDropZone.addEventListener('drop', async e => {
-  e.preventDefault();
-  editorDropZone.classList.remove('dragover');
+  e.preventDefault(); editorDropZone.classList.remove('dragover');
   const f = [...e.dataTransfer.files].find(x => x.name.toLowerCase().endsWith('.pdf'));
   if (f) await loadEditorPdf(f);
 });
@@ -2488,7 +2366,6 @@ async function loadEditorPdf(file) {
     showStatus(editorStatus, t('common.error') + err.message, 'err');
   }
 }
-
 async function renderEditorPage() {
   const page = await edPdfDoc.getPage(edCurrentPage + 1);
   const viewport = page.getViewport({ scale: edScale });
@@ -2498,34 +2375,23 @@ async function renderEditorPage() {
   editorCanvas.height = edCanvasHeight;
   editorCanvas.style.width = edCanvasWidth + 'px';
   editorCanvas.style.height = edCanvasHeight + 'px';
-
   const ctx = editorCanvas.getContext('2d');
   ctx.fillStyle = '#fff';
   ctx.fillRect(0, 0, edCanvasWidth, edCanvasHeight);
   await page.render({ canvasContext: ctx, viewport: viewport }).promise;
-
-  // Восстанавливаем рисунки для этой страницы
   const savedState = edFinalState[edCurrentPage];
-  if (savedState) {
-    ctx.putImageData(savedState, 0, 0);
-  }
-
-  editorPageCounter.textContent = `${edCurrentPage + 1} / ${edTotalPages}`;
+  if (savedState) ctx.putImageData(savedState, 0, 0);
+  editorPageCounter.textContent = (edCurrentPage + 1) + ' / ' + edTotalPages;
   editorPrev.disabled = edCurrentPage === 0;
   editorNext.disabled = edCurrentPage === edTotalPages - 1;
 }
-
 function saveCurrentPageState() {
   if (!edPdfDoc) return;
   const ctx = editorCanvas.getContext('2d');
-  try {
-    edFinalState[edCurrentPage] = ctx.getImageData(0, 0, edCanvasWidth, edCanvasHeight);
-  } catch (e) {
-    console.warn('Cannot save canvas state', e);
-  }
+  try { edFinalState[edCurrentPage] = ctx.getImageData(0, 0, edCanvasWidth, edCanvasHeight); }
+  catch (e) { console.warn(e); }
 }
 
-/* ===== TOOLBAR ===== */
 document.querySelectorAll('.tool-btn[data-tool]').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.tool-btn[data-tool]').forEach(b => b.classList.remove('active'));
@@ -2540,8 +2406,6 @@ document.querySelectorAll('.color-swatch').forEach(sw => {
     edColor = sw.dataset.color;
   });
 });
-
-/* ===== UNDO / CLEAR ===== */
 editorUndo.addEventListener('click', () => {
   const hist = edHistory[edCurrentPage];
   if (!hist || hist.length === 0) return;
@@ -2549,12 +2413,8 @@ editorUndo.addEventListener('click', () => {
   const ctx = editorCanvas.getContext('2d');
   ctx.putImageData(last, 0, 0);
   edFinalState[edCurrentPage] = ctx.getImageData(0, 0, edCanvasWidth, edCanvasHeight);
-  // Также снимаем последнюю векторную операцию
-  if (edVectorOps[edCurrentPage] && edVectorOps[edCurrentPage].length > 0) {
-    edVectorOps[edCurrentPage].pop();
-  }
+  if (edVectorOps[edCurrentPage] && edVectorOps[edCurrentPage].length > 0) edVectorOps[edCurrentPage].pop();
 });
-
 editorClear.addEventListener('click', async () => {
   if (!confirm('Clear all drawings on this page?')) return;
   edHistory[edCurrentPage] = [];
@@ -2562,39 +2422,22 @@ editorClear.addEventListener('click', async () => {
   delete edFinalState[edCurrentPage];
   await renderEditorPage();
 });
-
-/* ===== PAGE NAV ===== */
 editorPrev.addEventListener('click', async () => {
-  if (edCurrentPage > 0) {
-    saveCurrentPageState();
-    edCurrentPage--;
-    await renderEditorPage();
-  }
+  if (edCurrentPage > 0) { saveCurrentPageState(); edCurrentPage--; await renderEditorPage(); }
 });
 editorNext.addEventListener('click', async () => {
-  if (edCurrentPage < edTotalPages - 1) {
-    saveCurrentPageState();
-    edCurrentPage++;
-    await renderEditorPage();
-  }
+  if (edCurrentPage < edTotalPages - 1) { saveCurrentPageState(); edCurrentPage++; await renderEditorPage(); }
 });
 
-/* ===== DRAWING ===== */
 function getCanvasPos(e) {
   const rect = editorCanvas.getBoundingClientRect();
   const scaleX = editorCanvas.width / rect.width;
   const scaleY = editorCanvas.height / rect.height;
   let x, y;
-  if (e.touches) {
-    x = (e.touches[0].clientX - rect.left) * scaleX;
-    y = (e.touches[0].clientY - rect.top) * scaleY;
-  } else {
-    x = (e.clientX - rect.left) * scaleX;
-    y = (e.clientY - rect.top) * scaleY;
-  }
-  return { x, y };
+  if (e.touches) { x = (e.touches[0].clientX - rect.left) * scaleX; y = (e.touches[0].clientY - rect.top) * scaleY; }
+  else { x = (e.clientX - rect.left) * scaleX; y = (e.clientY - rect.top) * scaleY; }
+  return { x: x, y: y };
 }
-
 function saveSnapshot() {
   const ctx = editorCanvas.getContext('2d');
   edSnapshot = ctx.getImageData(0, 0, edCanvasWidth, edCanvasHeight);
@@ -2608,15 +2451,10 @@ function pushVectorOp(op) {
   if (!edVectorOps[edCurrentPage]) edVectorOps[edCurrentPage] = [];
   edVectorOps[edCurrentPage].push(op);
 }
-
 function drawArrow(ctx, x1, y1, x2, y2) {
   const headlen = 16;
-  const dx = x2 - x1, dy = y2 - y1;
-  const angle = Math.atan2(dy, dx);
-  ctx.beginPath();
-  ctx.moveTo(x1, y1);
-  ctx.lineTo(x2, y2);
-  ctx.stroke();
+  const angle = Math.atan2(y2 - y1, x2 - x1);
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
   ctx.beginPath();
   ctx.moveTo(x2, y2);
   ctx.lineTo(x2 - headlen * Math.cos(angle - Math.PI / 6), y2 - headlen * Math.sin(angle - Math.PI / 6));
@@ -2625,31 +2463,23 @@ function drawArrow(ctx, x1, y1, x2, y2) {
   ctx.fillStyle = edColor;
   ctx.fill();
 }
-
 function startDraw(e) {
   if (!edPdfDoc) return;
   e.preventDefault();
   edDrawing = true;
   saveSnapshot();
   const ctx = editorCanvas.getContext('2d');
-  ctx.strokeStyle = edColor;
-  ctx.fillStyle = edColor;
-  ctx.lineWidth = edLineWidth;
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
+  ctx.strokeStyle = edColor; ctx.fillStyle = edColor;
+  ctx.lineWidth = edLineWidth; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
   const pos = getCanvasPos(e);
-  edStartX = pos.x;
-  edStartY = pos.y;
+  edStartX = pos.x; edStartY = pos.y;
   edCurrentPenPath = [{ x: pos.x, y: pos.y }];
-  if (edTool === 'pen') {
-    ctx.beginPath();
-    ctx.moveTo(pos.x, pos.y);
-  } else if (edTool === 'text') {
+  if (edTool === 'pen') { ctx.beginPath(); ctx.moveTo(pos.x, pos.y); }
+  else if (edTool === 'text') {
     const txt = prompt(t('editor.textPrompt'), '');
     if (txt) {
       ctx.font = '24px sans-serif';
       ctx.fillText(txt, pos.x, pos.y);
-      // Векторная операция
       pushVectorOp({ type: 'text', x: pos.x, y: pos.y, text: txt, color: edColor });
     }
     edDrawing = false;
@@ -2657,56 +2487,30 @@ function startDraw(e) {
     saveCurrentPageState();
   }
 }
-
 function moveDraw(e) {
   if (!edDrawing) return;
   e.preventDefault();
   const ctx = editorCanvas.getContext('2d');
   const pos = getCanvasPos(e);
-  if (edTool === 'pen') {
-    ctx.lineTo(pos.x, pos.y);
-    ctx.stroke();
-    edCurrentPenPath.push({ x: pos.x, y: pos.y });
-  } else if (edTool === 'rect') {
-    ctx.putImageData(edSnapshot, 0, 0);
-    ctx.strokeRect(edStartX, edStartY, pos.x - edStartX, pos.y - edStartY);
-  } else if (edTool === 'arrow') {
-    ctx.putImageData(edSnapshot, 0, 0);
-    drawArrow(ctx, edStartX, edStartY, pos.x, pos.y);
-  }
+  if (edTool === 'pen') { ctx.lineTo(pos.x, pos.y); ctx.stroke(); edCurrentPenPath.push({ x: pos.x, y: pos.y }); }
+  else if (edTool === 'rect') { ctx.putImageData(edSnapshot, 0, 0); ctx.strokeRect(edStartX, edStartY, pos.x - edStartX, pos.y - edStartY); }
+  else if (edTool === 'arrow') { ctx.putImageData(edSnapshot, 0, 0); drawArrow(ctx, edStartX, edStartY, pos.x, pos.y); }
 }
-
 function endDraw(e) {
   if (!edDrawing) return;
   edDrawing = false;
-  const ctx = editorCanvas.getContext('2d');
-  const pos = e.touches ? getCanvasPos(e) : getCanvasPos(e);
-
-  // Записываем векторную операцию
+  const pos = getCanvasPos(e);
   if (edTool === 'pen') {
-    if (edCurrentPenPath.length > 1) {
-      pushVectorOp({ type: 'pen', points: edCurrentPenPath.slice(), color: edColor, width: edLineWidth });
-    }
+    if (edCurrentPenPath.length > 1) pushVectorOp({ type: 'pen', points: edCurrentPenPath.slice(), color: edColor, width: edLineWidth });
   } else if (edTool === 'rect') {
-    pushVectorOp({
-      type: 'rect',
-      x: edStartX, y: edStartY,
-      w: pos.x - edStartX, h: pos.y - edStartY,
-      color: edColor, width: edLineWidth
-    });
+    pushVectorOp({ type: 'rect', x: edStartX, y: edStartY, w: pos.x - edStartX, h: pos.y - edStartY, color: edColor, width: edLineWidth });
   } else if (edTool === 'arrow') {
-    pushVectorOp({
-      type: 'arrow',
-      x1: edStartX, y1: edStartY,
-      x2: pos.x, y2: pos.y,
-      color: edColor, width: edLineWidth
-    });
+    pushVectorOp({ type: 'arrow', x1: edStartX, y1: edStartY, x2: pos.x, y2: pos.y, color: edColor, width: edLineWidth });
   }
   edCurrentPenPath = [];
   pushUndo();
   saveCurrentPageState();
 }
-
 editorCanvas.addEventListener('mousedown', startDraw);
 editorCanvas.addEventListener('mousemove', moveDraw);
 editorCanvas.addEventListener('mouseup', endDraw);
@@ -2716,146 +2520,67 @@ editorCanvas.addEventListener('touchmove', moveDraw, { passive: false });
 editorCanvas.addEventListener('touchend', endDraw);
 
 /* ==========================================================
-   ✏️ PDF EDITOR — ЧАСТЬ Б
-   Сохранение двумя способами
+   SAVE CHOICE
    ========================================================== */
 const saveChoiceOverlay = document.getElementById('saveChoiceOverlay');
 const saveChoiceStatus = document.getElementById('saveChoiceStatus');
 
-// Клик на "💾 Save & Download" → открыть модалку выбора
 editorSave.addEventListener('click', () => {
   if (!edPdfDoc) return;
   saveCurrentPageState();
   saveChoiceStatus.className = 'status-msg hidden';
   saveChoiceOverlay.classList.add('active');
 });
-
-function closeSaveChoice() {
-  saveChoiceOverlay.classList.remove('active');
-}
+function closeSaveChoice() { saveChoiceOverlay.classList.remove('active'); }
 saveChoiceOverlay.addEventListener('click', e => { if (e.target === saveChoiceOverlay) closeSaveChoice(); });
 
-/* ===== СПОСОБ 1: ВЕКТОРНЫЙ — текст сохраняется ===== */
 document.getElementById('saveVectorBtn').addEventListener('click', async () => {
   saveChoiceStatus.className = 'status-msg hidden';
   showStatus(saveChoiceStatus, t('common.processing'), 'info');
   try {
     saveCurrentPageState();
-
-    const { PDFDocument, rgb, StandardFonts, degrees } = PDFLib;
-    // Загружаем ОРИГИНАЛЬНЫЙ PDF (не рендер, а исходник!)
-    const pdfDoc = await PDFDocument.load(edPdfBytes, { ignoreEncryption: true });
-
-    const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-
-    // Функция: hex → rgb (0-1)
+    const pdfDoc = await PDFLib.PDFDocument.load(edPdfBytes, { ignoreEncryption: true });
+    const font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
     function hexToRgb(hex) {
       const h = hex.replace('#', '');
-      return rgb(
-        parseInt(h.substring(0, 2), 16) / 255,
-        parseInt(h.substring(2, 4), 16) / 255,
-        parseInt(h.substring(4, 6), 16) / 255
-      );
+      return PDFLib.rgb(parseInt(h.substring(0, 2), 16) / 255, parseInt(h.substring(2, 4), 16) / 255, parseInt(h.substring(4, 6), 16) / 255);
     }
-
-    // Масштаб: вектора были в координатах canvas (умноженные на edScale).
-    // pdf-lib работает в единицах PDF. Оригинальные размеры страниц = canvas / edScale.
-    // Но при рисовании мы работали в canvas-координатах, а для pdf-lib нужно конвертировать.
-    // pdf-lib Y-ось снизу вверх, canvas — сверху вниз.
-    // Так как мы вставили canvas как есть (при растеризации размеры страниц равны), то используем ту же логику.
-
     const pages = pdfDoc.getPages();
-
     pages.forEach((page, pageIdx) => {
       const ops = edVectorOps[pageIdx];
       if (!ops || ops.length === 0) return;
-
-      const { width: pageW, height: pageH } = page.getSize();
-
-      // Координаты canvas были с учётом масштаба → делим на edScale
-      const sx = pageW / (edCanvasWidth / edScale) * 1; // множитель 1, т.к. width = edCanvasWidth / edScale
-      const sy = pageH / (edCanvasHeight / edScale);
-
+      const pageH = page.getSize().height;
       ops.forEach(op => {
         const color = hexToRgb(op.color || '#ef4444');
-        const lineWidth = (op.width || 3);
-
+        const lineWidth = op.width || 3;
         if (op.type === 'pen') {
-          // Рисуем ломаную линию
           for (let i = 1; i < op.points.length; i++) {
-            const p1 = op.points[i - 1];
-            const p2 = op.points[i];
-            page.drawLine({
-              start: { x: p1.x / edScale, y: pageH - p1.y / edScale },
-              end:   { x: p2.x / edScale, y: pageH - p2.y / edScale },
-              thickness: lineWidth,
-              color: color
-            });
+            const p1 = op.points[i - 1], p2 = op.points[i];
+            page.drawLine({ start: { x: p1.x / edScale, y: pageH - p1.y / edScale }, end: { x: p2.x / edScale, y: pageH - p2.y / edScale }, thickness: lineWidth, color: color });
           }
-                } else if (op.type === 'rect') {
-          const cx1 = op.x / edScale;
-          const cy1 = pageH - op.y / edScale;
-          const cx2 = (op.x + op.w) / edScale;
-          const cy2 = pageH - (op.y + op.h) / edScale;
-
-          const rectX = Math.min(cx1, cx2);
-          const rectY = Math.min(cy1, cy2);
-          const rectW = Math.abs(cx2 - cx1);
-          const rectH = Math.abs(cy2 - cy1);
-
-          page.drawRectangle({
-            x: rectX,
-            y: rectY,
-            width: rectW,
-            height: rectH,
-            borderColor: color,
-            borderWidth: lineWidth
-          });
-                } else if (op.type === 'arrow') {
-          // Основная линия стрелки
-          const ax1 = op.x1 / edScale;
-          const ay1 = pageH - op.y1 / edScale;
-          const ax2 = op.x2 / edScale;
-          const ay2 = pageH - op.y2 / edScale;
-
-          page.drawLine({
-            start: { x: ax1, y: ay1 },
-            end:   { x: ax2, y: ay2 },
-            thickness: lineWidth,
-            color: color
-          });
-
-          // Голова стрелки — вычисляем угол в PDF-координатах (Y вверх)
-          const adx = ax2 - ax1;
-          const ady = ay2 - ay1;
+        } else if (op.type === 'rect') {
+          const cx1 = op.x / edScale, cy1 = pageH - op.y / edScale;
+          const cx2 = (op.x + op.w) / edScale, cy2 = pageH - (op.y + op.h) / edScale;
+          page.drawRectangle({ x: Math.min(cx1, cx2), y: Math.min(cy1, cy2), width: Math.abs(cx2 - cx1), height: Math.abs(cy2 - cy1), borderColor: color, borderWidth: lineWidth });
+        } else if (op.type === 'arrow') {
+          const ax1 = op.x1 / edScale, ay1 = pageH - op.y1 / edScale;
+          const ax2 = op.x2 / edScale, ay2 = pageH - op.y2 / edScale;
+          page.drawLine({ start: { x: ax1, y: ay1 }, end: { x: ax2, y: ay2 }, thickness: lineWidth, color: color });
+          const adx = ax2 - ax1, ady = ay2 - ay1;
           const aangle = Math.atan2(ady, adx);
-          const aheadlen = 14 / edScale;
-          const arrowAngle = Math.PI / 7;
-
-          const leftX  = ax2 - aheadlen * Math.cos(aangle - arrowAngle);
-          const leftY  = ay2 - aheadlen * Math.sin(aangle - arrowAngle);
+          const aheadlen = 14 / edScale, arrowAngle = Math.PI / 7;
+          const leftX = ax2 - aheadlen * Math.cos(aangle - arrowAngle);
+          const leftY = ay2 - aheadlen * Math.sin(aangle - arrowAngle);
           const rightX = ax2 - aheadlen * Math.cos(aangle + arrowAngle);
           const rightY = ay2 - aheadlen * Math.sin(aangle + arrowAngle);
-
-          page.drawLine({
-            start: { x: ax2, y: ay2 },
-            end:   { x: leftX, y: leftY },
-            thickness: lineWidth,
-            color: color
-          });
-          page.drawLine({
-            start: { x: ax2, y: ay2 },
-            end:   { x: rightX, y: rightY },
-            thickness: lineWidth,
-            color: color
-          });
+          page.drawLine({ start: { x: ax2, y: ay2 }, end: { x: leftX, y: leftY }, thickness: lineWidth, color: color });
+          page.drawLine({ start: { x: ax2, y: ay2 }, end: { x: rightX, y: rightY }, thickness: lineWidth, color: color });
+        } else if (op.type === 'text') {
+          page.drawText(op.text, { x: op.x / edScale, y: pageH - op.y / edScale, size: 24 / edScale, font: font, color: color });
         }
       });
     });
-
-    const bytes = await pdfDoc.save();
-    downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'edited-text.pdf');
-
+    downloadBlob(new Blob([await pdfDoc.save()], { type: 'application/pdf' }), 'edited-text.pdf');
     showStatus(saveChoiceStatus, t('editor.saved'), 'ok');
     setTimeout(closeSaveChoice, 1200);
   } catch (err) {
@@ -2864,38 +2589,27 @@ document.getElementById('saveVectorBtn').addEventListener('click', async () => {
   }
 });
 
-/* ===== СПОСОБ 2: РАСТЕРНЫЙ — сохраняем как картинки ===== */
 document.getElementById('saveRasterBtn').addEventListener('click', async () => {
   saveChoiceStatus.className = 'status-msg hidden';
   showStatus(saveChoiceStatus, t('common.processing'), 'info');
   try {
     saveCurrentPageState();
-
-    const { PDFDocument } = PDFLib;
-    const outDoc = await PDFDocument.create();
+    const outDoc = await PDFLib.PDFDocument.create();
     const savedPage = edCurrentPage;
-
     for (let i = 0; i < edTotalPages; i++) {
       edCurrentPage = i;
       await renderEditorPage();
-
       const dataUrl = editorCanvas.toDataURL('image/png');
       const pngBytes = await (await fetch(dataUrl)).arrayBuffer();
       const png = await outDoc.embedPng(pngBytes);
-
       const pageW = edCanvasWidth / edScale;
       const pageH = edCanvasHeight / edScale;
-
       const page = outDoc.addPage([pageW, pageH]);
       page.drawImage(png, { x: 0, y: 0, width: pageW, height: pageH });
     }
-
     edCurrentPage = savedPage;
     await renderEditorPage();
-
-    const outBytes = await outDoc.save();
-    downloadBlob(new Blob([outBytes], { type: 'application/pdf' }), 'edited-image.pdf');
-
+    downloadBlob(new Blob([await outDoc.save()], { type: 'application/pdf' }), 'edited-image.pdf');
     showStatus(saveChoiceStatus, t('editor.saved'), 'ok');
     setTimeout(closeSaveChoice, 1200);
   } catch (err) {
@@ -2907,8 +2621,11 @@ document.getElementById('saveRasterBtn').addEventListener('click', async () => {
 /* ==========================================================
    INIT
    ========================================================== */
-pdfjsLib.GlobalWorkerOptions.workerSrc =
-  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+// Язык — из localStorage, по умолчанию EN
+const savedLang = localStorage.getItem('pdfnest_lang') || 'en';
+setLang(savedLang);
 
 // Часы
 updateLvClock();
@@ -2917,12 +2634,6 @@ setInterval(updateLvClock, 1000);
 // Будильники
 setInterval(checkAlarms, 15000);
 
-// Курс валют — загрузка + автообновление каждые 30 минут
-loadCurrencies();
-setInterval(loadCurrencies, 30 * 60 * 1000);
-
-// Инструменты
-renderTools();
 </script>
 </body>
 </html>
