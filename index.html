@@ -2729,34 +2729,40 @@ setInterval(checkAlarms, 15000);
    🍪 COOKIE CONSENT
    ========================================================== */
 const GA_ID = 'G-30RLVLY5JJ';
-const cookieBanner = document.getElementById('cookieBanner');
-
-const cookieChoice = localStorage.getItem('pdfnest_cookies');
-
-if (!cookieChoice) {
-  cookieBanner.classList.remove('hidden');
-  window['ga-disable-' + GA_ID] = true; // По умолчанию — GA выключен
-} else if (cookieChoice === 'accepted') {
-  cookieBanner.classList.add('hidden');
-  // GA работает
-} else {
-  cookieBanner.classList.add('hidden');
-  window['ga-disable-' + GA_ID] = true;
-}
 
 function acceptCookies() {
   localStorage.setItem('pdfnest_cookies', 'accepted');
-  cookieBanner.classList.add('hidden');
+  const banner = document.getElementById('cookieBanner');
+  if (banner) banner.classList.add('hidden');
   window['ga-disable-' + GA_ID] = false;
 }
 
 function declineCookies() {
   localStorage.setItem('pdfnest_cookies', 'declined');
-  cookieBanner.classList.add('hidden');
+  const banner = document.getElementById('cookieBanner');
+  if (banner) banner.classList.add('hidden');
   window['ga-disable-' + GA_ID] = true;
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+  const cookieBanner = document.getElementById('cookieBanner');
+  if (!cookieBanner) return; // Баннера нет — выходим
+
+  const cookieChoice = localStorage.getItem('pdfnest_cookies');
+
+  if (!cookieChoice) {
+    cookieBanner.classList.remove('hidden');
+    window['ga-disable-' + GA_ID] = true;
+  } else {
+    cookieBanner.classList.add('hidden');
+    if (cookieChoice === 'declined') {
+      window['ga-disable-' + GA_ID] = true;
+    }
+  }
+});
+
 </script>
+
 
 <!-- Cookie Consent Banner -->
 <div class="cookie-banner hidden" id="cookieBanner">
