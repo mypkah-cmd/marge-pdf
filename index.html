@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PDFNest — All-in-One PDF Toolkit</title>
-<!-- Google tag (gtag.js) -->
+<title id="siteTitle">PDFNest — All-in-One PDF Toolkit</title>
+
+<!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-30RLVLY5JJ"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -12,6 +13,7 @@
   gtag('js', new Date());
   gtag('config', 'G-30RLVLY5JJ', { 'anonymize_ip': true });
 </script>
+
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐱%3C/text%3E%3C/svg%3E">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
@@ -205,6 +207,13 @@
     text-align: center; padding: 24px; color: var(--muted);
     font-size: 13px; border-top: 1px solid var(--border);
   }
+  .footer-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
 
   /* ===== HEADER RIGHT ===== */
   .header-right {
@@ -264,7 +273,6 @@
     50% { transform: scale(1.15); }
   }
 
-  /* ===== DONATE BUTTON ===== */
   .donate-btn {
     display: flex;
     align-items: center;
@@ -316,15 +324,9 @@
     0%, 100% { transform: scale(1); }
     50%      { transform: scale(1.2); }
   }
-  .donate-btn-text {
-    position: relative;
-    z-index: 1;
-  }
+  .donate-btn-text { position: relative; z-index: 1; }
 
-  /* ===== LANGUAGE DROPDOWN ===== */
-  .lang-dropdown {
-    position: relative;
-  }
+  .lang-dropdown { position: relative; }
   .lang-btn {
     display: flex;
     align-items: center;
@@ -340,10 +342,7 @@
     transition: all 0.15s;
     font-family: inherit;
   }
-  .lang-btn:hover {
-    background: var(--primary);
-    color: #fff;
-  }
+  .lang-btn:hover { background: var(--primary); color: #fff; }
   .lang-btn-icon { font-size: 15px; }
   .lang-btn-label { font-size: 13px; }
   #langCurrentCode {
@@ -355,17 +354,9 @@
     font-size: 11px;
     margin-left: 2px;
   }
-  .lang-btn:hover #langCurrentCode {
-    background: rgba(255,255,255,0.25);
-  }
-  .lang-arrow {
-    font-size: 9px;
-    opacity: 0.7;
-    transition: transform 0.2s;
-  }
-  .lang-dropdown.open .lang-arrow {
-    transform: rotate(180deg);
-  }
+  .lang-btn:hover #langCurrentCode { background: rgba(255,255,255,0.25); }
+  .lang-arrow { font-size: 9px; opacity: 0.7; transition: transform 0.2s; }
+  .lang-dropdown.open .lang-arrow { transform: rotate(180deg); }
   .lang-menu {
     position: absolute;
     top: calc(100% + 6px);
@@ -384,9 +375,7 @@
     from { opacity: 0; transform: translateY(-4px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-  .lang-dropdown.open .lang-menu {
-    display: block;
-  }
+  .lang-dropdown.open .lang-menu { display: block; }
   .lang-menu button {
     display: flex;
     align-items: center;
@@ -403,16 +392,10 @@
     transition: background 0.12s;
     font-family: inherit;
   }
-  .lang-menu button:hover {
-    background: var(--bg);
-  }
-  .lang-menu button.active {
-    background: var(--primary);
-    color: #fff;
-  }
+  .lang-menu button:hover { background: var(--bg); }
+  .lang-menu button.active { background: var(--primary); color: #fff; }
   .lang-flag { font-size: 16px; }
 
-  /* ===== TIMER ===== */
   .timer-display {
     font-size: 48px;
     font-weight: 800;
@@ -444,14 +427,7 @@
     color: #fff;
     transform: translateY(-2px);
   }
-
-  /* ===== ALARM ===== */
-  .time-24 {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
-  }
+  .time-24 { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
   .time-24 input {
     width: 80px !important;
     padding: 10px 12px !important;
@@ -465,17 +441,8 @@
     margin-bottom: 0 !important;
     background: var(--card);
   }
-  .time-24 span {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--muted);
-  }
-  .alarm-list {
-    list-style: none;
-    margin-top: 16px;
-    max-height: 220px;
-    overflow-y: auto;
-  }
+  .time-24 span { font-size: 22px; font-weight: 700; color: var(--muted); }
+  .alarm-list { list-style: none; margin-top: 16px; max-height: 220px; overflow-y: auto; }
   .alarm-list li {
     display: flex;
     align-items: center;
@@ -486,21 +453,14 @@
     margin-bottom: 8px;
     font-size: 14px;
   }
-  .alarm-list li.active {
-    background: #eef2ff;
-    border-left: 3px solid var(--primary);
-  }
+  .alarm-list li.active { background: #eef2ff; border-left: 3px solid var(--primary); }
   .alarm-list .alarm-time {
     font-weight: 700;
     color: var(--primary);
     font-variant-numeric: tabular-nums;
     font-family: 'SF Mono', Consolas, Monaco, monospace;
   }
-  .alarm-list .alarm-label {
-    color: var(--muted);
-    font-size: 12px;
-    margin-left: 8px;
-  }
+  .alarm-list .alarm-label { color: var(--muted); font-size: 12px; margin-left: 8px; }
   .alarm-list .alarm-del {
     background: none;
     border: none;
@@ -510,7 +470,7 @@
     padding: 0 6px;
   }
 
-   /* ===== AD SLOT (в шапке) ===== */
+  /* ===== AD SLOT ===== */
   .ad-slot {
     display: flex;
     align-items: center;
@@ -528,11 +488,6 @@
     transition: all 0.2s;
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
-    margin-left: 0;
-  }
-  .ad-slot:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
   }
   .ad-slot:hover {
     transform: translateY(-1px);
@@ -551,19 +506,12 @@
     0%   { transform: translateX(-100%) translateY(-100%); }
     100% { transform: translateX(100%) translateY(100%); }
   }
-  .ad-slot-icon {
-    font-size: 14px;
-    animation: adSlotPulse 2s ease-in-out infinite;
-  }
+  .ad-slot-icon { font-size: 14px; animation: adSlotPulse 2s ease-in-out infinite; }
   @keyframes adSlotPulse {
     0%, 100% { transform: scale(1); }
     50%      { transform: scale(1.2); }
   }
-  .ad-slot-text {
-    letter-spacing: 0.3px;
-    position: relative;
-    z-index: 1;
-  }
+  .ad-slot-text { letter-spacing: 0.3px; position: relative; z-index: 1; }
   .ad-slot-arrow {
     font-size: 14px;
     font-weight: 700;
@@ -571,9 +519,7 @@
     position: relative;
     z-index: 1;
   }
-  .ad-slot:hover .ad-slot-arrow {
-    transform: translateX(4px);
-  }
+  .ad-slot:hover .ad-slot-arrow { transform: translateX(4px); }
 
   /* ===== WHY SECTION ===== */
   .why-section {
@@ -609,29 +555,16 @@
     border-color: var(--primary);
     box-shadow: 0 12px 28px rgba(79, 70, 229, 0.15);
   }
-  .why-item:hover::before {
-    transform: scaleX(1);
-  }
+  .why-item:hover::before { transform: scaleX(1); }
   .why-icon {
     font-size: 32px;
     margin-bottom: 8px;
     display: inline-block;
     transition: transform 0.3s;
   }
-  .why-item:hover .why-icon {
-    transform: scale(1.15) rotate(-5deg);
-  }
-  .why-item h3 {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 6px;
-  }
-  .why-item p {
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.5;
-  }
+  .why-item:hover .why-icon { transform: scale(1.15) rotate(-5deg); }
+  .why-item h3 { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .why-item p { font-size: 13px; color: var(--muted); line-height: 1.5; }
 
   /* ===== REMOVE PAGES ===== */
   .page-grid {
@@ -657,10 +590,7 @@
     user-select: none;
     position: relative;
   }
-  .page-item:hover {
-    border-color: var(--primary);
-    transform: translateY(-2px);
-  }
+  .page-item:hover { border-color: var(--primary); transform: translateY(-2px); }
   .page-item.selected {
     background: var(--error);
     border-color: var(--error);
@@ -673,27 +603,12 @@
     font-size: 10px;
     font-weight: bold;
   }
-  .page-num {
-    font-weight: 700;
-    font-size: 14px;
-    color: var(--primary);
-  }
-  .page-item.selected .page-num {
-    color: #fff;
-    text-decoration: line-through;
-  }
-  .page-hint {
-    color: var(--muted);
-    font-size: 13px;
-    text-align: center;
-    margin-bottom: 12px;
-  }
+  .page-num { font-weight: 700; font-size: 14px; color: var(--primary); }
+  .page-item.selected .page-num { color: #fff; text-decoration: line-through; }
+  .page-hint { color: var(--muted); font-size: 13px; text-align: center; margin-bottom: 12px; }
 
   /* ===== PDF EDITOR ===== */
-  .editor-wrapper {
-    max-width: 95vw !important;
-    width: 100%;
-  }
+  .editor-wrapper { max-width: 95vw !important; width: 100%; }
   .editor-toolbar {
     display: flex;
     flex-wrap: wrap;
@@ -719,17 +634,8 @@
     color: var(--text);
   }
   .tool-btn:hover { border-color: var(--primary); }
-  .tool-btn.active {
-    background: var(--primary);
-    border-color: var(--primary);
-    color: #fff;
-  }
-  .tool-divider {
-    width: 1px;
-    height: 28px;
-    background: var(--border);
-    margin: 0 4px;
-  }
+  .tool-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .tool-divider { width: 1px; height: 28px; background: var(--border); margin: 0 4px; }
   .color-swatch {
     width: 28px;
     height: 28px;
@@ -776,20 +682,10 @@
   }
   .page-nav-btn:hover { border-color: var(--primary); color: var(--primary); }
   .page-nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-  .page-counter {
-    color: var(--muted);
-    font-size: 14px;
-    font-weight: 600;
-    padding: 0 12px;
-  }
+  .page-counter { color: var(--muted); font-size: 14px; font-weight: 600; padding: 0 12px; }
 
   /* ===== SAVE CHOICE ===== */
-  .save-choice-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 16px;
-  }
+  .save-choice-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
   .save-choice-item {
     display: flex;
     align-items: center;
@@ -811,29 +707,12 @@
     box-shadow: 0 6px 16px rgba(79, 70, 229, 0.15);
   }
   .save-choice-icon { font-size: 24px; flex-shrink: 0; }
-  .save-choice-text {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
-  .save-choice-text strong {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--text);
-  }
-  .save-choice-text small {
-    font-size: 12px;
-    color: var(--muted);
-    line-height: 1.4;
-  }
+  .save-choice-text { display: flex; flex-direction: column; gap: 3px; }
+  .save-choice-text strong { font-size: 15px; font-weight: 700; color: var(--text); }
+  .save-choice-text small { font-size: 12px; color: var(--muted); line-height: 1.4; }
 
   /* ===== DONATE MODAL ===== */
-  .donate-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 16px;
-  }
+  .donate-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
   .donate-item {
     display: flex;
     align-items: center;
@@ -857,15 +736,15 @@
     box-shadow: 0 6px 16px rgba(79, 70, 229, 0.15);
   }
   .donate-item-premium {
-    background: linear-gradient(135deg, rgba(79, 70, 229, 0.08), rgba(6, 182, 212, 0.08));
-    border-color: var(--primary);
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(239, 68, 68, 0.08));
+    border-color: #f59e0b;
   }
   .donate-item-premium::before {
     content: '';
     position: absolute;
     top: -50%; left: -50%;
     width: 200%; height: 200%;
-    background: linear-gradient(45deg, transparent 40%, rgba(79, 70, 229, 0.15) 50%, transparent 60%);
+    background: linear-gradient(45deg, transparent 40%, rgba(245, 158, 11, 0.15) 50%, transparent 60%);
     animation: donateShine 3s linear infinite;
     pointer-events: none;
   }
@@ -873,15 +752,8 @@
     0%   { transform: translateX(-100%) translateY(-100%); }
     100% { transform: translateX(100%) translateY(100%); }
   }
-  .donate-icon {
-    font-size: 26px;
-    flex-shrink: 0;
-    position: relative;
-    z-index: 1;
-  }
-  .donate-item-premium .donate-icon {
-    animation: donateStar 2s ease-in-out infinite;
-  }
+  .donate-icon { font-size: 26px; flex-shrink: 0; position: relative; z-index: 1; }
+  .donate-item-premium .donate-icon { animation: donateStar 2s ease-in-out infinite; }
   @keyframes donateStar {
     0%, 100% { transform: scale(1) rotate(0deg); }
     50%      { transform: scale(1.15) rotate(10deg); }
@@ -894,16 +766,8 @@
     position: relative;
     z-index: 1;
   }
-  .donate-text strong {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--text);
-  }
-  .donate-text small {
-    font-size: 12px;
-    color: var(--muted);
-    line-height: 1.4;
-  }
+  .donate-text strong { font-size: 15px; font-weight: 700; color: var(--text); }
+  .donate-text small { font-size: 12px; color: var(--muted); line-height: 1.4; }
   .donate-arrow {
     font-size: 18px;
     font-weight: 700;
@@ -912,9 +776,7 @@
     position: relative;
     z-index: 1;
   }
-  .donate-item:hover .donate-arrow {
-    transform: translateX(4px);
-  }
+  .donate-item:hover .donate-arrow { transform: translateX(4px); }
   .donate-thanks {
     text-align: center;
     font-size: 13px;
@@ -922,6 +784,184 @@
     margin-top: 12px;
     padding-top: 12px;
     border-top: 1px solid var(--border);
+  }
+
+  /* ===== ABOUT / CONTACT BUTTONS (footer) ===== */
+  .footer-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 13px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+  }
+  .footer-btn:hover {
+    background: var(--primary);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.35);
+  }
+  .footer-btn-icon {
+    font-size: 15px;
+  }
+  .footer-btn.about-btn .footer-btn-icon { animation: aboutSpin 4s linear infinite; }
+  @keyframes aboutSpin {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  .footer-btn.contact-btn {
+    color: #10b981;
+    border-color: #10b981;
+  }
+  .footer-btn.contact-btn:hover {
+    background: #10b981;
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+  }
+
+  /* ===== ABOUT MODAL ===== */
+  .about-modal { max-width: 600px !important; }
+  .about-content {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 20px 0 24px;
+  }
+  .about-block {
+    display: flex;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--bg);
+    border-radius: 12px;
+    border-left: 3px solid var(--primary);
+    transition: all 0.2s;
+  }
+  .about-block:hover {
+    transform: translateX(4px);
+    border-left-color: var(--accent);
+  }
+  .about-icon { font-size: 26px; flex-shrink: 0; line-height: 1.2; }
+  .about-block strong {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .about-block p { font-size: 13px; color: var(--muted); line-height: 1.5; margin: 0; }
+
+  .about-help-block {
+    border-left-color: #f59e0b !important;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(239, 68, 68, 0.08)) !important;
+  }
+  .about-help-block:hover { border-left-color: #ef4444 !important; }
+  .about-help-list {
+    list-style: none;
+    margin-top: 10px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .about-help-list li {
+    font-size: 13px;
+    color: var(--text);
+    padding: 6px 10px;
+    background: var(--card);
+    border-radius: 8px;
+    line-height: 1.4;
+    transition: all 0.15s;
+  }
+  .about-help-list li:hover {
+    transform: translateX(4px);
+    background: var(--primary);
+    color: #fff;
+  }
+  .about-donate-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+  }
+  .about-donate-btn:hover { box-shadow: 0 8px 22px rgba(239, 68, 68, 0.55); }
+
+  /* ===== CONTACT MODAL ===== */
+  .contact-modal { max-width: 480px !important; }
+  .contact-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 20px 0 24px;
+  }
+  .contact-block {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 20px;
+    background: var(--bg);
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.2s;
+    border: 2px solid transparent;
+  }
+  .contact-block:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.15);
+  }
+  .contact-icon {
+    font-size: 32px;
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card);
+    border-radius: 12px;
+  }
+  .contact-info { flex: 1; min-width: 0; }
+  .contact-info strong {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+  .contact-info span {
+    font-size: 13px;
+    color: var(--muted);
+    word-break: break-all;
+  }
+  .contact-arrow {
+    font-size: 18px;
+    color: var(--primary);
+    font-weight: 700;
+    transition: transform 0.2s;
+  }
+  .contact-block:hover .contact-arrow { transform: translateX(4px); }
+
+  .contact-note {
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+    padding: 12px;
+    background: var(--bg);
+    border-radius: 10px;
   }
 
   /* ===== FOOTER ===== */
@@ -962,8 +1002,13 @@
   body.dark .lang-menu button:hover { background: #0f172a; }
   body.dark .donate-btn { box-shadow: 0 4px 14px rgba(239, 68, 68, 0.5); }
   body.dark .donate-item-premium {
-    background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(6, 182, 212, 0.15));
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(239, 68, 68, 0.15));
   }
+  body.dark .about-block { background: #0f172a; }
+  body.dark .about-help-list li { background: #1e293b; }
+  body.dark .contact-block { background: #0f172a; }
+  body.dark .contact-icon { background: #1e293b; }
+  body.dark .contact-note { background: #0f172a; }
 
   /* ===== MOBILE ===== */
   @media (max-width: 700px) {
@@ -993,7 +1038,19 @@
     .why-icon { font-size: 26px; margin-bottom: 6px; }
     .why-item h3 { font-size: 12px; }
     .why-item p { font-size: 11px; }
+    .about-block { padding: 12px; gap: 10px; }
+    .about-icon { font-size: 22px; }
+    .about-block strong { font-size: 14px; }
+    .about-block p { font-size: 12px; }
+    .about-help-list li { font-size: 12px; padding: 5px 8px; }
+    .footer-buttons { gap: 8px; }
+    .footer-btn { padding: 8px 14px; font-size: 12px; }
+    .contact-block { padding: 14px; gap: 12px; }
+    .contact-icon { width: 44px; height: 44px; font-size: 26px; }
+    .contact-info strong { font-size: 14px; }
+    .contact-info span { font-size: 12px; }
   }
+
   /* ===== COOKIE BANNER ===== */
   .cookie-banner {
     position: fixed;
@@ -1023,10 +1080,7 @@
     flex: 1;
     min-width: 200px;
   }
-  .cookie-buttons {
-    display: flex;
-    gap: 8px;
-  }
+  .cookie-buttons { display: flex; gap: 8px; }
   .cookie-btn {
     padding: 8px 18px;
     border-radius: 8px;
@@ -1037,32 +1091,17 @@
     transition: all 0.15s;
     font-family: inherit;
   }
-  .cookie-accept {
-    background: var(--primary);
-    color: #fff;
-  }
-  .cookie-accept:hover {
-    background: var(--primary-dark);
-    transform: translateY(-1px);
-  }
+  .cookie-accept { background: var(--primary); color: #fff; }
+  .cookie-accept:hover { background: var(--primary-dark); transform: translateY(-1px); }
   .cookie-decline {
     background: transparent;
     color: var(--muted);
     border: 1px solid var(--border);
   }
-  .cookie-decline:hover {
-    background: var(--bg);
-  }
+  .cookie-decline:hover { background: var(--bg); }
   @media (max-width: 700px) {
-    .cookie-banner {
-      padding: 12px 16px;
-      flex-direction: column;
-      text-align: center;
-    }
-    .cookie-buttons {
-      width: 100%;
-      justify-content: center;
-    }
+    .cookie-banner { padding: 12px 16px; flex-direction: column; text-align: center; }
+    .cookie-buttons { width: 100%; justify-content: center; }
   }
 </style>
 </head>
@@ -1071,14 +1110,14 @@
 <header>
   <div class="logo" onclick="location.reload()">
     <div class="logo-icon">🐱</div>
-    <span>PDFNest</span>
+    <span id="siteNameLogo">PDFNest</span>
   </div>
   <div class="header-right">
     <div class="lv-clock" id="lvClock">
       <span class="clock-city">🇱🇻 Rīga</span>
       <span class="clock-time" id="lvTime">00:00:00</span>
     </div>
-    <a href="mailto:your@email.com" class="ad-slot" title="Your ad could be here">
+    <a href="#" class="ad-slot" id="adSlot" onclick="contactUs(event)">
       <span class="ad-slot-icon">📢</span>
       <span class="ad-slot-text" data-i18n="adSlot.text">Your ad could be here</span>
       <span class="ad-slot-arrow">→</span>
@@ -1141,6 +1180,16 @@
   <span data-i18n="footer.text">Made with ❤️ — All processing happens in your browser</span>
   <br>
   <span class="footer-copy">© KoT — All rights reserved</span>
+  <div class="footer-buttons">
+    <button class="footer-btn about-btn" onclick="openAbout()">
+      <span class="footer-btn-icon">✨</span>
+      <span data-i18n="about.btnText">Why is it free?</span>
+    </button>
+    <button class="footer-btn contact-btn" onclick="openContact()">
+      <span class="footer-btn-icon">✉️</span>
+      <span data-i18n="contact.btnText">Contact us</span>
+    </button>
+  </div>
 </footer>
 
 <!-- МОДАЛКА ИНСТРУМЕНТОВ -->
@@ -1264,7 +1313,7 @@
     <h2 id="donateTitle">💰 Support the Project</h2>
     <p class="desc" id="donateDesc">Support the development.</p>
     <div class="donate-list">
-      <a href="https://www.paypal.com/paypalme/KosatiT/1" target="_blank" class="donate-item">
+      <a href="#" class="donate-item" id="donateOneTimeLink">
         <span class="donate-icon">☕</span>
         <div class="donate-text">
           <strong id="donateOneTimeTitle">Donate $1</strong>
@@ -1272,11 +1321,11 @@
         </div>
         <span class="donate-arrow">→</span>
       </a>
-      <a href="https://www.paypal.com/paypalme/KosatiT/5" target="_blank" class="donate-item donate-item-premium">
+      <a href="#" class="donate-item donate-item-premium" id="donateSubLink">
         <span class="donate-icon">⭐</span>
         <div class="donate-text">
-          <strong id="donateSubTitle">Buy Subscription</strong>
-          <small id="donateSubDesc">Monthly support</small>
+          <strong id="donateSubTitle">Donate $5</strong>
+          <small id="donateSubDesc">Bigger support</small>
         </div>
         <span class="donate-arrow">→</span>
       </a>
@@ -1311,12 +1360,106 @@
   </div>
 </div>
 
+<!-- МОДАЛКА "ПОЧЕМУ БЕСПЛАТНО" -->
+<div class="modal-overlay" id="aboutOverlay">
+  <div class="modal about-modal">
+    <button class="modal-close" onclick="closeAbout()">✕</button>
+    <h2 id="aboutTitle">✨ Why PDFNest is Free</h2>
+    <p class="desc" id="aboutSubtitle">And always will be</p>
+
+    <div class="about-content">
+      <div class="about-block">
+        <div class="about-icon">🆓</div>
+        <div>
+          <strong data-i18n="about.noLimits.title">No limits. Ever.</strong>
+          <p data-i18n="about.noLimits.text">Merge 5, 10, or 50 files — free, always. No daily quotas, no file-size limits, no sign-up, no email, no credit card. Just open and use.</p>
+        </div>
+      </div>
+
+      <div class="about-block">
+        <div class="about-icon">🔒</div>
+        <div>
+          <strong data-i18n="about.privacy.title">Your files never leave your device</strong>
+          <p data-i18n="about.privacy.text">Unlike iLovePDF, Smallpdf, and most other services, we don't upload your files to any server. Everything happens directly in your browser — you can even turn off the internet after loading the page and it will keep working. No tracking, no logs, no storage.</p>
+        </div>
+      </div>
+
+      <div class="about-block">
+        <div class="about-icon">💰</div>
+        <div>
+          <strong data-i18n="about.money.title">So how does it survive?</strong>
+          <p data-i18n="about.money.text">We have almost zero costs — no servers, no bandwidth bills, no databases. The site runs entirely on your device. Free forever, supported only by optional donations and a small ad banner.</p>
+        </div>
+      </div>
+
+      <div class="about-block">
+        <div class="about-icon">❤️</div>
+        <div>
+          <strong data-i18n="about.thanks.title">Thank you for being here</strong>
+          <p data-i18n="about.thanks.text">Every user makes this project worth doing. If PDFNest helped you — a small donation keeps it alive, and sharing it with a friend helps even more.</p>
+        </div>
+      </div>
+
+      <div class="about-block about-help-block">
+        <div class="about-icon">🤝</div>
+        <div>
+          <strong data-i18n="about.help.title">We welcome any help!</strong>
+          <p data-i18n="about.help.text">This is a growing project. Any support is deeply appreciated:</p>
+          <ul class="about-help-list">
+            <li data-i18n="about.help.item1">💻 Coding help — new tools, bug fixes, improvements</li>
+            <li data-i18n="about.help.item2">🎨 Design — logos, icons, themes</li>
+            <li data-i18n="about.help.item3">🌍 Translations — new languages or better wording</li>
+            <li data-i18n="about.help.item4">📣 Sharing — tell friends, post on social media</li>
+            <li data-i18n="about.help.item5">💰 Donations — even $1 keeps the project alive</li>
+            <li data-i18n="about.help.item6">💡 Ideas — suggest features you'd like to see</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn about-donate-btn" onclick="closeAbout(); openDonate();">
+      <span>💰</span>
+      <span data-i18n="about.donateBtn">Support the project</span>
+    </button>
+  </div>
+</div>
+
+<!-- МОДАЛКА "СВЯЗЬ С НАМИ" -->
+<div class="modal-overlay" id="contactOverlay">
+  <div class="modal contact-modal">
+    <button class="modal-close" onclick="closeContact()">✕</button>
+    <h2 id="contactTitle">✉️ Contact Us</h2>
+    <p class="desc" id="contactSubtitle">We'd love to hear from you</p>
+
+    <div class="contact-content">
+      <a href="#" id="contactEmailLink" class="contact-block">
+        <div class="contact-icon">📧</div>
+        <div class="contact-info">
+          <strong data-i18n="contact.email.title">Email</strong>
+          <span id="contactEmailText">—</span>
+        </div>
+        <div class="contact-arrow">→</div>
+      </a>
+
+      <div class="contact-note" data-i18n="contact.note">
+        Questions, suggestions, bug reports, partnership ideas — drop us a line. We usually reply within 24 hours.
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
+/* ==========================================================
+   ⚙️ ЕДИНАЯ КОНФИГУРАЦИЯ — меняй здесь
+   ========================================================== */
+const CONFIG = {
+  EMAIL: 'mypkah@gmail.com',        // ← МЕНЯЙ ЗДЕСЬ — везде поменяется
+  PAYPAL: 'KosatiT',
+  SITE_NAME: 'marge-PDF'
+};
+
 const translations = {
   en: {
-    "cookie.text": "🍪 We use cookies to improve your experience.",
-    "cookie.accept": "Accept",
-    "cookie.decline": "Decline",
     "hero.title": "All Your PDF Tools in One Place",
     "hero.subtitle": "Merge, convert, compress, and manage PDFs — free, fast, and 100% private. Your files never leave your device.",
     "footer.text": "Made with ❤️ — All processing happens in your browser",
@@ -1336,8 +1479,37 @@ const translations = {
     "donate.oneTime": "Donate $1",
     "donate.oneTimeDesc": "One-time support via PayPal",
     "donate.subscribe": "Donate $5",
-    "donate.subscribeDesc": "One-time $5 support via PayPal",
+    "donate.subscribeDesc": "Bigger support via PayPal",
     "donate.thanks": "Thank you for your support! ❤️",
+    "about.btnText": "Why is it free?",
+    "about.title": "✨ Why PDFNest is Free",
+    "about.subtitle": "And always will be",
+    "about.noLimits.title": "No limits. Ever.",
+    "about.noLimits.text": "Merge 5, 10, or 50 files — free, always. No daily quotas, no file-size limits, no sign-up, no email, no credit card. Just open and use.",
+    "about.privacy.title": "Your files never leave your device",
+    "about.privacy.text": "Unlike iLovePDF, Smallpdf, and most other services, we don't upload your files to any server. Everything happens directly in your browser — you can even turn off the internet after loading the page and it will keep working. No tracking, no logs, no storage.",
+    "about.money.title": "So how does it survive?",
+    "about.money.text": "We have almost zero costs — no servers, no bandwidth bills, no databases. The site runs entirely on your device. Free forever, supported only by optional donations and a small ad banner.",
+    "about.thanks.title": "Thank you for being here",
+    "about.thanks.text": "Every user makes this project worth doing. If PDFNest helped you — a small donation keeps it alive, and sharing it with a friend helps even more.",
+    "about.help.title": "We welcome any help!",
+    "about.help.text": "This is a growing project. Any support is deeply appreciated:",
+    "about.help.item1": "💻 Coding help — new tools, bug fixes, improvements",
+    "about.help.item2": "🎨 Design — logos, icons, themes",
+    "about.help.item3": "🌍 Translations — new languages or better wording",
+    "about.help.item4": "📣 Sharing — tell friends, post on social media",
+    "about.help.item5": "💰 Donations — even $1 keeps the project alive",
+    "about.help.item6": "💡 Ideas — suggest features you'd like to see",
+    "about.donateBtn": "Support the project",
+    "contact.btnText": "Contact us",
+    "contact.title": "✉️ Contact Us",
+    "contact.subtitle": "We'd love to hear from you",
+    "contact.email.title": "Email",
+    "contact.note": "Questions, suggestions, bug reports, partnership ideas — drop us a line. We usually reply within 24 hours.",
+    "contact.copied": "Email copied to clipboard!",
+    "cookie.text": "🍪 We use cookies to improve your experience.",
+    "cookie.accept": "Accept",
+    "cookie.decline": "Decline",
     "common.drop": "Drop files here or click to browse",
     "common.run": "Run",
     "common.processing": "Processing...",
@@ -1383,7 +1555,7 @@ const translations = {
     "opt.author": "Author",
     "opt.subject": "Subject",
     "timer.title": "⏱️ Timer",
-    "timer.desc": "Set a countdown. Browser will play a sound when it ends.",
+    "timer.desc": "Set a countdown.",
     "timer.hours": "Hours",
     "timer.minutes": "Minutes",
     "timer.seconds": "Seconds",
@@ -1391,40 +1563,36 @@ const translations = {
     "timer.stop": "⏹ Stop",
     "timer.finished": "⏰ Time's up!",
     "alarm.title": "🔔 Alarm",
-    "alarm.desc": "Set a time — the browser will ring while the tab is open.",
-    "alarm.timeLabel": "Alarm time (Rīga, 24h)",
-    "alarm.labelLabel": "Label (optional)",
+    "alarm.desc": "Set a time.",
+    "alarm.timeLabel": "Alarm time",
+    "alarm.labelLabel": "Label",
     "alarm.set": "🔔 Set Alarm",
     "alarm.added": "Alarm set for",
     "alarm.needTime": "Please choose a valid time",
     "alarm.ringing": "🔔 Alarm!",
     "rp.title": "🗑️ Remove Pages",
     "rp.desc": "Click on pages you want to delete.",
-    "rp.drop": "Drop a PDF here or click to browse",
-    "rp.hint": "Click pages to select them for deletion",
-    "rp.run": "🗑️ Delete Selected & Download",
+    "rp.drop": "Drop a PDF here",
+    "rp.hint": "Click pages",
+    "rp.run": "🗑️ Delete Selected",
     "rp.selectOne": "Please select at least one page",
     "rp.all": "You cannot delete all pages",
     "editor.title": "✏️ Edit PDF",
-    "editor.desc": "Draw, add shapes and arrows directly on your PDF, then save.",
+    "editor.desc": "Draw on your PDF.",
     "editor.save": "💾 Save & Download",
-    "editor.saved": "Done! File downloaded.",
+    "editor.saved": "Done!",
     "editor.textPrompt": "Text:",
     "saveChoice.title": "💾 Save PDF",
-    "saveChoice.desc": "Choose how you want to save your edited PDF.",
+    "saveChoice.desc": "Choose method.",
     "saveChoice.vectorTitle": "Save with text",
-    "saveChoice.vectorDesc": "Text stays copyable. File is smaller. Fast.",
+    "saveChoice.vectorDesc": "Text stays copyable.",
     "saveChoice.rasterTitle": "Save as image",
-    "saveChoice.rasterDesc": "Exact look. Text becomes part of the image."
+    "saveChoice.rasterDesc": "Exact look."
   },
   ru: {
-    "cookie.text": "🍪 Мы используем cookies для улучшения работы.",
-    "cookie.accept": "Принять",
-    "cookie.decline": "Отклонить",
     "hero.title": "Все PDF-инструменты в одном месте",
     "hero.subtitle": "Объединяйте, конвертируйте, сжимайте PDF — бесплатно, быстро и безопасно. Ваши файлы не покидают устройство.",
     "footer.text": "Сделано с ❤️ — вся обработка происходит в вашем браузере",
-    "currency.title": "Курс валют:",
     "adSlot.text": "Здесь могла бы быть ваша реклама",
     "donate.btnText": "Поддержать",
     "lang.label": "Язык",
@@ -1441,8 +1609,37 @@ const translations = {
     "donate.oneTime": "Донат $1",
     "donate.oneTimeDesc": "Разовая поддержка через PayPal",
     "donate.subscribe": "Донат $5",
-    "donate.subscribeDesc": "Разовая поддержка $5 через PayPal",
+    "donate.subscribeDesc": "Большая поддержка через PayPal",
     "donate.thanks": "Спасибо за поддержку! ❤️",
+    "about.btnText": "Почему бесплатно?",
+    "about.title": "✨ Почему PDFNest бесплатный",
+    "about.subtitle": "И всегда таким будет",
+    "about.noLimits.title": "Без лимитов. Никогда.",
+    "about.noLimits.text": "Объединяйте 5, 10 или 50 файлов — бесплатно и всегда. Без дневных квот, без ограничений размера, без регистрации, без email, без карты. Просто открыл — и пользуйся.",
+    "about.privacy.title": "Ваши файлы не покидают устройство",
+    "about.privacy.text": "В отличие от iLovePDF, Smallpdf и большинства других сервисов, мы не загружаем ваши файлы ни на какой сервер. Всё происходит прямо в браузере — можете даже выключить интернет после загрузки страницы, и она продолжит работать. Без слежки, без логов, без хранения.",
+    "about.money.title": "Как же он выживает?",
+    "about.money.text": "У нас почти нулевые затраты — нет серверов, нет оплаты трафика, нет баз данных. Сайт работает полностью на вашем устройстве. Бесплатно навсегда, при поддержке необязательных донатов и одного небольшого рекламного баннера.",
+    "about.thanks.title": "Спасибо, что вы здесь",
+    "about.thanks.text": "Каждый пользователь делает этот проект стоящим. Если PDFNest вам помог — небольшой донат продлит ему жизнь, а рассказ другу поможет ещё больше.",
+    "about.help.title": "Мы рады любой помощи!",
+    "about.help.text": "Это растущий проект. Любая поддержка очень ценится:",
+    "about.help.item1": "💻 Помощь с кодом — новые инструменты, исправления, улучшения",
+    "about.help.item2": "🎨 Дизайн — логотипы, иконки, темы",
+    "about.help.item3": "🌍 Переводы — новые языки или улучшение текстов",
+    "about.help.item4": "📣 Рассказать — поделитесь с друзьями, пост в соцсетях",
+    "about.help.item5": "💰 Донаты — даже $1 продлит жизнь проекту",
+    "about.help.item6": "💡 Идеи — предложите функции, которые хотели бы видеть",
+    "about.donateBtn": "Поддержать проект",
+    "contact.btnText": "Связаться с нами",
+    "contact.title": "✉️ Связь с нами",
+    "contact.subtitle": "Будем рады вашему сообщению",
+    "contact.email.title": "Email",
+    "contact.note": "Вопросы, предложения, сообщения об ошибках, идеи для сотрудничества — напишите нам. Обычно отвечаем в течение 24 часов.",
+    "contact.copied": "Email скопирован в буфер обмена!",
+    "cookie.text": "🍪 Мы используем cookies для улучшения работы.",
+    "cookie.accept": "Принять",
+    "cookie.decline": "Отклонить",
     "common.drop": "Перетащите файлы сюда или нажмите для выбора",
     "common.run": "Выполнить",
     "common.processing": "Обработка...",
@@ -1488,7 +1685,7 @@ const translations = {
     "opt.author": "Автор",
     "opt.subject": "Тема",
     "timer.title": "⏱️ Таймер",
-    "timer.desc": "Установите обратный отсчёт. По окончании — звук.",
+    "timer.desc": "Установите обратный отсчёт.",
     "timer.hours": "Часы",
     "timer.minutes": "Минуты",
     "timer.seconds": "Секунды",
@@ -1496,104 +1693,129 @@ const translations = {
     "timer.stop": "⏹ Стоп",
     "timer.finished": "⏰ Время вышло!",
     "alarm.title": "🔔 Будильник",
-    "alarm.desc": "Установите время — браузер зазвонит, пока вкладка открыта.",
-    "alarm.timeLabel": "Время будильника (Рига, 24ч)",
-    "alarm.labelLabel": "Название (необязательно)",
-    "alarm.set": "🔔 Поставить будильник",
-    "alarm.added": "Будильник установлен на",
-    "alarm.needTime": "Пожалуйста, введите корректное время",
+    "alarm.desc": "Установите время.",
+    "alarm.timeLabel": "Время будильника",
+    "alarm.labelLabel": "Название",
+    "alarm.set": "🔔 Поставить",
+    "alarm.added": "Будильник на",
+    "alarm.needTime": "Введите корректное время",
     "alarm.ringing": "🔔 Будильник!",
     "rp.title": "🗑️ Удалить страницы",
-    "rp.desc": "Нажмите на страницы, которые хотите удалить.",
-    "rp.drop": "Перетащите PDF сюда или нажмите для выбора",
-    "rp.hint": "Нажмите на страницы, чтобы отметить их для удаления",
-    "rp.run": "🗑️ Удалить выбранные и скачать",
-    "rp.selectOne": "Выберите хотя бы одну страницу",
-    "rp.all": "Нельзя удалить все страницы",
+    "rp.desc": "Нажмите на страницы, чтобы удалить.",
+    "rp.drop": "Перетащите PDF сюда",
+    "rp.hint": "Нажмите на страницы",
+    "rp.run": "🗑️ Удалить выбранные",
+    "rp.selectOne": "Выберите хотя бы одну",
+    "rp.all": "Нельзя удалить все",
     "editor.title": "✏️ Редактор PDF",
-    "editor.desc": "Рисуйте, добавляйте фигуры и стрелки прямо на PDF, потом сохраните.",
+    "editor.desc": "Рисуйте на PDF.",
     "editor.save": "💾 Сохранить и скачать",
-    "editor.saved": "Готово! Файл скачан.",
+    "editor.saved": "Готово!",
     "editor.textPrompt": "Текст:",
     "saveChoice.title": "💾 Сохранить PDF",
-    "saveChoice.desc": "Выберите способ сохранения отредактированного PDF.",
+    "saveChoice.desc": "Выберите способ.",
     "saveChoice.vectorTitle": "Сохранить с текстом",
-    "saveChoice.vectorDesc": "Текст остаётся копируемым. Файл меньше. Быстро.",
+    "saveChoice.vectorDesc": "Текст остаётся копируемым.",
     "saveChoice.rasterTitle": "Сохранить как картинку",
-    "saveChoice.rasterDesc": "Точное соответствие. Текст становится частью картинки."
+    "saveChoice.rasterDesc": "Точное соответствие."
   },
   lv: {
-    "cookie.text": "🍪 Mēs izmantojam sīkfailus, lai uzlabotu jūsu pieredzi.",
-    "cookie.accept": "Pieņemt",
-    "cookie.decline": "Noraidīt",
     "hero.title": "Visi PDF rīki vienuviet",
-    "hero.subtitle": "Apvienojiet, konvertējiet, saspiediet un pārvaldiet PDF — bez maksas, ātri un 100% privāti. Jūsu faili nekad neatstāj jūsu ierīci.",
+    "hero.subtitle": "Apvienojiet, konvertējiet, saspiediet un pārvaldiet PDF — bez maksas, ātri un 100% privāti.",
     "footer.text": "Veidots ar ❤️ — visa apstrāde notiek jūsu pārlūkā",
-    "currency.title": "Valūtas kursi:",
     "adSlot.text": "Šeit varētu būt jūsu reklāma",
     "donate.btnText": "Atbalstīt",
     "lang.label": "Valoda",
     "why.privacy.title": "100% Privāti",
-    "why.privacy.desc": "Jūsu faili nekad neatstāj pārlūku. Bez augšupielādes, bez serveriem, bez izsekošanas.",
+    "why.privacy.desc": "Jūsu faili nekad neatstāj pārlūku.",
     "why.fast.title": "Zibens ātrs",
-    "why.fast.desc": "Bez gaidīšanas, bez rindām. Strādā acumirklī, pēc pirmās ielādes — bezsaistē.",
+    "why.fast.desc": "Bez gaidīšanas. Strādā acumirklī.",
     "why.free.title": "Pilnīgi Bezmaksas",
-    "why.free.desc": "Bez reģistrācijas, bez SMS, bez slēptām maksām. Vienkārši atver un lieto.",
+    "why.free.desc": "Bez reģistrācijas, bez maksām.",
     "why.all.title": "Strādā Visur",
-    "why.all.desc": "Windows, Mac, Linux, Android, iOS — jebkura ierīce ar modernu pārlūku.",
+    "why.all.desc": "Windows, Mac, Linux, Android, iOS.",
     "donate.title": "💰 Atbalstīt projektu",
     "donate.desc": "Ja šis rīks jums ir noderīgs, varat atbalstīt tā attīstību.",
     "donate.oneTime": "Ziedot $1",
-    "donate.oneTimeDesc": "Vienreizējs atbalsts caur PayPal",
+    "donate.oneTimeDesc": "Vienreizējs atbalsts",
     "donate.subscribe": "Ziedot $5",
-    "donate.subscribeDesc": "Vienreizējs atbalsts $5 caur PayPal",
+    "donate.subscribeDesc": "Lielāks atbalsts",
     "donate.thanks": "Paldies par atbalstu! ❤️",
-    "common.drop": "Ievelciet failus šeit vai noklikšķiniet",
+    "about.btnText": "Kāpēc bez maksas?",
+    "about.title": "✨ Kāpēc PDFNest ir bez maksas",
+    "about.subtitle": "Un tā būs vienmēr",
+    "about.noLimits.title": "Bez ierobežojumiem. Nekad.",
+    "about.noLimits.text": "Apvienojiet 5, 10 vai 50 failus — bez maksas un vienmēr.",
+    "about.privacy.title": "Jūsu faili nekad neatstāj ierīci",
+    "about.privacy.text": "Atšķirībā no citiem servisiem, mēs neaugšupielādējam jūsu failus.",
+    "about.money.title": "Kā tad tas izdzīvo?",
+    "about.money.text": "Mums ir gandrīz nulles izmaksas. Bezmaksas uz visiem laikiem.",
+    "about.thanks.title": "Paldies, ka esat šeit",
+    "about.thanks.text": "Katrs lietotājs padara šo projektu tā vērtu.",
+    "about.help.title": "Mēs priecāsimies par jebkuru palīdzību!",
+    "about.help.text": "Šis ir augošs projekts:",
+    "about.help.item1": "💻 Palīdzība ar kodu",
+    "about.help.item2": "🎨 Dizains",
+    "about.help.item3": "🌍 Tulkojumi",
+    "about.help.item4": "📣 Dalīšanās",
+    "about.help.item5": "💰 Ziedojumi",
+    "about.help.item6": "💡 Idejas",
+    "about.donateBtn": "Atbalstīt projektu",
+    "contact.btnText": "Sazināties ar mums",
+    "contact.title": "✉️ Sazināties ar mums",
+    "contact.subtitle": "Mēs labprāt uzklausīsim jūs",
+    "contact.email.title": "E-pasts",
+    "contact.note": "Jautājumi, ieteikumi, kļūdu ziņojumi — rakstiet mums. Parasti atbildam 24 stundu laikā.",
+    "contact.copied": "E-pasts nokopēts!",
+    "cookie.text": "🍪 Mēs izmantojam sīkfailus.",
+    "cookie.accept": "Pieņemt",
+    "cookie.decline": "Noraidīt",
+    "common.drop": "Ievelciet failus šeit",
     "common.run": "Palaist",
     "common.processing": "Apstrāde...",
-    "common.done": "Gatavs! Fails lejupielādēts.",
+    "common.done": "Gatavs!",
     "common.error": "Kļūda: ",
     "tool.merge.name": "Apvienot PDF",
-    "tool.merge.desc": "Apvienojiet vairākus PDF vienā failā.",
+    "tool.merge.desc": "Apvienojiet vairākus PDF.",
     "tool.split.name": "Sadalīt PDF",
-    "tool.split.desc": "Izvelciet lappušu diapazonu jaunā PDF.",
+    "tool.split.desc": "Izvelciet lappušu diapazonu.",
     "tool.compress.name": "Saspiest PDF",
-    "tool.compress.desc": "Samaziniet PDF faila izmēru.",
+    "tool.compress.desc": "Samaziniet izmēru.",
     "tool.rotate.name": "Pagriezt PDF",
-    "tool.rotate.desc": "Pagrieziet visas lappuses par 90°, 180° vai 270°.",
+    "tool.rotate.desc": "Pagrieziet lappuses.",
     "tool.extract.name": "Izvilkt lappuses",
-    "tool.extract.desc": "Izvelciet atzīmētās lappuses atsevišķā PDF.",
-    "tool.watermark.name": "Pievienot ūdenszīmi",
-    "tool.watermark.desc": "Uzspiediet tekstu uz katras lappuses.",
+    "tool.extract.desc": "Izvelciet lappuses.",
+    "tool.watermark.name": "Ūdenszīme",
+    "tool.watermark.desc": "Pievienojiet tekstu.",
     "tool.pagenum.name": "Lappušu numuri",
-    "tool.pagenum.desc": "Pievienojiet numurus katras lappuses apakšā.",
+    "tool.pagenum.desc": "Pievienojiet numurus.",
     "tool.excel2pdf.name": "Excel → PDF",
-    "tool.excel2pdf.desc": "Konvertējiet Excel failu (.xlsx/.xls) uz PDF tabulu.",
+    "tool.excel2pdf.desc": "Konvertējiet Excel.",
     "tool.pdf2excel.name": "PDF → Excel",
-    "tool.pdf2excel.desc": "Izvelciet tekstu no PDF uz Excel failu.",
+    "tool.pdf2excel.desc": "Izvelciet tekstu.",
     "tool.word2pdf.name": "Word → PDF",
-    "tool.word2pdf.desc": "Konvertējiet .docx uz PDF.",
+    "tool.word2pdf.desc": "Konvertējiet Word.",
     "tool.img2pdf.name": "Attēli → PDF",
-    "tool.img2pdf.desc": "Apvienojiet JPG/PNG attēlus vienā PDF.",
+    "tool.img2pdf.desc": "Apvienojiet attēlus.",
     "tool.protect.name": "Aizsargāt PDF",
-    "tool.protect.desc": "Pievienojiet paroles aizsardzību PDF.",
-    "tool.metadata.name": "Rediģēt metadatus",
-    "tool.metadata.desc": "Mainiet PDF nosaukumu, autoru un tēmu.",
+    "tool.protect.desc": "Pievienojiet paroli.",
+    "tool.metadata.name": "Metadati",
+    "tool.metadata.desc": "Mainiet nosaukumu.",
     "tool.removepages.name": "Noņemt lappuses",
-    "tool.removepages.desc": "Noklikšķiniet uz lappusēm, lai tās noņemtu.",
-    "tool.editor.name": "Rediģēt PDF (Zīmēt)",
-    "tool.editor.desc": "Zīmējiet un pievienojiet formas uz PDF.",
-    "opt.range": "Lappušu diapazons (piem. 1-3,5)",
+    "tool.removepages.desc": "Noklikšķiniet uz lappusēm.",
+    "tool.editor.name": "Rediģēt PDF",
+    "tool.editor.desc": "Zīmējiet un saglabājiet.",
+    "opt.range": "Lappušu diapazons",
     "opt.angle": "Leņķis",
-    "opt.text": "Ūdenszīmes teksts",
-    "opt.opacity": "Necaurredzamība (0.1 – 1)",
+    "opt.text": "Teksts",
+    "opt.opacity": "Necaurredzamība",
     "opt.position": "Pozīcija",
     "opt.password": "Parole",
     "opt.title": "Nosaukums",
     "opt.author": "Autors",
     "opt.subject": "Tēma",
     "timer.title": "⏱️ Taimeris",
-    "timer.desc": "Iestatiet atskaiti. Pēc beigām — skaņa.",
+    "timer.desc": "Iestatiet atskaiti.",
     "timer.hours": "Stundas",
     "timer.minutes": "Minūtes",
     "timer.seconds": "Sekundes",
@@ -1601,104 +1823,129 @@ const translations = {
     "timer.stop": "⏹ Apturēt",
     "timer.finished": "⏰ Laiks beidzās!",
     "alarm.title": "🔔 Modinātājs",
-    "alarm.desc": "Iestatiet laiku — pārlūks zvanīs, kamēr cilne ir atvērta.",
-    "alarm.timeLabel": "Modinātāja laiks (Rīga, 24h)",
-    "alarm.labelLabel": "Apzīmējums (neobligāti)",
-    "alarm.set": "🔔 Iestatīt modinātāju",
-    "alarm.added": "Modinātājs iestatīts uz",
-    "alarm.needTime": "Lūdzu, ievadiet derīgu laiku",
+    "alarm.desc": "Iestatiet laiku.",
+    "alarm.timeLabel": "Modinātāja laiks",
+    "alarm.labelLabel": "Apzīmējums",
+    "alarm.set": "🔔 Iestatīt",
+    "alarm.added": "Modinātājs uz",
+    "alarm.needTime": "Ievadiet laiku",
     "alarm.ringing": "🔔 Modinātājs!",
     "rp.title": "🗑️ Noņemt lappuses",
-    "rp.desc": "Noklikšķiniet uz lappusēm, ko vēlaties dzēst.",
-    "rp.drop": "Ievelciet PDF šeit vai noklikšķiniet",
-    "rp.hint": "Noklikšķiniet uz lappusēm, lai atzīmētu dzēšanai",
-    "rp.run": "🗑️ Dzēst atzīmētās un lejupielādēt",
-    "rp.selectOne": "Lūdzu, izvēlieties vismaz vienu lappusi",
-    "rp.all": "Nevar dzēst visas lappuses",
+    "rp.desc": "Noklikšķiniet uz lappusēm.",
+    "rp.drop": "Ievelciet PDF",
+    "rp.hint": "Noklikšķiniet uz lappusēm",
+    "rp.run": "🗑️ Dzēst atzīmētās",
+    "rp.selectOne": "Izvēlieties vismaz vienu",
+    "rp.all": "Nevar dzēst visas",
     "editor.title": "✏️ Rediģēt PDF",
-    "editor.desc": "Zīmējiet, pievienojiet formas un bultas uz PDF, pēc tam saglabājiet.",
-    "editor.save": "💾 Saglabāt un lejupielādēt",
-    "editor.saved": "Gatavs! Fails lejupielādēts.",
+    "editor.desc": "Zīmējiet un saglabājiet.",
+    "editor.save": "💾 Saglabāt",
+    "editor.saved": "Gatavs!",
     "editor.textPrompt": "Teksts:",
     "saveChoice.title": "💾 Saglabāt PDF",
-    "saveChoice.desc": "Izvēlieties, kā saglabāt rediģēto PDF.",
-    "saveChoice.vectorTitle": "Saglabāt ar tekstu",
-    "saveChoice.vectorDesc": "Teksts paliek kopējams. Fails mazāks. Ātri.",
-    "saveChoice.rasterTitle": "Saglabāt kā attēlu",
-    "saveChoice.rasterDesc": "Precīzs izskats. Teksts kļūst par attēla daļu."
+    "saveChoice.desc": "Izvēlieties.",
+    "saveChoice.vectorTitle": "Ar tekstu",
+    "saveChoice.vectorDesc": "Teksts paliek.",
+    "saveChoice.rasterTitle": "Kā attēlu",
+    "saveChoice.rasterDesc": "Precīzs izskats."
   },
   de: {
-    "cookie.text": "🍪 Wir verwenden Cookies, um Ihr Erlebnis zu verbessern.",
-    "cookie.accept": "Akzeptieren",
-    "cookie.decline": "Ablehnen",
     "hero.title": "Alle PDF-Werkzeuge an einem Ort",
-    "hero.subtitle": "PDFs zusammenführen, konvertieren, komprimieren und verwalten – kostenlos, schnell und 100 % privat. Ihre Dateien verlassen Ihr Gerät nie.",
-    "footer.text": "Mit ❤️ erstellt – die gesamte Verarbeitung erfolgt in Ihrem Browser",
-    "currency.title": "Wechselkurse:",
+    "hero.subtitle": "PDFs zusammenführen, konvertieren und verwalten – kostenlos, schnell und 100 % privat.",
+    "footer.text": "Mit ❤️ erstellt – Verarbeitung in Ihrem Browser",
     "adSlot.text": "Hier könnte Ihre Werbung stehen",
     "donate.btnText": "Unterstützen",
     "lang.label": "Sprache",
     "why.privacy.title": "100% Privat",
-    "why.privacy.desc": "Ihre Dateien verlassen den Browser nie. Keine Uploads, keine Server, kein Tracking.",
+    "why.privacy.desc": "Ihre Dateien verlassen den Browser nie.",
     "why.fast.title": "Blitzschnell",
-    "why.fast.desc": "Kein Warten, keine Warteschlangen. Funktioniert sofort, nach dem ersten Laden auch offline.",
+    "why.fast.desc": "Funktioniert sofort.",
     "why.free.title": "Völlig Kostenlos",
-    "why.free.desc": "Keine Registrierung, keine SMS, keine versteckten Gebühren. Einfach öffnen und nutzen.",
+    "why.free.desc": "Keine Registrierung.",
     "why.all.title": "Funktioniert Überall",
-    "why.all.desc": "Windows, Mac, Linux, Android, iOS — jedes Gerät mit einem modernen Browser.",
+    "why.all.desc": "Jedes Gerät.",
     "donate.title": "💰 Das Projekt unterstützen",
-    "donate.desc": "Wenn Ihnen dieses Tool nützlich ist, können Sie seine Entwicklung unterstützen.",
+    "donate.desc": "Unterstützen Sie die Entwicklung.",
     "donate.oneTime": "$1 spenden",
-    "donate.oneTimeDesc": "Einmalige Unterstützung über PayPal",
-    "donate.subscribe": "Spende $5",
-    "donate.subscribeDesc": "Einmalige $5-Unterstützung über PayPal",
-    "donate.thanks": "Vielen Dank für Ihre Unterstützung! ❤️",
-    "common.drop": "Dateien hier ablegen oder klicken",
+    "donate.oneTimeDesc": "Einmalige Unterstützung",
+    "donate.subscribe": "$5 spenden",
+    "donate.subscribeDesc": "Größere Unterstützung",
+    "donate.thanks": "Danke für Ihre Unterstützung! ❤️",
+    "about.btnText": "Warum kostenlos?",
+    "about.title": "✨ Warum PDFNest kostenlos ist",
+    "about.subtitle": "Und immer bleiben wird",
+    "about.noLimits.title": "Keine Limits. Niemals.",
+    "about.noLimits.text": "Fügen Sie 5, 10 oder 50 Dateien zusammen – kostenlos und immer.",
+    "about.privacy.title": "Ihre Dateien verlassen nie Ihr Gerät",
+    "about.privacy.text": "Anders als andere Dienste laden wir keine Dateien hoch.",
+    "about.money.title": "Wie überlebt es also?",
+    "about.money.text": "Wir haben fast keine Kosten. Für immer kostenlos.",
+    "about.thanks.title": "Danke, dass Sie hier sind",
+    "about.thanks.text": "Jeder Nutzer macht dieses Projekt lohnenswert.",
+    "about.help.title": "Wir freuen uns über jede Hilfe!",
+    "about.help.text": "Jede Unterstützung wird geschätzt:",
+    "about.help.item1": "💻 Coding-Hilfe",
+    "about.help.item2": "🎨 Design",
+    "about.help.item3": "🌍 Übersetzungen",
+    "about.help.item4": "📣 Teilen",
+    "about.help.item5": "💰 Spenden",
+    "about.help.item6": "💡 Ideen",
+    "about.donateBtn": "Projekt unterstützen",
+    "contact.btnText": "Kontakt",
+    "contact.title": "✉️ Kontakt",
+    "contact.subtitle": "Wir freuen uns auf Sie",
+    "contact.email.title": "E-Mail",
+    "contact.note": "Fragen, Vorschläge, Fehlerberichte — schreiben Sie uns. Wir antworten meist innerhalb von 24 Stunden.",
+    "contact.copied": "E-Mail kopiert!",
+    "cookie.text": "🍪 Wir verwenden Cookies.",
+    "cookie.accept": "Akzeptieren",
+    "cookie.decline": "Ablehnen",
+    "common.drop": "Dateien hier ablegen",
     "common.run": "Ausführen",
     "common.processing": "Verarbeitung...",
-    "common.done": "Fertig! Datei heruntergeladen.",
+    "common.done": "Fertig!",
     "common.error": "Fehler: ",
     "tool.merge.name": "PDF zusammenführen",
-    "tool.merge.desc": "Mehrere PDFs zu einer Datei kombinieren.",
+    "tool.merge.desc": "Mehrere PDFs kombinieren.",
     "tool.split.name": "PDF teilen",
-    "tool.split.desc": "Einen Seitenbereich in ein neues PDF extrahieren.",
+    "tool.split.desc": "Bereich extrahieren.",
     "tool.compress.name": "PDF komprimieren",
-    "tool.compress.desc": "PDF-Dateigröße reduzieren.",
+    "tool.compress.desc": "Größe reduzieren.",
     "tool.rotate.name": "PDF drehen",
-    "tool.rotate.desc": "Alle Seiten um 90°, 180° oder 270° drehen.",
+    "tool.rotate.desc": "Seiten drehen.",
     "tool.extract.name": "Seiten extrahieren",
-    "tool.extract.desc": "Ausgewählte Seiten in ein separates PDF ziehen.",
-    "tool.watermark.name": "Wasserzeichen hinzufügen",
-    "tool.watermark.desc": "Text auf jeder Seite stempeln.",
+    "tool.extract.desc": "Seiten extrahieren.",
+    "tool.watermark.name": "Wasserzeichen",
+    "tool.watermark.desc": "Text stempeln.",
     "tool.pagenum.name": "Seitennummern",
-    "tool.pagenum.desc": "Seitennummern am unteren Rand hinzufügen.",
+    "tool.pagenum.desc": "Nummern hinzufügen.",
     "tool.excel2pdf.name": "Excel → PDF",
-    "tool.excel2pdf.desc": "Excel-Datei (.xlsx/.xls) in PDF-Tabelle konvertieren.",
+    "tool.excel2pdf.desc": "Excel konvertieren.",
     "tool.pdf2excel.name": "PDF → Excel",
-    "tool.pdf2excel.desc": "Text aus PDF in Excel-Datei extrahieren.",
+    "tool.pdf2excel.desc": "Text extrahieren.",
     "tool.word2pdf.name": "Word → PDF",
-    "tool.word2pdf.desc": ".docx in PDF konvertieren.",
+    "tool.word2pdf.desc": "Word konvertieren.",
     "tool.img2pdf.name": "Bilder → PDF",
-    "tool.img2pdf.desc": "JPG/PNG-Bilder zu einem PDF kombinieren.",
+    "tool.img2pdf.desc": "Bilder kombinieren.",
     "tool.protect.name": "PDF schützen",
-    "tool.protect.desc": "Passwortschutz zu PDF hinzufügen.",
-    "tool.metadata.name": "Metadaten bearbeiten",
-    "tool.metadata.desc": "Titel, Autor und Betreff eines PDFs ändern.",
+    "tool.protect.desc": "Passwort hinzufügen.",
+    "tool.metadata.name": "Metadaten",
+    "tool.metadata.desc": "Titel ändern.",
     "tool.removepages.name": "Seiten entfernen",
-    "tool.removepages.desc": "Auf Seiten klicken, um sie zu entfernen.",
-    "tool.editor.name": "PDF bearbeiten (Zeichnen)",
-    "tool.editor.desc": "Zeichnen und Formen auf PDF hinzufügen.",
-    "opt.range": "Seitenbereich (z. B. 1-3,5)",
+    "tool.removepages.desc": "Seiten löschen.",
+    "tool.editor.name": "PDF bearbeiten",
+    "tool.editor.desc": "Zeichnen.",
+    "opt.range": "Seitenbereich",
     "opt.angle": "Winkel",
-    "opt.text": "Wasserzeichen-Text",
-    "opt.opacity": "Deckkraft (0.1 – 1)",
+    "opt.text": "Text",
+    "opt.opacity": "Deckkraft",
     "opt.position": "Position",
     "opt.password": "Passwort",
     "opt.title": "Titel",
     "opt.author": "Autor",
     "opt.subject": "Betreff",
     "timer.title": "⏱️ Timer",
-    "timer.desc": "Countdown einstellen. Am Ende — Ton.",
+    "timer.desc": "Countdown.",
     "timer.hours": "Stunden",
     "timer.minutes": "Minuten",
     "timer.seconds": "Sekunden",
@@ -1706,31 +1953,31 @@ const translations = {
     "timer.stop": "⏹ Stopp",
     "timer.finished": "⏰ Zeit abgelaufen!",
     "alarm.title": "🔔 Wecker",
-    "alarm.desc": "Zeit einstellen — der Browser klingelt, solange der Tab offen ist.",
-    "alarm.timeLabel": "Weckzeit (Riga, 24h)",
-    "alarm.labelLabel": "Bezeichnung (optional)",
-    "alarm.set": "🔔 Wecker stellen",
-    "alarm.added": "Wecker gestellt für",
-    "alarm.needTime": "Bitte gültige Zeit eingeben",
+    "alarm.desc": "Zeit einstellen.",
+    "alarm.timeLabel": "Weckzeit",
+    "alarm.labelLabel": "Bezeichnung",
+    "alarm.set": "🔔 Stellen",
+    "alarm.added": "Wecker für",
+    "alarm.needTime": "Gültige Zeit",
     "alarm.ringing": "🔔 Wecker!",
     "rp.title": "🗑️ Seiten entfernen",
-    "rp.desc": "Auf die Seiten klicken, die gelöscht werden sollen.",
-    "rp.drop": "PDF hier ablegen oder klicken",
-    "rp.hint": "Seiten anklicken zum Löschen",
-    "rp.run": "🗑️ Ausgewählte löschen & herunterladen",
-    "rp.selectOne": "Bitte mindestens eine Seite auswählen",
-    "rp.all": "Nicht alle Seiten können gelöscht werden",
+    "rp.desc": "Seiten anklicken.",
+    "rp.drop": "PDF ablegen",
+    "rp.hint": "Seiten anklicken",
+    "rp.run": "🗑️ Löschen",
+    "rp.selectOne": "Mindestens eine",
+    "rp.all": "Nicht alle",
     "editor.title": "✏️ PDF bearbeiten",
-    "editor.desc": "Zeichnen, Formen und Pfeile auf PDF hinzufügen, dann speichern.",
-    "editor.save": "💾 Speichern & herunterladen",
-    "editor.saved": "Fertig! Datei heruntergeladen.",
+    "editor.desc": "Zeichnen.",
+    "editor.save": "💾 Speichern",
+    "editor.saved": "Fertig!",
     "editor.textPrompt": "Text:",
     "saveChoice.title": "💾 PDF speichern",
-    "saveChoice.desc": "Wählen Sie, wie das PDF gespeichert werden soll.",
-    "saveChoice.vectorTitle": "Mit Text speichern",
-    "saveChoice.vectorDesc": "Text bleibt kopierbar. Datei kleiner. Schnell.",
-    "saveChoice.rasterTitle": "Als Bild speichern",
-    "saveChoice.rasterDesc": "Genaues Aussehen. Text wird Teil des Bildes."
+    "saveChoice.desc": "Wählen.",
+    "saveChoice.vectorTitle": "Mit Text",
+    "saveChoice.vectorDesc": "Text bleibt.",
+    "saveChoice.rasterTitle": "Als Bild",
+    "saveChoice.rasterDesc": "Genaues Aussehen."
   }
 };
 
@@ -1775,7 +2022,9 @@ function setLang(lang) {
     donateTitle: 'donate.title', donateDesc: 'donate.desc',
     donateOneTimeTitle: 'donate.oneTime', donateOneTimeDesc: 'donate.oneTimeDesc',
     donateSubTitle: 'donate.subscribe', donateSubDesc: 'donate.subscribeDesc',
-    donateThanks: 'donate.thanks'
+    donateThanks: 'donate.thanks',
+    aboutTitle: 'about.title', aboutSubtitle: 'about.subtitle',
+    contactTitle: 'contact.title', contactSubtitle: 'contact.subtitle'
   };
   Object.keys(ids).forEach(id => {
     const el = document.getElementById(id);
@@ -1800,6 +2049,32 @@ document.getElementById('langMenu').addEventListener('click', (e) => {
     langDropdown.classList.remove('open');
   }
 });
+
+/* ==========================================================
+   🎯 INIT CONFIG
+   ========================================================== */
+function applyConfig() {
+// Название сайта
+  const logoEl = document.getElementById('siteNameLogo');
+  if (logoEl) logoEl.textContent = CONFIG.SITE_NAME;
+  document.title = CONFIG.SITE_NAME + ' — All-in-One PDF Toolkit';
+
+  // Все ссылки email
+  document.querySelectorAll('a[href^="mailto:"], #contactEmailLink').forEach(a => {
+    if (a.id === 'contactEmailLink') {
+      a.href = 'mailto:' + CONFIG.EMAIL;
+    }
+  });
+  // Contact email
+  const emailText = document.getElementById('contactEmailText');
+  if (emailText) emailText.textContent = CONFIG.EMAIL;
+  // Donate links
+  const oneTime = document.getElementById('donateOneTimeLink');
+  const sub = document.getElementById('donateSubLink');
+  if (oneTime) oneTime.href = 'https://www.paypal.com/paypalme/' + CONFIG.PAYPAL + '/1';
+  if (sub) sub.href = 'https://www.paypal.com/paypalme/' + CONFIG.PAYPAL + '/5';
+}
+applyConfig();
 
 /* ==========================================================
    TOOLS
@@ -1840,7 +2115,7 @@ function renderTools() {
 }
 
 /* ==========================================================
-   MODAL
+   MODAL (инструменты)
    ========================================================== */
 const overlay = document.getElementById('modalOverlay');
 const modalTitle = document.getElementById('modalTitle');
@@ -2151,7 +2426,7 @@ async function toolMetadata() {
 }
 
 /* ==========================================================
-   🕐 LV CLOCK
+   🕐 CLOCK
    ========================================================== */
 function updateLvClock() {
   const el = document.getElementById('lvTime');
@@ -2162,7 +2437,7 @@ function updateLvClock() {
 }
 
 /* ==========================================================
-   🌙 DARK THEME
+   🌙 THEME
    ========================================================== */
 const themeBtn = document.getElementById('themeBtn');
 function applyTheme(dark) {
@@ -2382,6 +2657,44 @@ function closeDonate() { donateOverlay.classList.remove('active'); }
 donateOverlay.addEventListener('click', e => { if (e.target === donateOverlay) closeDonate(); });
 document.getElementById('donateBtn').addEventListener('click', openDonate);
 
+/* ==========================================================
+   ✨ ABOUT
+   ========================================================== */
+const aboutOverlay = document.getElementById('aboutOverlay');
+function openAbout() { aboutOverlay.classList.add('active'); }
+function closeAbout() { aboutOverlay.classList.remove('active'); }
+aboutOverlay.addEventListener('click', e => { if (e.target === aboutOverlay) closeAbout(); });
+
+/* ==========================================================
+   ✉️ CONTACT
+   ========================================================== */
+const contactOverlay = document.getElementById('contactOverlay');
+function openContact() {
+  contactOverlay.classList.add('active');
+  const emailText = document.getElementById('contactEmailText');
+  if (emailText) emailText.textContent = CONFIG.EMAIL;
+}
+function closeContact() { contactOverlay.classList.remove('active'); }
+contactOverlay.addEventListener('click', e => { if (e.target === contactOverlay) closeContact(); });
+
+// Клик на email — копирует
+document.getElementById('contactEmailLink').addEventListener('click', (e) => {
+  e.preventDefault();
+  navigator.clipboard.writeText(CONFIG.EMAIL).then(() => {
+    const emailText = document.getElementById('contactEmailText');
+    if (emailText) {
+      const orig = emailText.textContent;
+      emailText.textContent = t('contact.copied');
+      setTimeout(() => { emailText.textContent = orig; }, 1500);
+    }
+  });
+});
+
+// Клик на рекламу → Contact
+function contactUs(e) {
+  e.preventDefault();
+  openContact();
+}
 
 /* ==========================================================
    BUTTONS — Timer / Alarm
@@ -2481,7 +2794,6 @@ function saveCurrentPageState() {
   try { edFinalState[edCurrentPage] = ctx.getImageData(0, 0, edCanvasWidth, edCanvasHeight); }
   catch (e) { console.warn(e); }
 }
-
 document.querySelectorAll('.tool-btn[data-tool]').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.tool-btn[data-tool]').forEach(b => b.classList.remove('active'));
@@ -2713,21 +3025,26 @@ document.getElementById('saveRasterBtn').addEventListener('click', async () => {
    ========================================================== */
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-// Язык — из localStorage, по умолчанию EN
 const savedLang = localStorage.getItem('pdfnest_lang') || 'en';
 setLang(savedLang);
 
-// Часы
 updateLvClock();
 setInterval(updateLvClock, 1000);
-
-// Будильники
 setInterval(checkAlarms, 15000);
+</script>
 
+<!-- Cookie Consent Banner -->
+<div class="cookie-banner hidden" id="cookieBanner">
+  <div class="cookie-text">
+    <span data-i18n="cookie.text">🍪 We use cookies to improve your experience.</span>
+  </div>
+  <div class="cookie-buttons">
+    <button class="cookie-btn cookie-accept" onclick="acceptCookies()" data-i18n="cookie.accept">Accept</button>
+    <button class="cookie-btn cookie-decline" onclick="declineCookies()" data-i18n="cookie.decline">Decline</button>
+  </div>
+</div>
 
-/* ==========================================================
-   🍪 COOKIE CONSENT
-   ========================================================== */
+<script>
 const GA_ID = 'G-30RLVLY5JJ';
 
 function acceptCookies() {
@@ -2746,10 +3063,8 @@ function declineCookies() {
 
 document.addEventListener('DOMContentLoaded', () => {
   const cookieBanner = document.getElementById('cookieBanner');
-  if (!cookieBanner) return; // Баннера нет — выходим
-
+  if (!cookieBanner) return;
   const cookieChoice = localStorage.getItem('pdfnest_cookies');
-
   if (!cookieChoice) {
     cookieBanner.classList.remove('hidden');
     window['ga-disable-' + GA_ID] = true;
@@ -2760,20 +3075,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 });
-
 </script>
-
-
-<!-- Cookie Consent Banner -->
-<div class="cookie-banner hidden" id="cookieBanner">
-  <div class="cookie-text">
-    <span data-i18n="cookie.text">🍪 We use cookies to improve your experience.</span>
-  </div>
-  <div class="cookie-buttons">
-    <button class="cookie-btn cookie-accept" onclick="acceptCookies()" data-i18n="cookie.accept">Accept</button>
-    <button class="cookie-btn cookie-decline" onclick="declineCookies()" data-i18n="cookie.decline">Decline</button>
-  </div>
-</div>
-
 </body>
 </html>
