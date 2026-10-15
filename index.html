@@ -187,10 +187,12 @@
   .cookie-accept { background: var(--primary); color: #fff; }
   .cookie-decline { background: transparent; color: var(--muted); border: 1px solid var(--border); }
   .footer-buttons { display: flex; justify-content: center; gap: 12px; margin-top: 14px; flex-wrap: wrap; }
-  .footer-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: transparent; color: var(--primary); border: 2px solid var(--primary); border-radius: 10px; font-weight: 600; font-size: 13px; font-family: inherit; cursor: pointer; }
+  .footer-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: transparent; color: var(--primary); border: 2px solid var(--primary); border-radius: 10px; font-weight: 600; font-size: 13px; font-family: inherit; cursor: pointer; text-decoration: none; }
   .footer-btn:hover { background: var(--primary); color: #fff; }
   .footer-btn.contact-btn { color: #10b981; border-color: #10b981; }
   .footer-btn.contact-btn:hover { background: #10b981; color: #fff; }
+  .footer-btn.mirror-btn-footer { color: #10b981; border-color: #10b981; }
+  .footer-btn.mirror-btn-footer:hover { background: #10b981; color: #fff; }
   .about-modal, .contact-modal { max-width: 600px !important; }
   .about-content { display: flex; flex-direction: column; gap: 14px; margin: 20px 0 24px; }
   .about-block { display: flex; gap: 14px; padding: 14px 16px; background: var(--bg); border-radius: 12px; border-left: 3px solid var(--primary); }
@@ -259,6 +261,14 @@
   .stamp-preset.active { box-shadow: 0 0 0 3px var(--primary); }
   .footer-copy { display: inline-block; margin-top: 8px; font-weight: 600; color: var(--primary); font-size: 12px; letter-spacing: 0.5px; }
   .ad-slot { display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; border-radius: 9px; font-size: 12px; font-weight: 600; text-decoration: none; white-space: nowrap; cursor: pointer; }
+  .mirror-btn { display: flex; align-items: center; gap: 6px; padding: 8px 14px; background: linear-gradient(135deg, #10b981, #059669); color: #fff; border-radius: 9px; font-size: 12px; font-weight: 700; text-decoration: none; white-space: nowrap; cursor: pointer; transition: all 0.15s; }
+  .mirror-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16,185,129,0.35); }
+  .proxy-banner { display: none; position: sticky; top: 0; z-index: 200; background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; padding: 14px 24px; text-align: center; font-size: 14px; line-height: 1.5; box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+  .proxy-banner.show { display: block; }
+  .proxy-banner strong { display: block; margin-bottom: 4px; font-size: 15px; }
+  .proxy-banner a { color: #fff; font-weight: 700; text-decoration: underline; }
+  .proxy-banner .close { position: absolute; top: 8px; right: 12px; background: rgba(255,255,255,0.2); border: none; color: #fff; width: 26px; height: 26px; border-radius: 50%; cursor: pointer; font-size: 14px; line-height: 1; }
+  .proxy-banner .close:hover { background: rgba(255,255,255,0.35); }
   .ed-selection-box { position: absolute; border: 2px dashed var(--primary); background: rgba(79, 70, 229, 0.08); pointer-events: none; z-index: 999; border-radius: 4px; }
   .ed-selection-handle { position: absolute; width: 12px; height: 12px; background: var(--primary); border: 2px solid #fff; border-radius: 50%; pointer-events: auto; z-index: 1000; }
   .ed-selection-handle.rot { cursor: grab; width: 16px; height: 16px; background: #f59e0b; }
@@ -284,6 +294,15 @@
 </style>
 </head>
 <body>
+
+<!-- Proxy / Zscaler banner (auto-shows only when detected) -->
+<div class="proxy-banner" id="proxyBanner">
+  <button class="close" onclick="document.getElementById('proxyBanner').classList.remove('show')" aria-label="Close">✕</button>
+  <strong data-i18n="proxy.title">🔒 Working from a corporate computer?</strong>
+  <span data-i18n="proxy.text">If your security system (Zscaler, Netskope, Menlo, etc.) blocks file uploads — try the mirror:</span>
+  <a href="https://mypkah-cmd.github.io/marge-pdf/" target="_blank" rel="noopener">mypkah-cmd.github.io/marge-pdf</a>
+</div>
+
 <header>
   <div class="logo" onclick="location.reload()">
     <div class="logo-icon">🐱</div>
@@ -294,6 +313,10 @@
       <span class="clock-city">🇱🇻 Rīga</span>
       <span class="clock-time" id="lvTime">00:00:00</span>
     </div>
+    <a href="https://mypkah-cmd.github.io/marge-pdf/" class="mirror-btn" target="_blank" rel="noopener" title="If the site doesn't work — try the mirror">
+      <span>🔀</span>
+      <span data-i18n="mirror.text">Mirror</span>
+    </a>
     <a href="#" class="ad-slot" onclick="contactUs(event)">
       <span>📢</span>
       <span data-i18n="adSlot.text">Your ad could be here</span>
@@ -344,6 +367,10 @@
   <div class="footer-buttons">
     <button class="footer-btn" onclick="openAbout()"><span>✨</span><span data-i18n="about.btnText">Why is it free?</span></button>
     <button class="footer-btn contact-btn" onclick="openContact()"><span>✉️</span><span data-i18n="contact.btnText">Contact us</span></button>
+    <a href="https://mypkah-cmd.github.io/marge-pdf/" class="footer-btn mirror-btn-footer" target="_blank" rel="noopener">
+      <span>🔀</span>
+      <span data-i18n="mirror.text">Mirror</span>
+    </a>
   </div>
 </footer>
 
@@ -361,16 +388,16 @@
 <div class="modal-overlay" id="timerOverlay">
   <div class="modal" style="max-width: 420px;">
     <button class="modal-close" onclick="closeTimerModal()">✕</button>
-    <h2 id="timerTitle">⏱️ Timer</h2>
-    <p class="desc" id="timerDesc">Set a countdown.</p>
+    <h2 id="timerTitle" data-i18n="timer.title">⏱️ Timer</h2>
+    <p class="desc" id="timerDesc" data-i18n="timer.desc">Set a countdown.</p>
     <div class="timer-display" id="timerDisplay">00:00:00</div>
     <div class="options">
-      <label id="timerLabelH">Hours</label><input type="number" id="timerH" value="0" min="0" max="23">
-      <label id="timerLabelM">Minutes</label><input type="number" id="timerM" value="5" min="0" max="59">
-      <label id="timerLabelS">Seconds</label><input type="number" id="timerS" value="0" min="0" max="59">
+      <label id="timerLabelH" data-i18n="timer.hours">Hours</label><input type="number" id="timerH" value="0" min="0" max="23">
+      <label id="timerLabelM" data-i18n="timer.minutes">Minutes</label><input type="number" id="timerM" value="5" min="0" max="59">
+      <label id="timerLabelS" data-i18n="timer.seconds">Seconds</label><input type="number" id="timerS" value="0" min="0" max="59">
     </div>
-    <button class="btn" id="timerStartBtn">▶ Start</button>
-    <button class="btn btn-secondary" id="timerStopBtn" style="display:none; margin-top:8px;">⏹ Stop</button>
+    <button class="btn" id="timerStartBtn" data-i18n="timer.start">▶ Start</button>
+    <button class="btn btn-secondary" id="timerStopBtn" style="display:none; margin-top:8px;" data-i18n="timer.stop">⏹ Stop</button>
     <div class="status-msg hidden" id="timerStatus"></div>
   </div>
 </div>
@@ -379,14 +406,14 @@
 <div class="modal-overlay" id="alarmOverlay">
   <div class="modal" style="max-width: 420px;">
     <button class="modal-close" onclick="closeAlarmModal()">✕</button>
-    <h2 id="alarmTitle">🔔 Alarm</h2>
-    <p class="desc" id="alarmDesc">Set a time.</p>
+    <h2 id="alarmTitle" data-i18n="alarm.title">🔔 Alarm</h2>
+    <p class="desc" id="alarmDesc" data-i18n="alarm.desc">Set a time.</p>
     <div class="options">
-      <label id="alarmLabelTime">Alarm time</label>
+      <label id="alarmLabelTime" data-i18n="alarm.timeLabel">Alarm time</label>
       <div class="time-24"><input type="number" id="alarmHour" value="7" min="0" max="23"><span>:</span><input type="number" id="alarmMinute" value="0" min="0" max="59"></div>
-      <label id="alarmLabelLabel">Label</label><input type="text" id="alarmLabel" placeholder="Wake up!">
+      <label id="alarmLabelLabel" data-i18n="alarm.labelLabel">Label</label><input type="text" id="alarmLabel" placeholder="Wake up!">
     </div>
-    <button class="btn" id="alarmSetBtn">🔔 Set Alarm</button>
+    <button class="btn" id="alarmSetBtn" data-i18n="alarm.set">🔔 Set Alarm</button>
     <div class="status-msg hidden" id="alarmStatus"></div>
     <ul class="alarm-list" id="alarmList"></ul>
   </div>
@@ -402,18 +429,17 @@
     <button class="btn" onclick="closeHelp()" data-i18n="help.close">Got it</button>
   </div>
 </div>
-
 <!-- MODAL: remove pages -->
 <div class="modal-overlay" id="removePagesOverlay">
   <div class="modal" style="max-width: 640px;">
     <button class="modal-close" onclick="closeRemovePages()">✕</button>
-    <h2 id="removePagesTitle">🗑️ Remove Pages</h2>
-    <p class="desc" id="removePagesDesc">Click on pages to delete.</p>
-    <div class="drop-zone" id="rpDropZone"><span class="big">📁</span><span id="rpDropText">Drop a PDF here</span><input type="file" id="rpFileInput" accept="application/pdf"></div>
+    <h2 id="removePagesTitle" data-i18n="rp.title">🗑️ Remove Pages</h2>
+    <p class="desc" id="removePagesDesc" data-i18n="rp.desc">Click on pages you want to delete.</p>
+    <div class="drop-zone" id="rpDropZone"><span class="big">📁</span><span id="rpDropText" data-i18n="rp.drop">Drop a PDF here</span><input type="file" id="rpFileInput" accept="application/pdf"></div>
     <div id="rpContent" class="hidden">
-      <p class="page-hint" id="rpHint">Click pages</p>
+      <p class="page-hint" id="rpHint" data-i18n="rp.hint">Click pages</p>
       <div class="page-grid" id="rpGrid"></div>
-      <button class="btn" id="rpRunBtn">🗑️ Delete Selected</button>
+      <button class="btn" id="rpRunBtn" data-i18n="rp.run">🗑️ Delete Selected</button>
     </div>
     <div class="status-msg hidden" id="rpStatus"></div>
   </div>
@@ -423,9 +449,9 @@
 <div class="modal-overlay" id="editorOverlay">
   <div class="modal editor-wrapper">
     <button class="modal-close" onclick="closeEditor()">✕</button>
-    <h2 id="editorTitle">✏️ Edit PDF</h2>
-    <p class="desc" id="editorDesc">Draw on your PDF.</p>
-    <div class="drop-zone" id="editorDropZone"><span class="big">📁</span><span id="editorDropText">Drop a PDF here</span><input type="file" id="editorFileInput" accept="application/pdf"></div>
+    <h2 id="editorTitle" data-i18n="editor.title">✏️ Edit PDF</h2>
+    <p class="desc" id="editorDesc" data-i18n="editor.desc">Draw on your PDF.</p>
+    <div class="drop-zone" id="editorDropZone"><span class="big">📁</span><span id="editorDropText" data-i18n="rp.drop">Drop a PDF here</span><input type="file" id="editorFileInput" accept="application/pdf"></div>
     <div id="editorContent" class="hidden">
       <div class="editor-toolbar">
         <button class="tool-btn active" data-tool="pen" title="Pen">✏️</button>
@@ -473,7 +499,7 @@
         <button class="page-nav-btn" id="editorNext">Next ▶</button>
       </div>
       <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:8px;" data-i18n="editor.hint">💡 select/move · rotate 15° · picker · Del — delete · Ctrl+wheel — zoom</p>
-      <button class="btn" id="editorSave" style="margin-top:12px;">💾 Save & Download</button>
+      <button class="btn" id="editorSave" style="margin-top:12px;" data-i18n="editor.save">💾 Save & Download</button>
     </div>
     <div class="status-msg hidden" id="editorStatus"></div>
   </div>
@@ -483,17 +509,17 @@
 <div class="modal-overlay" id="donateOverlay">
   <div class="modal" style="max-width: 460px;">
     <button class="modal-close" onclick="closeDonate()">✕</button>
-    <h2 id="donateTitle">💰 Support the Project</h2>
-    <p class="desc" id="donateDesc">Support the development.</p>
+    <h2 id="donateTitle" data-i18n="donate.title">💰 Support the Project</h2>
+    <p class="desc" id="donateDesc" data-i18n="donate.subtitle">Support the development.</p>
     <div class="qr-section">
       <p class="qr-label" data-i18n="donate.qrLabel">📱 Scan QR to donate via PayPal</p>
       <div class="qr-wrapper"><div id="qrContainer"></div></div>
     </div>
     <div class="donate-list">
-      <a href="#" class="donate-item" id="donateOneTimeLink"><span class="donate-icon">☕</span><div class="donate-text"><strong id="donateOneTimeTitle">Donate $1</strong><small id="donateOneTimeDesc">One-time support</small></div></a>
-      <a href="#" class="donate-item" id="donateSubLink"><span class="donate-icon">⭐</span><div class="donate-text"><strong id="donateSubTitle">Donate $5</strong><small id="donateSubDesc">Bigger support</small></div></a>
+      <a href="#" class="donate-item" id="donateOneTimeLink"><span class="donate-icon">☕</span><div class="donate-text"><strong id="donateOneTimeTitle" data-i18n="donate.oneTime">Donate $1</strong><small id="donateOneTimeDesc" data-i18n="donate.oneTimeDesc">One-time support</small></div></a>
+      <a href="#" class="donate-item" id="donateSubLink"><span class="donate-icon">⭐</span><div class="donate-text"><strong id="donateSubTitle" data-i18n="donate.sub">Donate $5</strong><small id="donateSubDesc" data-i18n="donate.subDesc">Bigger support</small></div></a>
     </div>
-    <p class="donate-thanks" id="donateThanks">Thank you! ❤️</p>
+    <p class="donate-thanks" id="donateThanks" data-i18n="donate.thanks">Thank you! ❤️</p>
   </div>
 </div>
 
@@ -501,11 +527,11 @@
 <div class="modal-overlay" id="saveChoiceOverlay">
   <div class="modal" style="max-width: 480px;">
     <button class="modal-close" onclick="closeSaveChoice()">✕</button>
-    <h2 id="saveChoiceTitle">💾 Save PDF</h2>
-    <p class="desc" id="saveChoiceDesc">Choose method.</p>
+    <h2 id="saveChoiceTitle" data-i18n="saveChoice.title">💾 Save PDF</h2>
+    <p class="desc" id="saveChoiceDesc" data-i18n="saveChoice.desc">Choose method.</p>
     <div class="save-choice-list">
-      <button class="save-choice-item" id="saveVectorBtn"><span class="save-choice-icon">🟢</span><div class="save-choice-text"><strong id="saveVectorTitle">Save with text</strong><small id="saveVectorDesc">Text stays copyable.</small></div></button>
-      <button class="save-choice-item" id="saveRasterBtn"><span class="save-choice-icon">🔴</span><div class="save-choice-text"><strong id="saveRasterTitle">Save as image</strong><small id="saveRasterDesc">Exact look.</small></div></button>
+      <button class="save-choice-item" id="saveVectorBtn"><span class="save-choice-icon">🟢</span><div class="save-choice-text"><strong id="saveVectorTitle" data-i18n="saveChoice.vectorTitle">Save with text</strong><small id="saveVectorDesc" data-i18n="saveChoice.vectorDesc">Text stays copyable.</small></div></button>
+      <button class="save-choice-item" id="saveRasterBtn"><span class="save-choice-icon">🔴</span><div class="save-choice-text"><strong id="saveRasterTitle" data-i18n="saveChoice.rasterTitle">Save as image</strong><small id="saveRasterDesc" data-i18n="saveChoice.rasterDesc">Exact look.</small></div></button>
     </div>
     <div class="status-msg hidden" id="saveChoiceStatus"></div>
   </div>
@@ -515,15 +541,15 @@
 <div class="modal-overlay" id="aboutOverlay">
   <div class="modal about-modal">
     <button class="modal-close" onclick="closeAbout()">✕</button>
-    <h2 id="aboutTitle">✨ Why marge-PDF is Free</h2>
-    <p class="desc" id="aboutSubtitle">And always will be</p>
+    <h2 id="aboutTitle" data-i18n="about.title">✨ Why marge-PDF is Free</h2>
+    <p class="desc" id="aboutSubtitle" data-i18n="about.subtitle">And always will be</p>
     <div class="about-content">
-      <div class="about-block"><div class="about-icon">🆓</div><div><strong>No limits. Ever.</strong><p>Merge 5, 10, or 50 files — free, always.</p></div></div>
-      <div class="about-block"><div class="about-icon">🔒</div><div><strong>Your files never leave your device</strong><p>Everything happens directly in your browser.</p></div></div>
-      <div class="about-block"><div class="about-icon">💰</div><div><strong>So how does it survive?</strong><p>Almost zero costs. Free forever.</p></div></div>
-      <div class="about-block"><div class="about-icon">❤️</div><div><strong>Thank you for being here</strong><p>Every user makes this project worth doing.</p></div></div>
+      <div class="about-block"><div class="about-icon">🆓</div><div><strong data-i18n="about.block1.title">No limits. Ever.</strong><p data-i18n="about.block1.desc">Merge 5, 10, or 50 files — free, always.</p></div></div>
+      <div class="about-block"><div class="about-icon">🔒</div><div><strong data-i18n="about.block2.title">Your files never leave your device</strong><p data-i18n="about.block2.desc">Everything happens directly in your browser.</p></div></div>
+      <div class="about-block"><div class="about-icon">💰</div><div><strong data-i18n="about.block3.title">So how does it survive?</strong><p data-i18n="about.block3.desc">Almost zero costs. Free forever.</p></div></div>
+      <div class="about-block"><div class="about-icon">❤️</div><div><strong data-i18n="about.block4.title">Thank you for being here</strong><p data-i18n="about.block4.desc">Every user makes this project worth doing.</p></div></div>
     </div>
-    <button class="btn" onclick="closeAbout(); openDonate();">💰 Support the project</button>
+    <button class="btn" onclick="closeAbout(); openDonate();" data-i18n="about.supportBtn">💰 Support the project</button>
   </div>
 </div>
 
@@ -531,14 +557,14 @@
 <div class="modal-overlay" id="contactOverlay">
   <div class="modal contact-modal">
     <button class="modal-close" onclick="closeContact()">✕</button>
-    <h2 id="contactTitle">✉️ Contact Us</h2>
-    <p class="desc" id="contactSubtitle">We'd love to hear from you</p>
+    <h2 id="contactTitle" data-i18n="contact.title">✉️ Contact Us</h2>
+    <p class="desc" id="contactSubtitle" data-i18n="contact.subtitle">We'd love to hear from you</p>
     <div class="contact-content">
       <a href="#" id="contactEmailLink" class="contact-block">
         <div class="contact-icon">📧</div>
-        <div class="contact-info"><strong>Email</strong><span id="contactEmailText">—</span></div>
+        <div class="contact-info"><strong data-i18n="contact.emailLabel">Email</strong><span id="contactEmailText">—</span></div>
       </a>
-      <div class="contact-note">Questions, suggestions, bug reports — drop us a line.</div>
+      <div class="contact-note" data-i18n="contact.note">Questions, suggestions, bug reports — drop us a line.</div>
     </div>
   </div>
 </div>
@@ -547,14 +573,14 @@
 <div class="modal-overlay" id="signatureOverlay">
   <div class="modal" style="max-width: 640px;">
     <button class="modal-close" onclick="closeSignature()">✕</button>
-    <h2 id="signatureTitle">✍️ Add Signature</h2>
-    <p class="desc" id="signatureDesc">Draw, type, or upload your signature.</p>
-    <div class="drop-zone" id="sigDropZone"><span class="big">📁</span><span id="sigDropText">Drop a PDF here</span><input type="file" id="sigFileInput" accept="application/pdf"></div>
+    <h2 id="signatureTitle" data-i18n="sig.title">✍️ Add Signature</h2>
+    <p class="desc" id="signatureDesc" data-i18n="sig.desc">Draw, type, or upload your signature.</p>
+    <div class="drop-zone" id="sigDropZone"><span class="big">📁</span><span id="sigDropText" data-i18n="rp.drop">Drop a PDF here</span><input type="file" id="sigFileInput" accept="application/pdf"></div>
     <div id="sigContent" class="hidden">
       <div class="sig-tabs">
-        <button class="sig-tab active" data-sigtab="draw">✏️ Draw</button>
-        <button class="sig-tab" data-sigtab="type">⌨️ Type</button>
-        <button class="sig-tab" data-sigtab="upload">📤 Upload</button>
+        <button class="sig-tab active" data-sigtab="draw" data-i18n="sig.tab.draw">✏️ Draw</button>
+        <button class="sig-tab" data-sigtab="type" data-i18n="sig.tab.type">⌨️ Type</button>
+        <button class="sig-tab" data-sigtab="upload" data-i18n="sig.tab.upload">📤 Upload</button>
       </div>
       <div class="sig-tab-content active" data-sigcontent="draw">
         <div class="sig-pad-wrap"><canvas id="sigCanvas" width="500" height="200"></canvas></div>
@@ -566,7 +592,7 @@
         </div>
       </div>
       <div class="sig-tab-content" data-sigcontent="type">
-        <div class="options"><label>Your name</label><input type="text" id="sigTextInput" placeholder="John Doe" maxlength="40"></div>
+        <div class="options"><label data-i18n="sig.type.label">Your name</label><input type="text" id="sigTextInput" placeholder="John Doe" maxlength="40"></div>
         <div class="sig-font-picker">
           <button class="sig-font-btn active" data-sigfont="'Brush Script MT', cursive" style="font-family:'Brush Script MT', cursive;">Signature</button>
           <button class="sig-font-btn" data-sigfont="'Georgia', serif" style="font-family:Georgia, serif; font-style:italic;">Signature</button>
@@ -574,10 +600,10 @@
         <div class="sig-preview-wrap"><div id="sigPreview">—</div></div>
       </div>
       <div class="sig-tab-content" data-sigcontent="upload">
-        <div class="drop-zone" id="sigImageDropZone"><span class="big">🖼️</span><span>Upload signature image (PNG)</span><input type="file" id="sigImageInput" accept="image/*"></div>
+        <div class="drop-zone" id="sigImageDropZone"><span class="big">🖼️</span><span data-i18n="sig.upload.hint">Upload signature image (PNG)</span><input type="file" id="sigImageInput" accept="image/*"></div>
         <div class="sig-preview-wrap" id="sigFilePreviewWrap" style="display:none;"><img id="sigFilePreview" alt="preview"></div>
       </div>
-      <button class="btn" id="sigPlaceBtn" style="margin-top:16px;">📌 Place on PDF</button>
+      <button class="btn" id="sigPlaceBtn" style="margin-top:16px;" data-i18n="sig.place">📌 Place on PDF</button>
     </div>
     <div class="status-msg hidden" id="sigStatus"></div>
   </div>
@@ -587,9 +613,9 @@
 <div class="modal-overlay" id="stampOverlay">
   <div class="modal" style="max-width: 560px;">
     <button class="modal-close" onclick="closeStamp()">✕</button>
-    <h2 id="stampTitle">🔖 Add Stamp</h2>
-    <p class="desc" id="stampDesc">Choose a stamp then place it on the PDF.</p>
-    <div class="drop-zone" id="stampDropZone"><span class="big">📁</span><span id="stampDropText">Drop a PDF here</span><input type="file" id="stampFileInput" accept="application/pdf"></div>
+    <h2 id="stampTitle" data-i18n="stamp.title">🔖 Add Stamp</h2>
+    <p class="desc" id="stampDesc" data-i18n="stamp.desc">Choose a stamp then place it on the PDF.</p>
+    <div class="drop-zone" id="stampDropZone"><span class="big">📁</span><span id="stampDropText" data-i18n="rp.drop">Drop a PDF here</span><input type="file" id="stampFileInput" accept="application/pdf"></div>
     <div id="stampContent" class="hidden">
       <div class="stamp-preset-grid" id="stampPresetGrid">
         <button class="stamp-preset active" data-stamp="APPROVED" data-color="#10b981" style="color:#10b981;border-color:#10b981;">APPROVED</button>
@@ -599,7 +625,7 @@
         <button class="stamp-preset" data-stamp="CONFIDENTIAL" data-color="#4f46e5" style="color:#4f46e5;border-color:#4f46e5;">CONFIDENTIAL</button>
         <button class="stamp-preset" data-stamp="PAID" data-color="#10b981" style="color:#10b981;border-color:#10b981;">PAID</button>
       </div>
-      <div class="options"><label>Custom text (optional)</label><input type="text" id="stampCustomText" placeholder="e.g. REVIEWED" maxlength="20"></div>
+      <div class="options"><label data-i18n="stamp.custom">Custom text (optional)</label><input type="text" id="stampCustomText" placeholder="e.g. REVIEWED" maxlength="20"></div>
       <div id="stampCanvasHolder" class="hidden">
         <div class="editor-canvas-wrap">
           <div class="editor-canvas-scroll" id="stampScroll">
@@ -608,7 +634,7 @@
         </div>
         <p style="text-align:center;font-size:13px;color:var(--muted);margin:10px 0;" data-i18n="stamp.hintPlace">💡 Click on PDF to place stamp</p>
       </div>
-      <button class="btn" id="stampPlaceBtn">📌 Place on PDF</button>
+      <button class="btn" id="stampPlaceBtn" data-i18n="stamp.place">📌 Place on PDF</button>
     </div>
     <div class="status-msg hidden" id="stampStatus"></div>
   </div>
@@ -618,9 +644,9 @@
 <div class="modal-overlay" id="textEditorOverlay">
   <div class="modal editor-wrapper">
     <button class="modal-close" onclick="closeTextEditor()">✕</button>
-    <h2 id="textEditorTitle">✏️ Edit Text on PDF</h2>
-    <p class="desc" id="textEditorDesc">Click anywhere on the page to add text, or click existing text to edit it.</p>
-    <div class="drop-zone" id="textEditorDropZone"><span class="big">📁</span><span id="textEditorDropText">Drop a PDF here</span><input type="file" id="textEditorFileInput" accept="application/pdf"></div>
+    <h2 id="textEditorTitle" data-i18n="text.title">✏️ Edit Text on PDF</h2>
+    <p class="desc" id="textEditorDesc" data-i18n="text.desc">Click anywhere on the page to add text, or click existing text to edit it.</p>
+    <div class="drop-zone" id="textEditorDropZone"><span class="big">📁</span><span id="textEditorDropText" data-i18n="rp.drop">Drop a PDF here</span><input type="file" id="textEditorFileInput" accept="application/pdf"></div>
     <div id="textEditorContent" class="hidden">
       <div class="text-toolbar">
         <div class="te-mode-group">
@@ -629,13 +655,13 @@
           <button class="te-mode-btn" data-temode="redact" title="Redact">⬛</button>
         </div>
         <div class="toolbar-divider"></div>
-        <label>Font:</label>
+        <label data-i18n="text.font">Font:</label>
         <select id="teFont">
           <option value="Helvetica" selected>Helvetica</option>
           <option value="TimesRoman">Times New Roman</option>
           <option value="Courier">Courier</option>
         </select>
-        <label>Size:</label>
+        <label data-i18n="text.size">Size:</label>
         <input type="number" id="teSize" value="16" min="8" max="72">
         <div class="toolbar-divider"></div>
         <div class="color-swatch active" data-tecolor="#1e293b" style="background:#1e293b"></div>
@@ -680,7 +706,7 @@
         <button class="page-nav-btn" id="tePageNext">Next ▶</button>
       </div>
       <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:8px;" data-i18n="text.hintLong">💡 Click existing text to edit · Click empty to add · Ctrl+wheel — zoom</p>
-      <button class="btn" id="teSaveBtn" style="margin-top:12px;">💾 Save & Download</button>
+      <button class="btn" id="teSaveBtn" style="margin-top:12px;" data-i18n="editor.save">💾 Save & Download</button>
     </div>
     <div class="status-msg hidden" id="textEditorStatus"></div>
   </div>
@@ -698,16 +724,24 @@
 
 <script>
 /* ==========================================================
-   CONFIG + TRANSLATIONS
+   CONFIG
    ========================================================== */
 const CONFIG = { EMAIL: 'margepdf@gmail.com', PAYPAL: 'KosatiT', SITE_NAME: 'marge-PDF' };
-
 const translations = {
   en: {
     "hero.title":"All Your PDF Tools in One Place","hero.subtitle":"Merge, convert, compress, and manage PDFs — free, fast, and 100% private.",
-    "footer.text":"Made with ❤️ — All processing happens in your browser","adSlot.text":"Your ad could be here",
+    "footer.text":"Made with ❤️ — All processing happens in your browser","adSlot.text":"Your ad could be here","mirror.text":"Mirror",
+    "proxy.title":"🔒 Working from a corporate computer?","proxy.text":"If your security system (Zscaler, Netskope, Menlo, etc.) blocks file uploads — try the mirror:",
     "why.privacy.title":"100% Private","why.privacy.desc":"Your files never leave your browser.","why.fast.title":"Lightning Fast","why.fast.desc":"Works instantly, even offline.","why.free.title":"Completely Free","why.free.desc":"No registration, no hidden fees.","why.all.title":"Works Everywhere","why.all.desc":"Any device with a modern browser.",
-    "about.btnText":"Why is it free?","contact.btnText":"Contact us","donate.qrLabel":"📱 Scan QR to donate via PayPal",
+    "about.btnText":"Why is it free?",
+    "about.title":"✨ Why marge-PDF is Free","about.subtitle":"And always will be",
+    "about.block1.title":"No limits. Ever.","about.block1.desc":"Merge 5, 10, or 50 PDF files — without limits, without subscription, without hidden fees. The project runs on voluntary donations, not on users.",
+    "about.block2.title":"Your files never leave your device","about.block2.desc":"Everything happens directly in your browser. No uploads to any server, no email confirmations, no accounts. Disconnect from the internet after the page loads — the tools keep working.",
+    "about.block3.title":"So how does it survive?","about.block3.desc":"Almost zero costs: no servers to pay for, no databases, no analytics trackers. Just static files on Cloudflare Workers. That's why marge-PDF stays free forever — no ads, no subscription.",
+    "about.block4.title":"Thank you for being here","about.block4.desc":"Every visitor, every shared link, every coffee donation keeps this project alive. You make marge-PDF worth building.",
+    "about.supportBtn":"💰 Support the project",
+    "contact.btnText":"Contact us","contact.title":"✉️ Contact Us","contact.subtitle":"We'd love to hear from you","contact.emailLabel":"Email","contact.note":"Questions, suggestions, bug reports — drop us a line.",
+    "donate.qrLabel":"📱 Scan QR to donate via PayPal","donate.title":"💰 Support the Project","donate.subtitle":"Every coffee counts — and helps keep the tools free for everyone.","donate.oneTime":"Donate $1","donate.oneTimeDesc":"One-time support","donate.sub":"Donate $5","donate.subDesc":"Bigger support","donate.thanks":"Thank you! ❤️",
     "common.drop":"Drop files here or click to browse","common.run":"Run","common.processing":"Processing...","common.done":"Done! File downloaded.","common.error":"Error: ",
     "tool.merge.name":"Merge PDF","tool.merge.desc":"Combine multiple PDFs. Drag to reorder.","tool.split.name":"Split PDF","tool.split.desc":"Extract a page range.","tool.compress.name":"Compress PDF","tool.compress.desc":"Reduce PDF size.","tool.rotate.name":"Rotate PDF","tool.rotate.desc":"Rotate pages.","tool.extract.name":"Extract Pages","tool.extract.desc":"Pull pages into a separate PDF.","tool.watermark.name":"Watermark","tool.watermark.desc":"Stamp text on pages.","tool.pagenum.name":"Page Numbers","tool.pagenum.desc":"Add page numbers.","tool.excel2pdf.name":"Excel → PDF","tool.excel2pdf.desc":"Convert Excel to PDF.","tool.pdf2excel.name":"PDF → Excel","tool.pdf2excel.desc":"Extract text to Excel.","tool.word2pdf.name":"Word → PDF","tool.word2pdf.desc":"Convert .docx to PDF.","tool.img2pdf.name":"Images → PDF","tool.img2pdf.desc":"Combine images. Drag to reorder.","tool.protect.name":"Protect PDF","tool.protect.desc":"Add password.","tool.metadata.name":"Edit Metadata","tool.metadata.desc":"Change title, author, subject.","tool.removepages.name":"Remove Pages","tool.removepages.desc":"Click pages to remove.","tool.editor.name":"Edit PDF (Draw)","tool.editor.desc":"Draw, select, move, rotate, pick color.","tool.pdf2jpg.name":"PDF → JPG","tool.pdf2jpg.desc":"Each page to JPG.","tool.pdf2word.name":"PDF → Word","tool.pdf2word.desc":"Extract text to Word.","tool.signature.name":"Add Signature","tool.signature.desc":"Draw, type, or upload signature.","tool.stamp.name":"Add Stamp","tool.stamp.desc":"Add APPROVED / DRAFT stamps.","tool.textedit.name":"Edit Text on PDF","tool.textedit.desc":"Edit existing text or add new.",
     "opt.range":"Page range (e.g. 1-3,5)","opt.angle":"Angle","opt.text":"Watermark text","opt.opacity":"Opacity (0.1 – 1)","opt.position":"Position","opt.password":"Password","opt.title":"Title","opt.author":"Author","opt.subject":"Subject",
@@ -748,9 +782,18 @@ const translations = {
   },
   ru: {
     "hero.title":"Все PDF-инструменты в одном месте","hero.subtitle":"Объединяйте, конвертируйте, сжимайте PDF — бесплатно, быстро и безопасно.",
-    "footer.text":"Сделано с ❤️ — вся обработка в вашем браузере","adSlot.text":"Здесь могла бы быть ваша реклама",
+    "footer.text":"Сделано с ❤️ — вся обработка в вашем браузере","adSlot.text":"Здесь могла бы быть ваша реклама","mirror.text":"Зеркало",
+    "proxy.title":"🔒 Работаете с корпоративного компьютера?","proxy.text":"Если ваша система защиты (Zscaler, Netskope, Menlo и др.) блокирует загрузку файлов — попробуйте зеркало:",
     "why.privacy.title":"100% Приватно","why.privacy.desc":"Файлы не покидают браузер.","why.fast.title":"Молниеносно","why.fast.desc":"Работает мгновенно, даже офлайн.","why.free.title":"Бесплатно","why.free.desc":"Без регистрации и скрытых платежей.","why.all.title":"Работает Везде","why.all.desc":"Любое устройство с браузером.",
-    "about.btnText":"Почему бесплатно?","contact.btnText":"Связаться с нами","donate.qrLabel":"📱 Сканируйте QR для доната",
+    "about.btnText":"Почему бесплатно?",
+    "about.title":"✨ Почему marge-PDF бесплатный","about.subtitle":"И таким останется",
+    "about.block1.title":"Без ограничений. Никогда.","about.block1.desc":"Объединяйте 5, 10 или 50 PDF-файлов — без лимитов, без подписки, без скрытых платежей. Проект существует за счёт добровольных донатов, а не за счёт пользователей.",
+    "about.block2.title":"Ваши файлы никогда не покидают устройство","about.block2.desc":"Вся обработка происходит прямо в браузере. Нет загрузок на сервер, нет подтверждений email, нет аккаунтов. Можете отключить интернет после загрузки страницы — инструменты продолжат работать.",
+    "about.block3.title":"Как проект выживает?","about.block3.desc":"Почти нулевые расходы: не нужно платить за серверы, базы данных и трекеры аналитики. Только статические файлы на Cloudflare Workers. Поэтому marge-PDF остаётся бесплатным навсегда — без рекламы, без подписки.",
+    "about.block4.title":"Спасибо, что вы здесь","about.block4.desc":"Каждый посетитель, каждая пересланная ссылка и каждая чашка кофе в донат — поддерживают проект. Именно вы делаете marge-PDF нужным.",
+    "about.supportBtn":"💰 Поддержать проект",
+    "contact.btnText":"Связаться с нами","contact.title":"✉️ Связаться с нами","contact.subtitle":"Будем рады вашему сообщению","contact.emailLabel":"Email","contact.note":"Вопросы, предложения, баг-репорты — напишите нам.",
+    "donate.qrLabel":"📱 Сканируйте QR для доната","donate.title":"💰 Поддержать проект","donate.subtitle":"Каждая чашка кофе важна — она помогает оставить инструменты бесплатными для всех.","donate.oneTime":"Донат $1","donate.oneTimeDesc":"Разовая поддержка","donate.sub":"Донат $5","donate.subDesc":"Большая поддержка","donate.thanks":"Спасибо! ❤️",
     "common.drop":"Перетащите файлы сюда или нажмите","common.run":"Выполнить","common.processing":"Обработка...","common.done":"Готово!","common.error":"Ошибка: ",
     "tool.merge.name":"Объединить PDF","tool.merge.desc":"Соедините несколько PDF. Перетаскивайте для порядка.","tool.split.name":"Разделить PDF","tool.split.desc":"Извлеките диапазон страниц.","tool.compress.name":"Сжать PDF","tool.compress.desc":"Уменьшить размер.","tool.rotate.name":"Повернуть PDF","tool.rotate.desc":"Повернуть страницы.","tool.extract.name":"Извлечь страницы","tool.extract.desc":"Отдельный PDF из страниц.","tool.watermark.name":"Водяной знак","tool.watermark.desc":"Текст на каждой странице.","tool.pagenum.name":"Номера страниц","tool.pagenum.desc":"Добавить номера.","tool.excel2pdf.name":"Excel → PDF","tool.excel2pdf.desc":"Преобразовать Excel.","tool.pdf2excel.name":"PDF → Excel","tool.pdf2excel.desc":"Извлечь текст в Excel.","tool.word2pdf.name":"Word → PDF","tool.word2pdf.desc":"Конвертировать .docx.","tool.img2pdf.name":"Картинки → PDF","tool.img2pdf.desc":"Объединить JPG/PNG.","tool.protect.name":"Защитить PDF","tool.protect.desc":"Добавить пароль.","tool.metadata.name":"Метаданные","tool.metadata.desc":"Название, автор, тема.","tool.removepages.name":"Удалить страницы","tool.removepages.desc":"Нажмите, чтобы удалить.","tool.editor.name":"Рисовать на PDF","tool.editor.desc":"Рисуйте, выбирайте, двигайте, поворачивайте.","tool.pdf2jpg.name":"PDF → JPG","tool.pdf2jpg.desc":"Каждая страница в JPG.","tool.pdf2word.name":"PDF → Word","tool.pdf2word.desc":"Извлечь текст в Word.","tool.signature.name":"Подпись","tool.signature.desc":"Нарисуйте или загрузите подпись.","tool.stamp.name":"Штамп","tool.stamp.desc":"APPROVED, DRAFT, URGENT.","tool.textedit.name":"Редактор текста","tool.textedit.desc":"Правьте существующий или добавьте новый текст.",
     "opt.range":"Диапазон (напр. 1-3,5)","opt.angle":"Угол","opt.text":"Текст","opt.opacity":"Прозрачность","opt.position":"Позиция","opt.password":"Пароль","opt.title":"Название","opt.author":"Автор","opt.subject":"Тема",
@@ -791,9 +834,18 @@ const translations = {
   },
   lv: {
     "hero.title":"Visi PDF rīki vienuviet","hero.subtitle":"Apvienojiet, konvertējiet, saspiediet un pārvaldiet PDF — bez maksas, ātri un 100% privāti.",
-    "footer.text":"Veidots ar ❤️ — visa apstrāde notiek jūsu pārlūkā","adSlot.text":"Šeit varētu būt jūsu reklāma",
+    "footer.text":"Veidots ar ❤️ — visa apstrāde notiek jūsu pārlūkā","adSlot.text":"Šeit varētu būt jūsu reklāma","mirror.text":"Spogulis",
+    "proxy.title":"🔒 Strādājat no korporatīvā datora?","proxy.text":"Ja jūsu drošības sistēma (Zscaler, Netskope, Menlo u.c.) bloķē failu augšupielādi — izmēģiniet spoguli:",
     "why.privacy.title":"100% Privāti","why.privacy.desc":"Jūsu faili nekad neatstāj pārlūku.","why.fast.title":"Zibens ātrs","why.fast.desc":"Strādā acumirklī, pat bezsaistē.","why.free.title":"Pilnīgi Bezmaksas","why.free.desc":"Bez reģistrācijas, bez maksām.","why.all.title":"Strādā Visur","why.all.desc":"Jebkura ierīce ar pārlūku.",
-    "about.btnText":"Kāpēc bez maksas?","contact.btnText":"Sazināties ar mums","donate.qrLabel":"📱 Skenējiet QR, lai ziedotu caur PayPal",
+    "about.btnText":"Kāpēc bez maksas?",
+    "about.title":"✨ Kāpēc marge-PDF ir bez maksas","about.subtitle":"Un tāds tas paliks",
+    "about.block1.title":"Bez ierobežojumiem. Nekad.","about.block1.desc":"Apvienojiet 5, 10 vai 50 PDF failus — bez limita, bez abonementa, bez slēptām maksām. Projekts pastāv no brīvprātīgiem ziedojumiem, nevis no lietotājiem.",
+    "about.block2.title":"Jūsu faili nekad neatstāj ierīci","about.block2.desc":"Visa apstrāde notiek tieši pārlūkā. Nav augšupielāžu serverī, nav e-pasta apstiprinājumu, nav kontu. Varat atslēgt internetu pēc lapas ielādes — rīki turpinās strādāt.",
+    "about.block3.title":"Kā projekts izdzīvo?","about.block3.desc":"Gandrīz nulles izmaksas: nav jāmaksā par serveriem, datubāzēm vai analītikas izsekotājiem. Tikai statiski faili uz Cloudflare Workers. Tāpēc marge-PDF paliek bez maksas uz visiem laikiem — bez reklāmām, bez abonementa.",
+    "about.block4.title":"Paldies, ka esat šeit","about.block4.desc":"Katrs apmeklētājs, katra kopīgotā saite un katra kafijas ziedojuma reize uztur šo projektu dzīvu. Jūs padarāt marge-PDF vērtīgu.",
+    "about.supportBtn":"💰 Atbalstīt projektu",
+    "contact.btnText":"Sazināties ar mums","contact.title":"✉️ Sazināties ar mums","contact.subtitle":"Mēs labprāt dzirdēsim no jums","contact.emailLabel":"E-pasts","contact.note":"Jautājumi, ieteikumi, kļūdu ziņojumi — rakstiet mums.",
+    "donate.qrLabel":"📱 Skenējiet QR, lai ziedotu caur PayPal","donate.title":"💰 Atbalstīt projektu","donate.subtitle":"Katra kafija ir svarīga — tā palīdz saglabāt rīkus bez maksas visiem.","donate.oneTime":"Ziedot $1","donate.oneTimeDesc":"Vienreizējs atbalsts","donate.sub":"Ziedot $5","donate.subDesc":"Lielāks atbalsts","donate.thanks":"Paldies! ❤️",
     "common.drop":"Ievelciet failus šeit vai noklikšķiniet","common.run":"Palaist","common.processing":"Apstrāde...","common.done":"Gatavs!","common.error":"Kļūda: ",
     "tool.merge.name":"Apvienot PDF","tool.merge.desc":"Apvienojiet vairākus PDF. Velciet, lai mainītu kārtību.","tool.split.name":"Sadalīt PDF","tool.split.desc":"Izvelciet lappušu diapazonu.","tool.compress.name":"Saspiest PDF","tool.compress.desc":"Samaziniet izmēru.","tool.rotate.name":"Pagriezt PDF","tool.rotate.desc":"Pagrieziet lappuses.","tool.extract.name":"Izvilkt lappuses","tool.extract.desc":"Atsevišķs PDF.","tool.watermark.name":"Ūdenszīme","tool.watermark.desc":"Pievienojiet tekstu.","tool.pagenum.name":"Lappušu numuri","tool.pagenum.desc":"Pievienojiet numurus.","tool.excel2pdf.name":"Excel → PDF","tool.excel2pdf.desc":"Konvertējiet Excel.","tool.pdf2excel.name":"PDF → Excel","tool.pdf2excel.desc":"Izvelciet tekstu.","tool.word2pdf.name":"Word → PDF","tool.word2pdf.desc":"Konvertējiet Word.","tool.img2pdf.name":"Attēli → PDF","tool.img2pdf.desc":"Apvienojiet attēlus.","tool.protect.name":"Aizsargāt PDF","tool.protect.desc":"Pievienojiet paroli.","tool.metadata.name":"Metadati","tool.metadata.desc":"Mainiet nosaukumu.","tool.removepages.name":"Noņemt lappuses","tool.removepages.desc":"Noklikšķiniet uz lappusēm.","tool.editor.name":"Rediģēt PDF","tool.editor.desc":"Zīmējiet, atlasiet, pārvietojiet, pagrieziet.","tool.pdf2jpg.name":"PDF → JPG","tool.pdf2jpg.desc":"Katra lappuse uz JPG.","tool.pdf2word.name":"PDF → Word","tool.pdf2word.desc":"Izvelciet tekstu uz Word.","tool.signature.name":"Paraksts","tool.signature.desc":"Uzzīmējiet vai augšupielādējiet.","tool.stamp.name":"Zīmogs","tool.stamp.desc":"APPROVED, DRAFT, URGENT.","tool.textedit.name":"Rediģēt tekstu","tool.textedit.desc":"Rediģējiet esošo vai pievienojiet jaunu tekstu.",
     "opt.range":"Lappušu diapazons","opt.angle":"Leņķis","opt.text":"Teksts","opt.opacity":"Necaurredzamība","opt.position":"Pozīcija","opt.password":"Parole","opt.title":"Nosaukums","opt.author":"Autors","opt.subject":"Tēma",
@@ -834,9 +886,18 @@ const translations = {
   },
   de: {
     "hero.title":"Alle PDF-Werkzeuge an einem Ort","hero.subtitle":"PDFs zusammenführen, konvertieren und verwalten – kostenlos, schnell und 100 % privat.",
-    "footer.text":"Mit ❤️ erstellt – Verarbeitung in Ihrem Browser","adSlot.text":"Hier könnte Ihre Werbung stehen",
+    "footer.text":"Mit ❤️ erstellt – Verarbeitung in Ihrem Browser","adSlot.text":"Hier könnte Ihre Werbung stehen","mirror.text":"Spiegel",
+    "proxy.title":"🔒 Arbeiten Sie an einem Firmencomputer?","proxy.text":"Wenn Ihr Sicherheitssystem (Zscaler, Netskope, Menlo usw.) Datei-Uploads blockiert — versuchen Sie den Spiegel:",
     "why.privacy.title":"100% Privat","why.privacy.desc":"Ihre Dateien verlassen den Browser nie.","why.fast.title":"Blitzschnell","why.fast.desc":"Funktioniert sofort, auch offline.","why.free.title":"Völlig Kostenlos","why.free.desc":"Keine Registrierung, keine versteckten Kosten.","why.all.title":"Funktioniert Überall","why.all.desc":"Jedes Gerät mit modernem Browser.",
-    "about.btnText":"Warum kostenlos?","contact.btnText":"Kontakt","donate.qrLabel":"📱 QR scannen für PayPal-Spende",
+    "about.btnText":"Warum kostenlos?",
+    "about.title":"✨ Warum marge-PDF kostenlos ist","about.subtitle":"Und das bleibt auch so",
+    "about.block1.title":"Keine Limits. Nie.","about.block1.desc":"Führen Sie 5, 10 oder 50 PDF-Dateien zusammen — ohne Limits, ohne Abonnement, ohne versteckte Kosten. Das Projekt lebt von freiwilligen Spenden, nicht von Nutzern.",
+    "about.block2.title":"Ihre Dateien verlassen nie Ihr Gerät","about.block2.desc":"Alles läuft direkt im Browser. Keine Uploads auf einen Server, keine E-Mail-Bestätigungen, keine Konten. Trennen Sie nach dem Laden der Seite das Internet — die Werkzeuge funktionieren weiter.",
+    "about.block3.title":"Wie überlebt das Projekt?","about.block3.desc":"Fast keine Kosten: keine Server, keine Datenbanken, keine Analytics-Tracker. Nur statische Dateien auf Cloudflare Workers. Deshalb bleibt marge-PDF für immer kostenlos — keine Werbung, kein Abonnement.",
+    "about.block4.title":"Danke, dass Sie hier sind","about.block4.desc":"Jeder Besucher, jeder geteilte Link und jede Kaffee-Spende halten dieses Projekt am Leben. Sie machen marge-PDF wertvoll.",
+    "about.supportBtn":"💰 Projekt unterstützen",
+    "contact.btnText":"Kontakt","contact.title":"✉️ Kontakt","contact.subtitle":"Wir freuen uns auf Ihre Nachricht","contact.emailLabel":"E-Mail","contact.note":"Fragen, Vorschläge, Bug-Reports — schreiben Sie uns.",
+    "donate.qrLabel":"📱 QR scannen für PayPal-Spende","donate.title":"💰 Projekt unterstützen","donate.subtitle":"Jeder Kaffee zählt — und hilft, die Werkzeuge für alle kostenlos zu halten.","donate.oneTime":"$1 spenden","donate.oneTimeDesc":"Einmalige Unterstützung","donate.sub":"$5 spenden","donate.subDesc":"Größere Unterstützung","donate.thanks":"Vielen Dank! ❤️",
     "common.drop":"Dateien hier ablegen oder klicken","common.run":"Ausführen","common.processing":"Verarbeitung...","common.done":"Fertig!","common.error":"Fehler: ",
     "tool.merge.name":"PDF zusammenführen","tool.merge.desc":"Mehrere PDFs kombinieren. Ziehen zum Sortieren.","tool.split.name":"PDF teilen","tool.split.desc":"Bereich extrahieren.","tool.compress.name":"PDF komprimieren","tool.compress.desc":"Größe reduzieren.","tool.rotate.name":"PDF drehen","tool.rotate.desc":"Seiten drehen.","tool.extract.name":"Seiten extrahieren","tool.extract.desc":"Seiten extrahieren.","tool.watermark.name":"Wasserzeichen","tool.watermark.desc":"Text stempeln.","tool.pagenum.name":"Seitennummern","tool.pagenum.desc":"Nummern hinzufügen.","tool.excel2pdf.name":"Excel → PDF","tool.excel2pdf.desc":"Excel konvertieren.","tool.pdf2excel.name":"PDF → Excel","tool.pdf2excel.desc":"Text extrahieren.","tool.word2pdf.name":"Word → PDF","tool.word2pdf.desc":"Word konvertieren.","tool.img2pdf.name":"Bilder → PDF","tool.img2pdf.desc":"Bilder kombinieren.","tool.protect.name":"PDF schützen","tool.protect.desc":"Passwort hinzufügen.","tool.metadata.name":"Metadaten","tool.metadata.desc":"Titel ändern.","tool.removepages.name":"Seiten entfernen","tool.removepages.desc":"Seiten löschen.","tool.editor.name":"PDF bearbeiten","tool.editor.desc":"Zeichnen, auswählen, bewegen, drehen.","tool.pdf2jpg.name":"PDF → JPG","tool.pdf2jpg.desc":"Jede Seite in JPG.","tool.pdf2word.name":"PDF → Word","tool.pdf2word.desc":"Text in Word.","tool.signature.name":"Unterschrift","tool.signature.desc":"Zeichnen oder laden.","tool.stamp.name":"Stempel","tool.stamp.desc":"APPROVED, DRAFT, URGENT.","tool.textedit.name":"Text bearbeiten","tool.textedit.desc":"Vorhandenen Text bearbeiten oder neuen hinzufügen.",
     "opt.range":"Seitenbereich","opt.angle":"Winkel","opt.text":"Text","opt.opacity":"Deckkraft","opt.position":"Position","opt.password":"Passwort","opt.title":"Titel","opt.author":"Autor","opt.subject":"Betreff",
@@ -2235,24 +2296,16 @@ document.addEventListener('DOMContentLoaded', () => { const b = document.getElem
    INIT (единая точка входа)
    ========================================================== */
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-/* Автоопределение языка браузера */
 function detectBrowserLang() {
-  // 1. Пользователь уже выбирал язык вручную? Уважаем выбор.
   const saved = localStorage.getItem('pdfnest_lang');
   if (saved && translations[saved]) return saved;
-
-  // 2. Читаем языки браузера
   const langs = (navigator.languages && navigator.languages.length)
     ? navigator.languages
     : [navigator.language || navigator.userLanguage || 'en'];
-
-  // 3. Смотрим каждый по порядку
   for (const lang of langs) {
-    const short = lang.toLowerCase().split('-')[0]; // 'ru-RU' → 'ru'
+    const short = lang.toLowerCase().split('-')[0];
     if (translations[short]) return short;
   }
-
-  // 4. Fallback
   return 'en';
 }
 
@@ -2262,6 +2315,40 @@ setInterval(updateLvClock, 1000);
 setInterval(checkAlarms, 15000);
 renderRecent();
 setInterval(renderRecent, 5000);
+</script>
+
+<script>
+/* ==========================================================
+   PROXY / ZSCALER DETECTION
+   Auto-shows banner for corporate isolation systems
+   ========================================================== */
+(function detectCorporateProxy() {
+  const hn = (window.location.hostname || '').toLowerCase();
+  const href = (window.location.href || '').toLowerCase();
+  const ref = (document.referrer || '').toLowerCase();
+
+  const blockedHosts = [
+    'zscaler.com', 'zscaler.net', 'zscalerone.net', 'zscalerthree.net',
+    'isolation.zscaler',
+    'nskope.com', 'goskope.com', 'netskope.com',
+    'menlosecurity.com', 'menlo.io',
+    'wss.symantec.com', 'symantec.com',
+    'forcepoint.com', 'websense.com',
+    'paloaltonetworks.com', 'prismaaccess.com',
+    'umbrella.com', 'opendns.com',
+    'mcas.ms', 'defender.microsoft.com',
+    'beyondcorp.google.com',
+    'cloudflare-gateway', 'warp.cloudflare.com'
+  ];
+
+  const isProxy = blockedHosts.some(h => hn.includes(h) || href.includes(h) || ref.includes(h));
+
+  if (isProxy) {
+    const b = document.getElementById('proxyBanner');
+    if (b) b.classList.add('show');
+    setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 200);
+  }
+})();
 </script>
 
 <script>
