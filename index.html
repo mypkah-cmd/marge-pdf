@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex, nofollow">
 <title>marge-PDF — All-in-One PDF Toolkit</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#4f46e5">
@@ -15,11 +14,13 @@
 <meta property="og:title" content="marge-PDF — All-in-One PDF Toolkit">
 <meta property="og:description" content="Merge, convert, compress, and manage PDFs — free, fast, and 100% private.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="og-image.png">
+<meta property="og:image" content="https://margepdf.com/og-image.png">
+<meta property="og:site_name" content="marge-PDF">
+<meta name="description" content="Merge PDFs. Beyond the margins. All your PDF tools in one place — free, fast, and 100% private. Works directly in your browser.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="marge-PDF — All-in-One PDF Toolkit">
 <meta name="twitter:description" content="Merge, convert, compress, and manage PDFs — free, fast, and 100% private.">
-<meta name="twitter:image" content="og-image.png">
+<meta name="twitter:image" content="https://margepdf.com/og-image.png">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-30RLVLY5JJ"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -27,7 +28,7 @@
   gtag('js', new Date());
   gtag('config', 'G-30RLVLY5JJ', { 'anonymize_ip': true });
 </script>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐱%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="icon-192.png">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -347,7 +348,20 @@
 
 <header>
   <div class="logo" onclick="location.reload()">
-    <div class="logo-icon">🐱</div>
+        <div class="logo-icon" style="background: none; padding: 0;">
+      <svg viewBox="0 0 512 512" style="width: 34px; height: 34px; border-radius: 9px;">
+        <defs>
+          <linearGradient id="logo-g" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#6366f1"/>
+            <stop offset="100%" stop-color="#06b6d4"/>
+          </linearGradient>
+        </defs>
+        <rect width="512" height="512" rx="112" fill="url(#logo-g)"/>
+        <rect x="140" y="160" width="220" height="260" rx="16" fill="rgba(255,255,255,0.15)"/>
+        <rect x="160" y="140" width="220" height="260" rx="16" fill="rgba(255,255,255,0.3)"/>
+        <path d="M180 120 L300 120 L280 160 L320 160 L270 200 L310 200 L260 240 L300 240 L270 280 L310 280 L280 320 L320 320 L300 360 L180 360 Z" fill="#ffffff"/>
+      </svg>
+    </div>
     <span id="siteNameLogo">marge-PDF</span>
   </div>
   <div class="header-right">
@@ -384,8 +398,8 @@
 </header>
 
 <section class="hero">
-  <h1 data-i18n="hero.title">All Your PDF Tools in One Place</h1>
-  <p data-i18n="hero.subtitle">Merge, convert, compress, and manage PDFs — free, fast, and 100% private.</p>
+  <h1 data-i18n="hero.title">Merge PDFs. Beyond the margins.</h1>
+  <p data-i18n="hero.subtitle">All your PDF tools in one place — free, fast, and 100% private.</p>
 </section>
 
 <section class="why-section">
@@ -413,6 +427,18 @@
       <span>🔀</span>
       <span data-i18n="mirror.text">Mirror</span>
     </a>
+  </div>
+  <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 13px; max-width: 900px; margin-left: auto; margin-right: auto;">
+    <p style="font-weight: 700; margin-bottom: 8px; color: var(--muted);" data-i18n="help.group.media">Guides:</p>
+    <a href="ru/merge-pdf.html" style="color: var(--primary); margin: 0 8px 8px 0; display: inline-block;">Merge PDF (RU)</a>
+    <a href="en/merge-pdf.html" style="color: var(--primary); margin: 0 8px 8px 0; display: inline-block;">Merge PDF (EN)</a>
+    <a href="lv/merge-pdf.html" style="color: var(--primary); margin: 0 8px 8px 0; display: inline-block;">Merge PDF (LV)</a>
+    <a href="de/merge-pdf.html" style="color: var(--primary); margin: 0 8px 8px 0; display: inline-block;">Merge PDF (DE)</a>
+    <br>
+    <a href="ru/edit-pdf-text.html" style="color: var(--primary); margin: 0 8px 8px 0; display: inline-block;">Edit Text (RU)</a>
+    <a href="en/sign-pdf.html" style="color: var(--primary); margin: 0 8px 8px 0; display: inline-block;">Sign PDF (EN)</a>
+    <a href="ru/pdf-to-jpg.html" style="color: var(--primary); margin: 0 8px 8px 0; display: inline-block;">PDF to JPG (RU)</a>
+    <a href="de/watermark-pdf.html" style="color: var(--primary); margin: 0 8px 8px 0; display: inline-block;">Watermark (DE)</a>
   </div>
 </footer>
 
@@ -774,7 +800,7 @@ const CONFIG = { EMAIL: 'margepdf@gmail.com', PAYPAL: 'KosatiT', SITE_NAME: 'mar
    ========================================================== */
 const translations = {
   en: {
-    "hero.title":"All Your PDF Tools in One Place","hero.subtitle":"Merge, convert, compress, and manage PDFs — free, fast, and 100% private.",
+    "hero.title":"Merge PDFs. Beyond the margins.","hero.subtitle":"All your PDF tools in one place — free, fast, and 100% private.",
     "footer.text":"Made with ❤️ — All processing happens in your browser","adSlot.text":"Your ad could be here","mirror.text":"Mirror",
     "proxy.title":"🔒 Working from a corporate computer?","proxy.text":"If your security system blocks file uploads — try the mirror:",
     "why.privacy.title":"100% Private","why.privacy.desc":"Your files never leave your browser.","why.fast.title":"Lightning Fast","why.fast.desc":"Works instantly, even offline.","why.free.title":"Completely Free","why.free.desc":"No registration, no hidden fees.","why.all.title":"Works Everywhere","why.all.desc":"Any device with a modern browser.",
@@ -831,7 +857,7 @@ const translations = {
     "tip.undo":"Undo last action","tip.clear":"Clear all","tip.zoomIn":"Zoom in","tip.zoomOut":"Zoom out","tip.zoomReset":"Reset zoom"
   },
   ru: {
-    "hero.title":"Все PDF-инструменты в одном месте","hero.subtitle":"Объединяйте, конвертируйте, сжимайте PDF — бесплатно, быстро и безопасно.",
+    "hero.title":"Объединяйте PDF. За гранью обычного.","hero.subtitle":"Все PDF-инструменты в одном месте — бесплатно, быстро и безопасно.",
     "footer.text":"Сделано с ❤️ — вся обработка в вашем браузере","adSlot.text":"Здесь могла бы быть ваша реклама","mirror.text":"Зеркало",
     "proxy.title":"🔒 Работаете с корпоративного компьютера?","proxy.text":"Если ваша система защиты блокирует загрузку файлов — попробуйте зеркало:",
     "why.privacy.title":"100% Приватно","why.privacy.desc":"Файлы не покидают браузер.","why.fast.title":"Молниеносно","why.fast.desc":"Работает мгновенно, даже офлайн.","why.free.title":"Бесплатно","why.free.desc":"Без регистрации и скрытых платежей.","why.all.title":"Работает Везде","why.all.desc":"Любое устройство с браузером.",
@@ -888,7 +914,7 @@ const translations = {
     "tip.undo":"Отменить последнее действие","tip.clear":"Очистить всё","tip.zoomIn":"Увеличить","tip.zoomOut":"Уменьшить","tip.zoomReset":"Сбросить масштаб"
   },
   lv: {
-    "hero.title":"Visi PDF rīki vienuviet","hero.subtitle":"Apvienojiet, konvertējiet, saspiediet un pārvaldiet PDF — bez maksas, ātri un 100% privāti.",
+    "hero.title":"Apvienojiet PDF. Ārpus malām.","hero.subtitle":"Visi PDF rīki vienuviet — bez maksas, ātri un droši.",
     "footer.text":"Veidots ar ❤️ — visa apstrāde notiek jūsu pārlūkā","adSlot.text":"Šeit varētu būt jūsu reklāma","mirror.text":"Spogulis",
     "proxy.title":"🔒 Strādājat no korporatīvā datora?","proxy.text":"Ja jūsu drošības sistēma bloķē failu augšupielādi — izmēģiniet spoguli:",
     "why.privacy.title":"100% Privāti","why.privacy.desc":"Jūsu faili nekad neatstāj pārlūku.","why.fast.title":"Zibens ātrs","why.fast.desc":"Strādā acumirklī, pat bezsaistē.","why.free.title":"Pilnīgi Bezmaksas","why.free.desc":"Bez reģistrācijas, bez maksām.","why.all.title":"Strādā Visur","why.all.desc":"Jebkura ierīce ar pārlūku.",
@@ -945,7 +971,7 @@ const translations = {
     "tip.undo":"Atsaukt pēdējo darbību","tip.clear":"Notīrīt visu","tip.zoomIn":"Pietuvināt","tip.zoomOut":"Attālināt","tip.zoomReset":"Atjaunot mērogu"
   },
   de: {
-    "hero.title":"Alle PDF-Werkzeuge an einem Ort","hero.subtitle":"PDFs zusammenführen, konvertieren und verwalten – kostenlos, schnell und 100 % privat.",
+    "hero.title":"PDF zusammenführen. Jenseits der Grenzen.","hero.subtitle":"Alle PDF-Werkzeuge an einem Ort — kostenlos, schnell und sicher.",
     "footer.text":"Mit ❤️ erstellt – Verarbeitung in Ihrem Browser","adSlot.text":"Hier könnte Ihre Werbung stehen","mirror.text":"Spiegel",
     "proxy.title":"🔒 Arbeiten Sie an einem Firmencomputer?","proxy.text":"Wenn Ihr Sicherheitssystem Datei-Uploads blockiert — versuchen Sie den Spiegel:",
     "why.privacy.title":"100% Privat","why.privacy.desc":"Ihre Dateien verlassen den Browser nie.","why.fast.title":"Blitzschnell","why.fast.desc":"Funktioniert sofort, auch offline.","why.free.title":"Völlig Kostenlos","why.free.desc":"Keine Registrierung, keine versteckten Kosten.","why.all.title":"Funktioniert Überall","why.all.desc":"Jedes Gerät mit modernem Browser.",

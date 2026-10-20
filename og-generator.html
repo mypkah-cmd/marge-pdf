@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>OG Image Generator — marge-PDF Premium</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #f1f5f9; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px 20px; }
+  .container { max-width: 1280px; width: 100%; background: #1e293b; border-radius: 16px; padding: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+  h1 { font-size: 20px; margin-bottom: 8px; color: #fff; }
+  .subtitle { font-size: 13px; color: #94a3b8; margin-bottom: 20px; }
+  .preview-wrap { background: #000; border-radius: 12px; overflow: hidden; margin-bottom: 20px; display: flex; justify-content: center; }
+  canvas { max-width: 100%; height: auto; display: block; }
+  .buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+  button { padding: 14px 28px; background: linear-gradient(135deg, #4f46e5, #4338ca); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+  button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(79, 70, 229, 0.5); }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🎨 OG Image Generator — Premium Tech</h1>
+  <p class="subtitle">Social preview 1200×630 — Paper stack with broken margin</p>
+
+  <div class="preview-wrap">
+    <canvas id="ogCanvas" width="1200" height="630"></canvas>
+  </div>
+
+  <div class="buttons">
+    <button onclick="downloadPNG()">⬇️ Download PNG</button>
+    <button onclick="generate()">🔄 Regenerate</button>
+  </div>
+</div>
+
+<script>
+function generate() {
+  const canvas = document.getElementById('ogCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = 1200, H = 630;
+
+  // Background — deep premium gradient
+  const bgGrad = ctx.createLinearGradient(0, 0, W, H);
+  bgGrad.addColorStop(0, '#1e1b4b');
+  bgGrad.addColorStop(1, '#0f172a');
+  ctx.fillStyle = bgGrad;
+  ctx.fillRect(0, 0, W, H);
+
+  // === GEOMETRIC BACKGROUND ===
+  ctx.save();
+  ctx.strokeStyle = 'rgba(79, 70, 229, 0.15)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i < W; i += 40) { ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, H); ctx.stroke(); }
+  for (let j = 0; j < H; j += 40) { ctx.beginPath(); ctx.moveTo(0, j); ctx.lineTo(W, j); ctx.stroke(); }
+  ctx.restore();
+
+  // === MAIN GLASS CARD ===
+  const cardX = 80, cardY = 60, cardW = W - 160, cardH = H - 120, cardR = 24;
+  ctx.save();
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+  ctx.shadowBlur = 40;
+  ctx.shadowOffsetY = 20;
+  ctx.fillStyle = 'rgba(30, 41, 59, 0.9)';
+  roundRect(ctx, cardX, cardY, cardW, cardH, cardR);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+  ctx.lineWidth = 2;
+  roundRect(ctx, cardX, cardY, cardW, cardH, cardR);
+  ctx.stroke();
+  ctx.restore();
+
+  // === NEW PREMIUM LOGO CONCEPT (Stack of sheets, front one is broken) ===
+  const iconX = cardX + 60, iconY = cardY + 60, iconSize = 90, iconR = 20;
+  
+  // Logo background
+  const iconGrad = ctx.createLinearGradient(iconX, iconY, iconX + iconSize, iconY + iconSize);
+  iconGrad.addColorStop(0, '#6366f1'); // indigo
+  iconGrad.addColorStop(1, '#06b6d4'); // cyan
+  ctx.fillStyle = iconGrad;
+  roundRect(ctx, iconX, iconY, iconSize, iconSize, iconR);
+  ctx.fill();
+
+  // Draw paper stack inside the icon
+  ctx.save();
+  ctx.translate(iconX + iconSize/2, iconY + iconSize/2);
+  
+  // Back sheet (bottom, offset down)
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+  roundRect(ctx, -20, -15, 40, 50, 4);
+  ctx.fill();
+
+  // Middle sheet
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+  roundRect(ctx, -25, -22, 40, 50, 4);
+  ctx.fill();
+
+  // Front sheet (broken margin)
+  ctx.fillStyle = '#ffffff';
+  ctx.beginPath();
+  ctx.moveTo(-28, -28); // top left
+  ctx.lineTo(5, -28);   // top right (broken)
+  
+  // The jagged break (margin tearing away)
+  ctx.lineTo(5, -22);
+  ctx.lineTo(15, -22);
+  ctx.lineTo(8, -10);
+  ctx.lineTo(18, -10);
+  ctx.lineTo(10, 2);
+  ctx.lineTo(20, 2);
+  ctx.lineTo(10, 14);
+  ctx.lineTo(15, 14);
+  ctx.lineTo(5, 25);    // bottom right
+  
+  ctx.lineTo(-28, 25);  // bottom left
+  ctx.closePath();
+  ctx.fill();
+  
+  ctx.restore();
+
+  // Site name
+  ctx.textAlign = 'left';
+  ctx.font = 'bold 44px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+  ctx.fillStyle = '#ffffff';
+  ctx.fillText('marge-PDF', iconX + iconSize + 30, iconY + iconSize / 2);
+
+  ctx.font = '600 18px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+  ctx.fillStyle = '#94a3b8';
+  ctx.fillText('Beyond the margins', iconX + iconSize + 30, iconY + iconSize / 2 + 28);
+
+  // === HERO TEXT ===
+  ctx.font = '800 72px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+  
+  ctx.fillStyle = '#ffffff';
+  ctx.fillText('Merge PDFs.', cardX + 60, cardY + 230);
+
+  const titleGrad = ctx.createLinearGradient(cardX + 60, 0, cardX + 600, 0);
+  titleGrad.addColorStop(0, '#06b6d4');
+  titleGrad.addColorStop(1, '#3b82f6');
+  ctx.fillStyle = titleGrad;
+  ctx.fillText('Beyond the margins.', cardX + 60, cardY + 320);
+
+  // Subtitle
+  ctx.font = '500 26px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+  ctx.fillStyle = '#94a3b8';
+  ctx.fillText('Merge · Convert · Compress · Sign · Edit', cardX + 60, cardY + 390);
+
+  // Tags
+  const tags = ['Merge', 'Split', 'Sign', 'Edit Text', 'Compress', 'PDF → JPG', 'Watermark'];
+  let tagX = cardX + 60;
+  const tagY = cardY + 440;
+  const tagH = 38;
+  const tagPad = 18;
+
+  ctx.font = '600 16px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+
+  tags.forEach(tag => {
+    const tagW = ctx.measureText(tag).width + tagPad * 2;
+    if (tagX + tagW > cardX + cardW - 60) return;
+
+    ctx.fillStyle = 'rgba(79, 70, 229, 0.2)';
+    roundRect(ctx, tagX, tagY, tagW, tagH, 8);
+    ctx.fill();
+
+    ctx.strokeStyle = 'rgba(79, 70, 229, 0.5)';
+    ctx.lineWidth = 1;
+    roundRect(ctx, tagX, tagY, tagW, tagH, 8);
+    ctx.stroke();
+
+    ctx.fillStyle = '#a5b4fc';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(tag, tagX + tagW / 2, tagY + tagH / 2 + 1);
+
+    tagX += tagW + 12;
+  });
+
+  // Right Side Badges
+  const privW = 200, privH = 46;
+  const privX = cardX + cardW - privW - 60;
+  const privY = cardY + 60;
+  ctx.fillStyle = 'rgba(16, 185, 129, 0.15)';
+  roundRect(ctx, privX, privY, privW, privH, 10);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)';
+  roundRect(ctx, privX, privY, privW, privH, 10);
+  ctx.stroke();
+  
+  ctx.font = '700 18px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+  ctx.fillStyle = '#34d399';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('100% Private', privX + privW / 2, privY + privH / 2 + 1);
+
+  // Free forever
+  const freeW = 180, freeH = 46;
+  const freeX = cardX + cardW - freeW - 60;
+  const freeY = cardY + 130;
+  ctx.fillStyle = 'rgba(245, 158, 11, 0.15)';
+  roundRect(ctx, freeX, freeY, freeW, freeH, 10);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(245, 158, 11, 0.4)';
+  roundRect(ctx, freeX, freeY, freeW, freeH, 10);
+  ctx.stroke();
+
+  ctx.font = '700 18px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+  ctx.fillStyle = '#fbbf24';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('Free forever', freeX + freeW / 2, freeY + freeH / 2 + 1);
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+function downloadPNG() {
+  const canvas = document.getElementById('ogCanvas');
+  canvas.toBlob(function(blob) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'og-image.png';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }, 'image/png', 1.0);
+}
+
+window.addEventListener('load', generate);
+</script>
+</body>
+</html>
