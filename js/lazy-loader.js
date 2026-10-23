@@ -79,7 +79,9 @@ const LazyAssets = (() => {
    if(pending || (typeof ProductUX!=='undefined' && ProductUX.busy()))return;
    pending=true;status('Loading tool / Загрузка инструмента…');
    try{
-    await Promise.all(deps.map(LazyAssets.library));await LazyAssets.module(file);
+    await Promise.all(deps.map(LazyAssets.library));
+    if(file==='draw-editor'||file==='text-editor')await LazyAssets.module('page-text');
+    await LazyAssets.module(file);
     const actual=window[name];if(actual===stub)throw new Error('Tool did not initialize: '+name);
     document.getElementById('lazyStatus')?.remove();return actual(...args);
    }catch(error){status(error.message,()=>stub(...args));}

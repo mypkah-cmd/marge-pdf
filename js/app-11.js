@@ -16,9 +16,9 @@
   catch (_) { favorites = new Set(); }
   let historyEnabled = v2Storage.getItem('marge_v2_history') === 'yes';
   const groups = {
-    pages:['merge','split','compress','rotate','extract','removepages'],
+    pages:['unlockcopy','pdfcount','merge','split','compress','rotate','extract','removepages'],
     convert:['pdf2jpg','pdf2word','excel2pdf','pdf2excel','word2pdf','img2pdf'],
-    edit:['watermark','pagenum','metadata','editor','signature','stamp','textedit','protect']
+    edit:['qrpdf','watermark','pagenum','metadata','editor','signature','stamp','textedit','protect']
   };
   const controls = document.getElementById('v2Controls');
   const search = document.getElementById('toolSearch');

@@ -76,7 +76,7 @@ function onRotateMove(e) { if (!edRotateStart || !edSelectedOp) return; const po
 function onRotateEnd() { edRotateStart=null; window.removeEventListener('mousemove', onRotateMove); window.removeEventListener('mouseup', onRotateEnd); }
 
 function openEditor() { editorOverlay.classList.add('active'); edPdfBytes=null; edPdfDoc=null; edTotalPages=0; edCurrentPage=0; edZoom=1; edSelectedOp=null; updateEdZoomUI(); Object.keys(edHistory).forEach(k => delete edHistory[k]); Object.keys(edVectorOps).forEach(k => delete edVectorOps[k]); editorContent.classList.add('hidden'); editorDropZone.style.display='block'; editorStatus.className='status-msg hidden'; }
-function closeEditor() { editorOverlay.classList.remove('active'); }
+function closeEditor() { PageText.finish(); editorOverlay.classList.remove('active'); }
 editorOverlay.addEventListener('click', e => { if (e.target === editorOverlay) closeEditor(); });
 function updateEdZoomUI() { if (editorZoomLevel) editorZoomLevel.textContent = Math.round(edZoom * 100) + '%'; }
 editorDropZone.addEventListener('click', () => editorFileInput.click());
@@ -182,18 +182,13 @@ function startDraw(e) {
   if (edTool==='pen'||edTool==='marker'||edTool==='eraser') { ctx.beginPath(); ctx.moveTo(pos.x,pos.y); }
   else if (edTool==='text') { showInlineTextInput(pos.x,pos.y); edDrawing=false; }
 }
-function showInlineTextInput(x, y) {
-  const rect = editorCanvas.getBoundingClientRect(); const parentRect = editorScroll.getBoundingClientRect();
-  const cssX = (x / editorCanvas.width) * rect.width + (rect.left - parentRect.left) + editorScroll.scrollLeft;
-  const cssY = (y / editorCanvas.height) * rect.height + (rect.top - parentRect.top) + editorScroll.scrollTop;
-  const input = document.createElement('input'); input.type='text'; input.className='inline-text-input';
-  input.style.left=cssX+'px'; input.style.top=cssY+'px'; input.style.fontSize=(24*edZoom)+'px';
-  input.placeholder=t('editor.textPrompt');
-  editorScroll.appendChild(input); input.focus();
-  let done=false;
-  function commit() { if (done) return; done=true; const txt=input.value.trim(); if (txt) { pushVectorOp({ type:'text', x, y, text:txt, color:edColor, zoom:edZoom }); renderEditorPage(); } input.remove(); }
-  input.addEventListener('blur', commit);
-  input.addEventListener('keydown', ev => { if (ev.key==='Enter') { ev.preventDefault(); commit(); } if (ev.key==='Escape') { done=true; input.remove(); } });
+function showInlineTextInput(x,y) {
+ const color=edColor,zoom=edZoom,page=edCurrentPage;
+ PageText.start({canvas:editorCanvas,parent:editorScroll,x,y,
+  font:(24*edZoom)+'px sans-serif',color:edColor,
+  commit(text){if(text.trim()){if(!edVectorOps[page])edVectorOps[page]=[];edVectorOps[page].push({type:'text',x,y,text,color,zoom,id:edNextOpId++});}renderEditorPage();},
+  cancel(){renderEditorPage();}
+ });
 }
 function moveDraw(e) {
   if (edTool === 'select' && edDragStart && edSelectedOp) {

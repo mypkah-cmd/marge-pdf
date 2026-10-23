@@ -25,7 +25,7 @@ let teBoxStartX=0, teBoxStartY=0, teBoxSnapshot=null;
 const tePageTextCache = {};
 
 function openTextEditor() { textEditorOverlay.classList.add('active'); tePdfBytes=null; tePdfDoc=null; teTotalPages=0; teCurrentPage=0; teZoom=1; teItems=[]; teFormatPanel.classList.remove('active'); Object.keys(tePageTextCache).forEach(k => delete tePageTextCache[k]); textEditorContent.classList.add('hidden'); textEditorDropZone.style.display='block'; textEditorStatus.className='status-msg hidden'; updateTeZoomUI(); }
-function closeTextEditor() { textEditorOverlay.classList.remove('active'); }
+function closeTextEditor() { PageText.finish(); textEditorOverlay.classList.remove('active'); }
 textEditorOverlay.addEventListener('click', e => { if (e.target === textEditorOverlay) closeTextEditor(); });
 function updateTeZoomUI() { if (teZoomLevel) teZoomLevel.textContent = Math.round(teZoom * 100) + '%'; }
 textEditorDropZone.addEventListener('click', () => textEditorFileInput.click());
@@ -124,70 +124,38 @@ function applyFormatting() {
 }
 
 textEditorCanvas.addEventListener('click', async e => {
-  if (!tePdfDoc) return;
-  if (teMode !== 'text') return;
-  if (teDrawingBox) return;
-  const rect = textEditorCanvas.getBoundingClientRect();
-  const parentRect = teScroll.getBoundingClientRect();
-  const scaleX = textEditorCanvas.width / rect.width;
-  const scaleY = textEditorCanvas.height / rect.height;
-  const canvasX = (e.clientX - rect.left) * scaleX;
-  const canvasY = (e.clientY - rect.top) * scaleY;
-  const items = await getPageTextItems(teCurrentPage);
-  let hit = null;
-  const baseH = textEditorCanvas.height / teZoom;
-  const px = canvasX / teZoom;
-  const py = canvasY / teZoom;
-  for (const it of items) {
-    const itemBottom = baseH - it.y;
-    const itemTop = itemBottom - (it.height || it.fontSize);
-    const itemLeft = it.x;
-    const itemRight = it.x + it.width;
-    if (px >= itemLeft && px <= itemRight && py >= itemTop - 2 && py <= itemBottom + 2) { hit = it; break; }
-  }
-  const cssX = (canvasX / textEditorCanvas.width) * rect.width + (rect.left - parentRect.left) + teScroll.scrollLeft;
-  const cssY = (canvasY / textEditorCanvas.height) * rect.height + (rect.top - parentRect.top) + teScroll.scrollTop;
-  const input = document.createElement('input');
-  input.type = 'text'; input.className = 'inline-text-input';
-  input.style.left = cssX + 'px'; input.style.top = cssY + 'px';
-  input.style.fontFamily = teFont + ', sans-serif'; input.style.color = teColor;
-  if (hit) {
-    const detectedSizePt = Math.max(8, Math.min(72, Math.round(hit.fontSize * 0.75)));
-    teSize = detectedSizePt; document.getElementById('teSize').value = teSize;
-    input.style.fontSize = (teSize * teBaseScale * teZoom) + 'px';
-    input.value = hit.str; input.placeholder = t('text.promptText');
-    teScroll.appendChild(input); input.focus(); input.select();
-    let done = false;
-    function commit() {
-      if (done) return; done = true;
-      const txt = input.value;
-      const baseH2 = textEditorCanvas.height / teZoom;
-      const bottomBase = baseH2 - hit.y;
-      const topBase = bottomBase - (hit.height || hit.fontSize);
-      const leftBase = hit.x; const rightBase = hit.x + hit.width;
-      teItems.push({ kind: 'whiteout', page: teCurrentPage, x: leftBase, y: topBase, w: (rightBase - leftBase) + 2, h: (bottomBase - topBase) + 2 });
-      if (txt.trim()) { teItems.push({ kind: 'text', page: teCurrentPage, x: leftBase, y: bottomBase, text: txt, font: teFont, size: teSize, color: teColor }); }
-      renderTextEditorPage(); input.remove();
-    }
-    input.addEventListener('blur', commit);
-    input.addEventListener('keydown', ev => { if (ev.key === 'Enter') { ev.preventDefault(); commit(); } if (ev.key === 'Escape') { done = true; input.remove(); } });
-    return;
-  }
-  const nx = canvasX / teZoom; const ny = canvasY / teZoom;
-  input.style.fontSize = (teSize * teBaseScale * teZoom) + 'px';
-  input.placeholder = t('text.promptText');
-  teScroll.appendChild(input); input.focus();
-  let done = false;
-  function commit() {
-    if (done) return; done = true;
-    const txt = input.value.trim();
-    if (txt) { teItems.push({ kind: 'text', page: teCurrentPage, x: nx, y: ny, text: txt, font: teFont, size: teSize, color: teColor }); renderTextEditorPage(); }
-    input.remove();
-  }
-  input.addEventListener('blur', commit);
-  input.addEventListener('keydown', ev => { if (ev.key === 'Enter') { ev.preventDefault(); commit(); } if (ev.key === 'Escape') { done = true; input.remove(); } });
+ if(!tePdfDoc || teMode!=='text' || teDrawingBox)return;
+ PageText.finish();
+ const rect=textEditorCanvas.getBoundingClientRect();
+ const canvasX=(e.clientX-rect.left)*textEditorCanvas.width/rect.width;
+ const canvasY=(e.clientY-rect.top)*textEditorCanvas.height/rect.height;
+ const px=canvasX/teZoom,py=canvasY/teZoom;
+ const pageIndex=teCurrentPage;
+ const items=await getPageTextItems(pageIndex);
+ if(pageIndex!==teCurrentPage)return;
+ const baseH=textEditorCanvas.height/teZoom;
+ let hit=null;
+ for(const item of items){
+  const bottom=baseH-item.y,top=bottom-(item.height||item.fontSize);
+  if(px>=item.x && px<=item.x+item.width && py>=top-2 && py<=bottom+2){hit=item;break;}
+ }
+ const x=hit?hit.x:px,y=hit?baseH-hit.y:py;
+ if(hit){teSize=Math.max(8,Math.min(72,Math.round(hit.fontSize*.75)));document.getElementById('teSize').value=teSize;}
+ const style={font:teFont,size:teSize,color:teColor};
+ // Temporarily cover the old glyphs while editing; Escape restores the page.
+ if(hit){const ctx=textEditorCanvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(x*teZoom,(y-(hit.height||hit.fontSize))*teZoom,(hit.width+2)*teZoom,((hit.height||hit.fontSize)+2)*teZoom);}
+ const families={Helvetica:'Arial, Helvetica, sans-serif',TimesRoman:'"Times New Roman", Times, serif',Courier:'"Courier New", monospace'};
+ PageText.start({canvas:textEditorCanvas,parent:teScroll,x:x*teZoom,y:y*teZoom,
+  font:(style.size*teBaseScale*teZoom)+'px '+(families[style.font]||'sans-serif'),color:style.color,
+  value:hit?hit.str:'',select:!!hit,
+  commit(text){
+   if(hit && text===hit.str){renderTextEditorPage();return;}
+   if(hit)teItems.push({kind:'whiteout',page:pageIndex,x,y:y-(hit.height||hit.fontSize),w:hit.width+2,h:(hit.height||hit.fontSize)+2});
+   if(text.trim())teItems.push({kind:'text',page:pageIndex,x,y,text,font:style.font,size:style.size,color:style.color});
+   renderTextEditorPage();
+  },cancel(){renderTextEditorPage();}
+ });
 });
-
 function teGetCanvasPos(e) {
   const rect=textEditorCanvas.getBoundingClientRect();
   const scaleX=textEditorCanvas.width/rect.width, scaleY=textEditorCanvas.height/rect.height;
