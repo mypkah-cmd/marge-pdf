@@ -46,7 +46,7 @@ window.ExtraTools=(()=>{
  document.head.append(style);
  const fileInput=document.getElementById('extraFile'),drop=document.getElementById('extraDrop');
  function fileLabel(){
-  document.getElementById('extraFileName').textContent=fileInput.files[0]?.name || (document.documentElement.lang==='ru'?'Перетащите PDF сюда или нажмите для выбора':'Drop a PDF here or click to choose');
+  document.getElementById('extraFileName').textContent=fileInput.files[0]?.name || SiteLocale.get('Drop a PDF here or click to choose');
  }
  fileInput.addEventListener('change',fileLabel);
  drop.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&!fileInput.disabled){e.preventDefault();fileInput.click();}});
@@ -59,12 +59,16 @@ window.ExtraTools=(()=>{
  });
 
  const $=id=>document.getElementById(id);
- const ru=()=>document.documentElement.lang==='ru';
- const t=(a,b)=>ru()?a:b;
+ const t=(a,b)=>SiteLocale.get(b);
  let mode='';
  function set(id,a,b){$(id).textContent=t(a,b);}
  function open(id){
   if(busy)return;mode=id;box.classList.add('active');
+  refreshLabels();
+  $('extraStatus').textContent='';$('extraResult').replaceChildren();$('extraFile').value='';$('extraPassword').value='';$('extraConsentCheck').checked=false;$('extraProgress').hidden=true;fileLabel();
+ }
+ function refreshLabels(){
+  const id=mode;
   $('extraTitle').textContent=translations[document.documentElement.lang]?.['tool.'+id+'.name']||id;
   set('extraFileLabel','PDF-файл','PDF file');set('extraPasswordLabel','Пароль (если нужен)','Password (if needed)');
   set('extraQRLabel','Текст или ссылка для QR','QR text or URL');set('extraPagesLabel','Страницы (пусто = все)','Pages (blank = all)');set('extraSizeLabel','Размер, pt','Size, pt');
@@ -74,8 +78,10 @@ window.ExtraTools=(()=>{
   $('extraNote').textContent=id==='unlockcopy'?t('Это не снятие шифрования с сохранением структуры. Создаётся новый PDF из изображений, 144 dpi. Введите известный пароль; подбора пароля нет.','This is not structure-preserving decryption. A new PDF is created from 144 dpi page images. Enter the known password; no password cracking.'):
    id==='pdfcount'?t('Слова считаются только в текстовом слое. Сканы без OCR могут дать 0 слов. Сегментация зависит от языка и качества текста.','Only the text layer is counted. Scans without OCR may have zero words. Segmentation depends on language and text quality.'):
    t('QR добавляется с белым полем, отступом 18 pt. Размер задаётся в PDF-пунктах. Подписанные PDF после изменения могут потерять действительность подписи.','QR includes a white quiet zone and 18 pt margin. Size uses PDF points. Editing signed PDFs may invalidate signatures.');
-  $('extraStatus').textContent='';$('extraResult').replaceChildren();$('extraFile').value='';$('extraPassword').value='';$('extraConsentCheck').checked=false;$('extraProgress').hidden=true;fileLabel();
+  fileLabel();
+  $('extraClose').setAttribute('aria-label',SiteLocale.get('Close'));
  }
+ new MutationObserver(()=>{if(mode)refreshLabels();}).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
  function check(){if(cancelled)throw new DOMException('Cancelled','AbortError');}
  async function step(done,total){await new Promise(r=>setTimeout(r,0));check();$('extraProgress').hidden=false;$('extraProgress').max=total;$('extraProgress').value=done;$('extraStatus').textContent=done+' / '+total;}
  function words(text){
@@ -97,7 +103,7 @@ window.ExtraTools=(()=>{
  }
  function report(rows){
   const table=document.createElement('table');table.style.width='100%';
-  for(const row of rows){const tr=document.createElement('tr');for(const value of row){const td=document.createElement('td');td.textContent=value;tr.append(td);}table.append(tr);}
+  for(const row of rows){const tr=document.createElement('tr');for(const value of row){const td=document.createElement('td');td.textContent=value;const key=SiteLocale.keyFor(value);if(key)td.dataset.localeKey=key;tr.append(td);}table.append(tr);}
   $('extraResult').append(table);
  }
  $('extraClose').onclick=()=>{if(!busy){box.classList.remove('active');$('extraPassword').value='';}};
@@ -116,11 +122,11 @@ window.ExtraTools=(()=>{
     await Promise.all([LazyAssets.library('pdfLib'),LazyAssets.library('qr')]);check();
     const pdf=await PDFLib.PDFDocument.load(await file.arrayBuffer());
     const indices=range($('extraPages').value,pdf.getPageCount());
-    const size=Number($('extraSize').value);if(!Number.isFinite(size)||size<24||size>200)throw new Error('Size: 24–200 pt');
+    const size=Number($('extraSize').value);if(!Number.isFinite(size)||size<24||size>200)throw new Error(SiteLocale.get('Size: 24–200 pt'));
     const host=document.createElement('div');host.style.cssText='position:fixed;left:-10000px;top:0';document.body.append(host);
     let data;
     try{new QRCode(host,{text:value,width:512,height:512,correctLevel:QRCode.CorrectLevel.M});
-     const canvas=host.querySelector('canvas');if(!canvas)throw new Error('QR canvas unavailable');
+     const canvas=host.querySelector('canvas');if(!canvas)throw new Error(SiteLocale.get('QR canvas unavailable'));
      const padded=document.createElement('canvas');padded.width=padded.height=640;const ctx=padded.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,640,640);ctx.drawImage(canvas,64,64,512,512);data=padded.toDataURL('image/png');
     }finally{host.remove();}
     const image=await pdf.embedPng(data);
