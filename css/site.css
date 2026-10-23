@@ -398,3 +398,13 @@ header .lv-clock {justify-content:center;align-items:center;min-width:96px;min-h
 #uxFeedback select {max-width:100%;padding:10px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;}
 #uxResult[hidden],#uxPreview[hidden],#uxFeedback[hidden] {display:none!important;}
 @media(max-width:700px){.ux-box{margin:14px;padding:16px;}}
+
+/* Direct typing belongs to the white PDF page, never to the dark UI theme. */
+.page-direct-text,body.dark .page-direct-text {
+ position:absolute;display:inline-block;z-index:20;min-width:2px;
+ background:transparent!important;border:0!important;border-radius:0!important;
+ box-shadow:none!important;outline:none!important;padding:0!important;margin:0!important;
+ white-space:pre;line-height:normal;letter-spacing:normal;text-indent:0;
+ text-align:left;cursor:text;-webkit-text-fill-color:currentColor;
+}
+.page-direct-text::selection {background:rgba(70,130,240,.25);}
