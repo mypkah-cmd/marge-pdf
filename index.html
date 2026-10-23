@@ -727,6 +727,10 @@ footer { padding:32px 24px; }
       <a href="#" class="donate-item" id="donateOneTimeLink"><span class="donate-icon">☕</span><div class="donate-text"><strong id="donateOneTimeTitle" data-i18n="donate.oneTime">Donate $1</strong><small id="donateOneTimeDesc" data-i18n="donate.oneTimeDesc">One-time support</small></div></a>
       <a href="#" class="donate-item" id="donateSubLink"><span class="donate-icon">🍰</span><div class="donate-text"><strong id="donateSubTitle" data-i18n="donate.sub">Donate $5</strong><small id="donateSubDesc" data-i18n="donate.subDesc">Bigger support</small></div></a>
     </div>
+    <a href="#" class="donate-item" id="donateCustomLink" target="_blank" rel="noopener noreferrer">
+      <span class="donate-icon" aria-hidden="true">💝</span>
+      <div class="donate-text"><strong id="donateCustomTitle">Своя сумма</strong><small id="donateCustomDesc">Укажите сумму на странице PayPal</small></div>
+    </a>
     <p class="donate-thanks" id="donateThanks" data-i18n="donate.thanks">Thank you! ❤️</p>
   </div>
 </div>
@@ -3202,6 +3206,28 @@ const ProductUX = (() => {
  });
  updateLabels();
  return {text,step,begin,finish,discard,commit,selection,busy:()=>!!job};
+})();
+
+</script>
+<script>
+
+// Custom donation: open the existing recipient link without a fixed amount.
+(() => {
+ const copy = {
+  ru:['Своя сумма','Укажите сумму на странице PayPal'],
+  en:['Custom amount','Enter your amount on the PayPal page'],
+  lv:['Cita summa','Norādiet summu PayPal lapā'],
+  de:['Eigener Betrag','Betrag auf der PayPal-Seite eingeben']
+ };
+ const link=document.getElementById('donateCustomLink');
+ link.href='https://www.paypal.com/paypalme/'+CONFIG.PAYPAL;
+ function update(){
+  const labels=copy[document.documentElement.lang] || copy.en;
+  document.getElementById('donateCustomTitle').textContent=labels[0];
+  document.getElementById('donateCustomDesc').textContent=labels[1];
+ }
+ new MutationObserver(update).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+ update();
 })();
 
 </script>
