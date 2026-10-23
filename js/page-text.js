@@ -9,7 +9,7 @@ window.PageText = (() => {
   const sx=r.width/canvas.width,sy=r.height/canvas.height;
   const el=document.createElement('span');el.className='page-direct-text';
   el.contentEditable='true';el.spellcheck=false;el.setAttribute('role','textbox');
-  el.setAttribute('aria-label',document.documentElement.lang==='ru'?'Текст на странице PDF':'Text on PDF page');
+  el.setAttribute('aria-label',SiteLocale.get('Text on PDF page'));
   el.style.font=font;el.style.color=color;el.style.caretColor=color;
   el.style.transform=`scale(${sx},${sy})`;el.style.transformOrigin='top left';
   el.style.left=(r.left-p.left+parent.scrollLeft-parent.clientLeft+x*sx)+'px';
