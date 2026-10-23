@@ -1,6 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+
+// Optional storage must never prevent the interface from starting.
+const v2Storage = (() => {
+  const memory = new Map();
+  return {
+    getItem(key) {
+      try { return window.localStorage.getItem(key) ?? memory.get(key) ?? null; }
+      catch (_) { return memory.get(key) ?? null; }
+    },
+    setItem(key,value) {
+      memory.set(key,String(value));
+      try { window.localStorage.setItem(key,String(value)); } catch (_) {}
+    },
+    removeItem(key) {
+      memory.delete(key);
+      try { window.localStorage.removeItem(key); } catch (_) {}
+    }
+  };
+})();
+
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>marge-PDF — All-in-One PDF Toolkit</title>
@@ -335,6 +357,111 @@
   [data-tooltip-pos="left"]::before { bottom: auto; top: 50%; right: calc(100% + 4px); left: auto; transform: translate(4px, -50%); border-bottom-color: transparent; border-left-color: #1e293b; }
   [data-tooltip-pos="left"]:hover::before { transform: translate(0, -50%); }
 </style>
+<style id="marge-v2-interface">
+
+/* marge-PDF interface upgrade */
+:root { --primary:#6554e8; --primary-dark:#5141c9; --accent:#089db3; --bg:#f5f6fb; --radius:18px; --shadow:0 6px 24px rgba(32,35,80,.045); }
+body { font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif; }
+header { padding:16px max(20px,calc((100vw - 1240px)/2)); gap:18px; flex-wrap:wrap; }
+.header-right { flex-wrap:wrap; gap:8px; }
+header .ad-slot { display:none; } header .mirror-btn,header .lv-clock { display:flex; }
+.logo { letter-spacing:-.6px; }
+.hero { max-width:1000px; padding:64px 24px 28px; }
+.hero h1 { font-size:clamp(30px,5vw,54px); line-height:1.12; letter-spacing:-1.8px; }
+.hero p { margin-top:18px; line-height:1.7; }
+.why-section { max-width:1240px; gap:12px; margin-bottom:28px; }
+.why-item { padding:16px; text-align:left; border-radius:14px; }
+.why-icon { font-size:22px; margin-bottom:5px; }
+.why-item p { margin-top:5px; }
+.tools-grid { max-width:1240px; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; padding-bottom:36px; }
+.tool-card { position:relative; text-align:left; padding:24px; min-height:176px; box-shadow:var(--shadow); }
+.tool-card:hover { transform:translateY(-3px); }
+.tool-icon { display:flex; align-items:center; justify-content:center; width:48px; height:48px; font-size:25px; background:var(--bg); border-radius:14px; margin-bottom:16px; }
+.tool-card h3 { padding-right:20px; font-size:16px; }
+.v2-description { color:var(--muted); font-size:13px; margin-top:8px; line-height:1.6; }
+.v2-star { position:absolute; right:12px; top:12px; border:0; border-radius:8px; background:transparent; color:var(--muted); font-size:23px; cursor:pointer; padding:4px 8px; }
+.v2-star[aria-pressed="true"] { color:#a86a00; background:#fff4d6; }
+.v2-controls { max-width:1240px; padding:0 24px; margin:0 auto 20px; }
+.v2-search { width:100%; padding:16px 18px; border:1px solid var(--border); border-radius:14px; background:var(--card); color:var(--text); font:inherit; }
+.v2-tabs { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+.v2-tabs button { padding:10px 15px; border:1px solid var(--border); border-radius:100px; color:var(--muted); background:var(--card); font:inherit; font-size:13px; cursor:pointer; }
+.v2-tabs button[aria-pressed="true"] { background:var(--primary); color:white; border-color:var(--primary); }
+.v2-summary { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:18px 0 0; color:var(--muted); font-size:13px; }
+.v2-summary button { border:0; background:transparent; color:var(--primary); cursor:pointer; font:inherit; }
+.v2-empty { grid-column:1/-1; padding:36px; text-align:center; color:var(--muted); }
+.v2-notice { max-width:1192px; margin:16px auto; padding:14px 18px; border:1px solid #e9bc65; border-radius:12px; background:#fff8e8; color:#674711; font-size:14px; }
+.v2-quick { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-top:24px; }
+.v2-quick button { padding:13px 20px; border:1px solid var(--border); border-radius:12px; background:var(--card); color:var(--text); font:inherit; font-weight:600; cursor:pointer; }
+.v2-quick button:first-child { background:var(--primary); border-color:var(--primary); color:white; }
+.v2-diagnostics { max-width:1192px; margin:0 auto 30px; padding:16px; border:1px solid var(--border); border-radius:14px; background:var(--card); font-size:13px; }
+.v2-diagnostics summary { cursor:pointer; font-weight:600; }
+.v2-diagnostics ul { margin:14px 0 0 20px; color:var(--muted); line-height:1.9; }
+:focus-visible { outline:3px solid var(--accent); outline-offset:4px; }
+body.dark { --bg:#101321; --card:#1b2033; --border:#30374f; --text:#f1f3ff; --muted:#a7b0c8; }
+body.dark .v2-star[aria-pressed="true"] { background:#45351d; color:#ffd57c; }
+.modal { border:1px solid var(--border); box-shadow:0 24px 100px rgba(0,0,0,.25); }
+footer { padding:32px 24px; }
+@media(max-width:1000px) { .tools-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media(max-width:720px) { .tools-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; padding:0 14px 30px; } .tool-card { padding:18px 14px; } .hero { padding-top:36px; } .v2-controls { padding:0 14px; } header { position:relative; } .why-section { grid-template-columns:repeat(2,minmax(0,1fr)); padding:0 14px; } }
+@media(max-width:380px) { .tools-grid { grid-template-columns:1fr; } }
+@media(prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
+
+</style>
+<style id="six-column-layout">
+#toolsGrid.tools-grid {grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;}
+#toolsGrid .tool-card {min-width:0;padding:18px 12px;}
+#toolsGrid .tool-card h3,#toolsGrid .v2-description {overflow-wrap:anywhere;}
+@media(max-width:1024px) and (orientation:portrait){
+#toolsGrid.tools-grid {grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;padding-left:8px;padding-right:8px;}
+#toolsGrid .tool-card {padding:28px 6px 12px;min-height:132px;}
+#toolsGrid .tool-card h3 {font-size:11px;line-height:1.35;padding-right:0;}
+#toolsGrid .tool-icon {width:34px;height:34px;font-size:21px;margin-bottom:9px;}
+#toolsGrid .v2-description {display:none;}
+#toolsGrid .v2-star {top:2px;right:2px;font-size:20px;padding:2px 6px;}
+}
+@media(max-width:1200px) and (orientation:landscape){
+#toolsGrid.tools-grid {grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;padding-left:10px;padding-right:10px;}
+#toolsGrid .tool-card {padding:27px 8px 12px;min-height:132px;}
+#toolsGrid .tool-card h3 {font-size:12px;line-height:1.35;padding-right:0;}
+#toolsGrid .tool-icon {width:36px;height:36px;font-size:22px;margin-bottom:10px;}
+#toolsGrid .v2-description {display:none;}
+#toolsGrid .v2-star {top:2px;right:2px;font-size:20px;padding:2px 6px;}
+}
+</style>
+
+<style id="support-ui-style">
+.support-goal {padding:16px;border:1px solid var(--border);border-radius:12px;background:var(--bg);margin:16px 0;}
+.support-goal p {color:var(--muted);font-size:14px;line-height:1.6;margin-top:8px;}
+.support-result {position:fixed;bottom:18px;right:18px;z-index:10020;width:min(420px,calc(100vw - 28px));padding:20px;background:var(--card);color:var(--text);border:1px solid var(--primary);border-radius:16px;box-shadow:0 12px 45px rgba(0,0,0,.22);}
+.support-result[hidden] {display:none!important;}
+.support-result h2 {font-size:18px;margin-bottom:8px;}
+.support-result p {font-size:14px;color:var(--muted);line-height:1.6;}
+.support-result-actions {display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
+.support-result-actions button {padding:10px 14px;border-radius:9px;border:1px solid var(--border);background:var(--bg);color:var(--text);font:inherit;cursor:pointer;}
+.support-result-actions button:first-child {background:var(--primary);color:white;border-color:var(--primary);}
+@media(max-width:700px){header .donate-btn {padding:9px 11px;font-size:12px;} .support-result {bottom:12px;right:14px;padding:16px;}}
+</style>
+<style>header .lv-clock {justify-content:center;align-items:center;min-width:96px;min-height:38px;}</style>
+
+<style id="product-ux-style">
+.ux-box {max-width:1192px;margin:18px auto;padding:20px;border:1px solid var(--border);border-radius:16px;background:var(--card);color:var(--text);}
+.ux-actions {display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;align-items:center;}
+.ux-button {padding:10px 14px;border:1px solid var(--border);border-radius:9px;background:var(--bg);color:var(--text);font:inherit;font-size:13px;cursor:pointer;}
+.ux-button:disabled {opacity:.5;cursor:not-allowed;}
+.ux-note {color:var(--muted);font-size:13px;line-height:1.6;margin:8px 0;}
+.ux-preview-grid {display:grid;grid-template-columns:repeat(auto-fill,minmax(115px,1fr));gap:12px;}
+.ux-page {border:1px solid var(--border);border-radius:10px;padding:8px;min-width:0;}
+.ux-page canvas {width:100%;height:auto;display:block;background:white;}
+.ux-page label {display:block;font-size:13px;margin:8px 0;}
+.ux-page .ux-button {padding:5px 9px;}
+#uxPreview .modal {max-width:900px;}
+#uxProgress progress {width:100%;margin-top:10px;}
+#uxProgress {border:1px solid var(--border);border-radius:10px;padding:12px;margin:12px 0;}
+#uxFeedback textarea {width:100%;min-height:140px;padding:12px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font:inherit;}
+#uxFeedback select {max-width:100%;padding:10px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;}
+#uxResult[hidden],#uxPreview[hidden],#uxFeedback[hidden] {display:none!important;}
+@media(max-width:700px){.ux-box{margin:14px;padding:16px;}}
+</style>
 </head>
 <body>
 
@@ -366,7 +493,6 @@
   </div>
   <div class="header-right">
     <div class="lv-clock" data-tooltip="" data-tooltip-i18n="tip.clock">
-      <span class="clock-city">🇱🇻 Rīga</span>
       <span class="clock-time" id="lvTime">00:00:00</span>
     </div>
     <a href="https://mypkah-cmd.github.io/marge-pdf/" class="mirror-btn" target="_blank" rel="noopener" data-tooltip="" data-tooltip-i18n="tip.mirror">
@@ -377,7 +503,7 @@
       <span>📢</span>
       <span data-i18n="adSlot.text">Your ad could be here</span>
     </a>
-    <button class="donate-btn" id="donateBtn" data-tooltip="" data-tooltip-i18n="tip.donate"><span>💰</span></button>
+    <button class="donate-btn" id="donateBtn" data-tooltip="" data-tooltip-i18n="tip.donate"><span data-i18n="support.button">Поддержать проект</span></button>
     <button class="icon-btn" id="themeBtn" data-tooltip="" data-tooltip-i18n="tip.theme">🌙</button>
     <button class="icon-btn" id="timerBtn" data-tooltip="" data-tooltip-i18n="tip.timer">⏱️</button>
     <button class="icon-btn" id="alarmBtn" data-tooltip="" data-tooltip-i18n="tip.alarm">🔔</button>
@@ -409,6 +535,13 @@
   <div class="why-item"><div class="why-icon">💻</div><h3 data-i18n="why.all.title">Works Everywhere</h3><p data-i18n="why.all.desc"></p></div>
 </section>
 
+
+<section class="v2-controls" id="v2Controls" aria-label="Поиск инструментов">
+  <label for="toolSearch" style="display:block;font-size:18px;font-weight:700;margin-bottom:10px">Поиск инструментов / Find a tool</label>
+  <input id="toolSearch" class="v2-search" type="search" placeholder="Найти инструмент… / Find a tool…" autocomplete="off">
+  <div class="v2-tabs" id="v2Tabs"></div>
+  <div class="v2-summary"><span id="v2Count" aria-live="polite"></span><button id="v2Reset" type="button">Сбросить</button></div>
+</section>
 <div class="tools-grid" id="toolsGrid"></div>
 
 <section id="recentSection" class="hidden" style="max-width:1280px;margin:0 auto 40px;padding:0 24px;">
@@ -580,13 +713,19 @@
     <button class="modal-close" onclick="closeDonate()">✕</button>
     <h2 id="donateTitle" data-i18n="donate.title">💰 Support the Project</h2>
     <p class="desc" id="donateDesc" data-i18n="donate.subtitle">Support the development.</p>
-    <div class="qr-section">
+    
+<div class="support-goal">
+ <strong data-i18n="support.goalTitle">Зачем поддерживать marge-PDF?</strong>
+ <p data-i18n="support.goal">Поддержите дальнейшую разработку marge-PDF: исправление ошибок и улучшение PDF-инструментов.</p>
+ <p data-i18n="support.voluntary">Поддержка добровольная. Все текущие инструменты доступны бесплатно, независимо от доната.</p>
+</div>
+<div class="qr-section">
       <p class="qr-label" data-i18n="donate.qrLabel">📱 Scan QR to donate via PayPal</p>
       <div class="qr-wrapper"><div id="qrContainer"></div></div>
     </div>
     <div class="donate-list">
       <a href="#" class="donate-item" id="donateOneTimeLink"><span class="donate-icon">☕</span><div class="donate-text"><strong id="donateOneTimeTitle" data-i18n="donate.oneTime">Donate $1</strong><small id="donateOneTimeDesc" data-i18n="donate.oneTimeDesc">One-time support</small></div></a>
-      <a href="#" class="donate-item" id="donateSubLink"><span class="donate-icon">⭐</span><div class="donate-text"><strong id="donateSubTitle" data-i18n="donate.sub">Donate $5</strong><small id="donateSubDesc" data-i18n="donate.subDesc">Bigger support</small></div></a>
+      <a href="#" class="donate-item" id="donateSubLink"><span class="donate-icon">🍰</span><div class="donate-text"><strong id="donateSubTitle" data-i18n="donate.sub">Donate $5</strong><small id="donateSubDesc" data-i18n="donate.subDesc">Bigger support</small></div></a>
     </div>
     <p class="donate-thanks" id="donateThanks" data-i18n="donate.thanks">Thank you! ❤️</p>
   </div>
@@ -848,9 +987,9 @@ const translations = {
     "help.excel2pdf.title":"📊 Excel → PDF — table export","help.excel2pdf.text":"Each Excel sheet becomes a PDF page with a formatted table.",
     "help.pdf2excel.title":"📈 PDF → Excel — extract text into rows","help.pdf2excel.text":"Text from each PDF page lands in an .xlsx spreadsheet as rows.",
     "help.recent.title":"🕓 Recent files — auto history","help.recent.text":"Every downloaded result is saved in your browser (IndexedDB) for quick re-download.",
-    "help.timer.title":"⏱️ Timer & 🔔 Alarm","help.timer.text":"Set a countdown or a fixed-time alarm (Riga timezone).",
+    "help.timer.title":"⏱️ Timer & 🔔 Alarm","help.timer.text":"Set a countdown or an alarm using your device’s local time.",
     "help.theme.title":"🌙 Theme & 🌐 Languages","help.theme.text":"Switch between light and dark. Change language via the globe icon — EN, RU, LV, DE.",
-    "tip.clock":"Current time in Riga","tip.mirror":"Alternative mirror — if the main site is blocked","tip.ad":"Place your ad here","tip.donate":"Support the project","tip.theme":"Light / dark theme","tip.timer":"Timer — set a countdown","tip.alarm":"Alarm — set a fixed time","tip.help":"How to use all tools","tip.lang":"Change language",
+    "tip.clock":"Your device’s local time","tip.mirror":"Alternative mirror — if the main site is blocked","tip.ad":"Place your ad here","tip.donate":"Support the project","tip.theme":"Light / dark theme","tip.timer":"Timer — set a countdown","tip.alarm":"Alarm — set a fixed time","tip.help":"How to use all tools","tip.lang":"Change language",
     "tip.pen":"Pen — free drawing","tip.marker":"Marker — translucent drawing","tip.eraser":"Eraser","tip.line":"Line","tip.rect":"Rectangle","tip.circle":"Circle / ellipse","tip.arrow":"Arrow","tip.textBtn":"Add text","tip.select":"Select & move object","tip.rotateTool":"Rotate selected 15°","tip.picker":"Color picker — pick color from page",
     "tip.lw2":"Thin line","tip.lw4":"Medium line","tip.lw8":"Thick line","tip.lw14":"Extra thick line",
     "tip.colorRed":"Red color","tip.colorBlue":"Blue color","tip.colorGreen":"Green color","tip.colorOrange":"Orange color","tip.colorBlack":"Black color",
@@ -905,9 +1044,9 @@ const translations = {
     "help.excel2pdf.title":"📊 Excel → PDF","help.excel2pdf.text":"Каждый лист Excel = страница PDF с таблицей.",
     "help.pdf2excel.title":"📈 PDF → Excel","help.pdf2excel.text":"Текст с каждой страницы попадёт в .xlsx строками.",
     "help.recent.title":"🕓 Недавние файлы","help.recent.text":"Каждый результат сохраняется в браузере (IndexedDB).",
-    "help.timer.title":"⏱️ Таймер и 🔔 Будильник","help.timer.text":"Обратный отсчёт или будильник на определённое время (по Риге).",
+    "help.timer.title":"⏱️ Таймер и 🔔 Будильник","help.timer.text":"Обратный отсчёт или будильник по местному времени вашего устройства.",
     "help.theme.title":"🌙 Тема и 🌐 Языки","help.theme.text":"Переключение светлой и тёмной темы.",
-    "tip.clock":"Текущее время в Риге","tip.mirror":"Альтернативное зеркало — если основной сайт заблокирован","tip.ad":"Здесь может быть ваша реклама","tip.donate":"Поддержать проект","tip.theme":"Светлая / тёмная тема","tip.timer":"Таймер — обратный отсчёт","tip.alarm":"Будильник — на определённое время","tip.help":"Как пользоваться инструментами","tip.lang":"Сменить язык",
+    "tip.clock":"Местное время вашего устройства","tip.mirror":"Альтернативное зеркало — если основной сайт заблокирован","tip.ad":"Здесь может быть ваша реклама","tip.donate":"Поддержать проект","tip.theme":"Светлая / тёмная тема","tip.timer":"Таймер — обратный отсчёт","tip.alarm":"Будильник — на определённое время","tip.help":"Как пользоваться инструментами","tip.lang":"Сменить язык",
     "tip.pen":"Перо — свободное рисование","tip.marker":"Маркер — полупрозрачное рисование","tip.eraser":"Ластик","tip.line":"Линия","tip.rect":"Прямоугольник","tip.circle":"Круг / овал","tip.arrow":"Стрелка","tip.textBtn":"Добавить текст","tip.select":"Выбрать и двигать объект","tip.rotateTool":"Повернуть выбранное на 15°","tip.picker":"Пипетка — взять цвет с листа",
     "tip.lw2":"Тонкая линия","tip.lw4":"Средняя линия","tip.lw8":"Толстая линия","tip.lw14":"Очень толстая линия",
     "tip.colorRed":"Красный цвет","tip.colorBlue":"Синий цвет","tip.colorGreen":"Зелёный цвет","tip.colorOrange":"Оранжевый цвет","tip.colorBlack":"Чёрный цвет",
@@ -962,9 +1101,9 @@ const translations = {
     "help.excel2pdf.title":"📊 Excel → PDF","help.excel2pdf.text":"Katra Excel lapa kļūst par PDF lappusi ar formatētu tabulu.",
     "help.pdf2excel.title":"📈 PDF → Excel","help.pdf2excel.text":"Teksts nonāk .xlsx izklājlapā kā rindas.",
     "help.recent.title":"🕓 Nesenās datnes","help.recent.text":"Katrs lejupielādētais rezultāts tiek saglabāts pārlūkā (IndexedDB).",
-    "help.timer.title":"⏱️ Taimeris un 🔔 Modinātājs","help.timer.text":"Iestatiet atskaiti vai modinātāju uz noteiktu laiku (pēc Rīgas).",
+    "help.timer.title":"⏱️ Taimeris un 🔔 Modinātājs","help.timer.text":"Iestatiet atskaiti vai modinātāju pēc ierīces vietējā laika.",
     "help.theme.title":"🌙 Tēma un 🌐 Valodas","help.theme.text":"Pārslēgšanās starp gaišo un tumšo.",
-    "tip.clock":"Pašreizējais laiks Rīgā","tip.mirror":"Alternatīvs spogulis — ja galvenā vietne ir bloķēta","tip.ad":"Šeit varētu būt jūsu reklāma","tip.donate":"Atbalstīt projektu","tip.theme":"Gaišā / tumšā tēma","tip.timer":"Taimeris — atskaites laiks","tip.alarm":"Modinātājs — noteikts laiks","tip.help":"Kā lietot rīkus","tip.lang":"Mainīt valodu",
+    "tip.clock":"Ierīces vietējais laiks","tip.mirror":"Alternatīvs spogulis — ja galvenā vietne ir bloķēta","tip.ad":"Šeit varētu būt jūsu reklāma","tip.donate":"Atbalstīt projektu","tip.theme":"Gaišā / tumšā tēma","tip.timer":"Taimeris — atskaites laiks","tip.alarm":"Modinātājs — noteikts laiks","tip.help":"Kā lietot rīkus","tip.lang":"Mainīt valodu",
     "tip.pen":"Pildspalva — brīva zīmēšana","tip.marker":"Marķieris — caurspīdīga zīmēšana","tip.eraser":"Dzēsējs","tip.line":"Līnija","tip.rect":"Taisnstūris","tip.circle":"Aplis / ovāls","tip.arrow":"Bulta","tip.textBtn":"Pievienot tekstu","tip.select":"Atlasīt un pārvietot objektu","tip.rotateTool":"Pagriezt atlasīto par 15°","tip.picker":"Pipete — paņemt krāsu no lapas",
     "tip.lw2":"Plāna līnija","tip.lw4":"Vidēja līnija","tip.lw8":"Bieza līnija","tip.lw14":"Ļoti bieza līnija",
     "tip.colorRed":"Sarkana krāsa","tip.colorBlue":"Zila krāsa","tip.colorGreen":"Zaļa krāsa","tip.colorOrange":"Oranža krāsa","tip.colorBlack":"Melna krāsa",
@@ -1019,9 +1158,9 @@ const translations = {
     "help.excel2pdf.title":"📊 Excel → PDF","help.excel2pdf.text":"Jedes Excel-Blatt wird eine PDF-Seite mit formatierter Tabelle.",
     "help.pdf2excel.title":"📈 PDF → Excel","help.pdf2excel.text":"Text jeder PDF-Seite landet in einer .xlsx-Tabelle als Zeilen.",
     "help.recent.title":"🕓 Letzte Dateien","help.recent.text":"Jedes heruntergeladene Ergebnis wird im Browser (IndexedDB) gespeichert.",
-    "help.timer.title":"⏱️ Timer & 🔔 Wecker","help.timer.text":"Countdown oder Wecker zu fester Zeit (Riga-Zeitzone).",
+    "help.timer.title":"⏱️ Timer & 🔔 Wecker","help.timer.text":"Countdown oder Wecker nach der lokalen Uhrzeit Ihres Geräts.",
     "help.theme.title":"🌙 Theme & 🌐 Sprachen","help.theme.text":"Zwischen hell und dunkel wechseln.",
-    "tip.clock":"Aktuelle Zeit in Riga","tip.mirror":"Alternativer Spiegel — wenn die Hauptseite blockiert ist","tip.ad":"Hier könnte Ihre Werbung stehen","tip.donate":"Projekt unterstützen","tip.theme":"Hell / dunkel","tip.timer":"Timer — Countdown","tip.alarm":"Wecker — feste Zeit","tip.help":"Bedienungsanleitung","tip.lang":"Sprache ändern",
+    "tip.clock":"Lokale Uhrzeit Ihres Geräts","tip.mirror":"Alternativer Spiegel — wenn die Hauptseite blockiert ist","tip.ad":"Hier könnte Ihre Werbung stehen","tip.donate":"Projekt unterstützen","tip.theme":"Hell / dunkel","tip.timer":"Timer — Countdown","tip.alarm":"Wecker — feste Zeit","tip.help":"Bedienungsanleitung","tip.lang":"Sprache ändern",
     "tip.pen":"Stift — freies Zeichnen","tip.marker":"Marker — halbtransparent","tip.eraser":"Radierer","tip.line":"Linie","tip.rect":"Rechteck","tip.circle":"Kreis / Ellipse","tip.arrow":"Pfeil","tip.textBtn":"Text hinzufügen","tip.select":"Objekt auswählen & bewegen","tip.rotateTool":"Ausgewähltes um 15° drehen","tip.picker":"Pipette — Farbe von Seite aufnehmen",
     "tip.lw2":"Dünne Linie","tip.lw4":"Mittlere Linie","tip.lw8":"Dicke Linie","tip.lw14":"Sehr dicke Linie",
     "tip.colorRed":"Rote Farbe","tip.colorBlue":"Blaue Farbe","tip.colorGreen":"Grüne Farbe","tip.colorOrange":"Orange Farbe","tip.colorBlack":"Schwarze Farbe",
@@ -1044,7 +1183,7 @@ function setLang(lang) {
   if (!translations[lang]) lang = 'en';
   currentLang = lang;
   document.documentElement.lang = lang;
-  localStorage.setItem('pdfnest_lang', lang);
+  v2Storage.setItem('pdfnest_lang', lang);
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const k = el.getAttribute('data-i18n');
     const v = translations[lang][k] || translations.en[k];
@@ -1259,11 +1398,16 @@ function renderAlarms() { alarmList.innerHTML=''; alarms.forEach((a,i) => { cons
 
 alarmSetBtn.addEventListener('click', () => { const h=parseInt(document.getElementById('alarmHour').value,10); const m=parseInt(document.getElementById('alarmMinute').value,10); if (isNaN(h)||isNaN(m)||h<0||h>23||m<0||m>59) { showStatus(alarmStatus, t('alarm.needTime'), 'err'); return; } const time=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0'); alarms.push({ time, label:document.getElementById('alarmLabel').value||'', active:true, fired:false }); showStatus(alarmStatus, t('alarm.added')+' '+time, 'ok'); document.getElementById('alarmLabel').value=''; renderAlarms(); });
 
+function localDeviceTime(date, seconds = false) {
+  const parts = [date.getHours(), date.getMinutes()];
+  if (seconds) parts.push(date.getSeconds());
+  return parts.map(value => String(value).padStart(2, '0')).join(':');
+}
 function checkAlarms() {
   const now = new Date();
-  const lvTime = new Intl.DateTimeFormat('ru-RU', { timeZone: 'Europe/Riga', hour: '2-digit', minute: '2-digit', hour12: false }).format(now);
+  const lvTime = localDeviceTime(now);
   if (lvTime !== lastCheckedMinute) {
-    console.log('⏰ Проверка будильника — время Рига:', lvTime, '| активных:', alarms.filter(a => a.active && !a.fired).length);
+    console.log('⏰ Проверка будильника — местное время:', lvTime, '| активных:', alarms.filter(a => a.active && !a.fired).length);
     lastCheckedMinute = lvTime;
   }
   alarms.forEach(a => {
@@ -1299,11 +1443,11 @@ document.getElementById('alarmBtn').addEventListener('click', openAlarmModal);
 setInterval(checkAlarms, 1000);
 checkAlarms();
 
-function updateLvClock() { const el=document.getElementById('lvTime'); if (el) el.textContent=new Intl.DateTimeFormat('ru-RU', { timeZone:'Europe/Riga', hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false }).format(new Date()); }
+function updateLvClock() { const el=document.getElementById('lvTime'); if (el) el.textContent=localDeviceTime(new Date(), true); }
 const themeBtn = document.getElementById('themeBtn');
-function applyTheme(dark) { document.body.classList.toggle('dark', dark); themeBtn.textContent = dark ? '☀️' : '🌙'; localStorage.setItem('pdfnest_theme', dark ? 'dark' : 'light'); }
+function applyTheme(dark) { document.body.classList.toggle('dark', dark); themeBtn.textContent = dark ? '☀️' : '🌙'; v2Storage.setItem('pdfnest_theme', dark ? 'dark' : 'light'); }
 themeBtn.addEventListener('click', () => applyTheme(!document.body.classList.contains('dark')));
-if (localStorage.getItem('pdfnest_theme') === 'dark') applyTheme(true);
+if (v2Storage.getItem('pdfnest_theme') === 'dark') applyTheme(true);
 </script>
 <script>
 /* ==========================================================
@@ -1408,10 +1552,13 @@ function renderFileList(tool, fileList, runBtn) {
 function showStatus(el, text, type) { if (!el) return; el.textContent = text; el.className = 'status-msg ' + (type || 'info'); }
 
 async function executeTool(tool, statusMsg) {
+  if (ProductUX.busy()) return;
   const runBtn = document.getElementById('runBtn');
-  runBtn.disabled = true;
+  let completed = false;
+  ProductUX.begin(tool);
   showStatus(statusMsg, t('common.processing'), 'info');
   try {
+    await ProductUX.step();
     if (tool.id === 'merge') await toolMerge();
     else if (tool.id === 'pdf2jpg') await toolPdf2Jpg();
     else if (tool.id === 'pdf2word') await toolPdf2Word();
@@ -1427,9 +1574,19 @@ async function executeTool(tool, statusMsg) {
     else if (tool.id === 'img2pdf') await toolImg2Pdf();
     else if (tool.id === 'protect') await toolProtect();
     else if (tool.id === 'metadata') await toolMetadata();
+
+    await ProductUX.step();
+    ProductUX.commit();
+    completed = true;
     showStatus(statusMsg, t('common.done'), 'ok');
-  } catch (err) { console.error(err); showStatus(statusMsg, t('common.error') + err.message, 'err'); }
-  finally { runBtn.disabled = false; }
+  } catch (err) {
+    ProductUX.discard();
+    showStatus(statusMsg, err.name === 'AbortError' ? ProductUX.text('cancelled') : t('common.error') + err.message, err.name === 'AbortError' ? 'info' : 'err');
+  } finally {
+    ProductUX.finish();
+    if (runBtn && runBtn.isConnected) runBtn.disabled = false;
+    if (completed) { closeModal(); document.getElementById('uxResult').scrollIntoView({block:'center'}); }
+  }
 }
 
 function downloadBlob(blob, filename) {
@@ -1461,11 +1618,15 @@ function parseRange(str, max) {
 
 async function toolMerge() {
   const merged = await PDFLib.PDFDocument.create();
+  let completedFiles = 0;
   for (const file of currentFiles) {
+    await ProductUX.step();
     const bytes = await file.arrayBuffer();
     const pdf = await PDFLib.PDFDocument.load(bytes, { ignoreEncryption: true });
-    const pages = await merged.copyPages(pdf, pdf.getPageIndices());
+    const selection = ProductUX.selection(file, pdf.getPageCount());
+    const pages = await merged.copyPages(pdf, selection);
     pages.forEach(p => merged.addPage(p));
+    await ProductUX.step(++completedFiles, currentFiles.length, 'files');
   }
   downloadBlob(new Blob([await merged.save()], { type: 'application/pdf' }), 'merged.pdf');
 }
@@ -1538,12 +1699,13 @@ async function toolExcel2Pdf() {
     doc.setFontSize(14); doc.text(sheetName, 14, 14);
     doc.autoTable({ head: rows.length ? [rows[0]] : [], body: rows.slice(1), startY: 20, styles: { fontSize: 9 }, headStyles: { fillColor: [79,70,229] } });
   });
-  doc.save('excel.pdf');
+  downloadBlob(doc.output('blob'), 'excel.pdf');
 }
 async function toolPdf2Excel() {
   const pdf = await pdfjsLib.getDocument({ data: await currentFiles[0].arrayBuffer() }).promise;
   const allRows = [];
   for (let i = 1; i <= pdf.numPages; i++) {
+    await ProductUX.step(i-1, pdf.numPages);
     const content = await (await pdf.getPage(i)).getTextContent();
     const lines = {};
     content.items.forEach(item => {
@@ -1560,7 +1722,7 @@ async function toolPdf2Excel() {
   }
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(allRows), 'Extracted');
-  XLSX.writeFile(wb, 'extracted.xlsx');
+  downloadBlob(new Blob([XLSX.write(wb, {bookType:'xlsx',type:'array'})], {type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}), 'extracted.xlsx');
 }
 async function toolWord2Pdf() {
   const jsPDF = window.jspdf.jsPDF;
@@ -1571,11 +1733,12 @@ async function toolWord2Pdf() {
   const lines = doc.splitTextToSize(result.value || '', pw - margin * 2);
   let y = margin;
   lines.forEach(line => { if (y > ph - margin) { doc.addPage(); y = margin; } doc.text(line, margin, y); y += 16; });
-  doc.save('word.pdf');
+  downloadBlob(doc.output('blob'), 'word.pdf');
 }
 async function toolImg2Pdf() {
   const pdf = await PDFLib.PDFDocument.create();
   for (const file of currentFiles) {
+    await ProductUX.step();
     const bytes = await file.arrayBuffer();
     const img = file.type === 'image/png' ? await pdf.embedPng(bytes) : await pdf.embedJpg(bytes);
     const page = pdf.addPage([img.width, img.height]);
@@ -1616,6 +1779,7 @@ async function toolPdf2Jpg() {
   }
   const zip = new JSZip();
   for (let i = 1; i <= total; i++) {
+    await ProductUX.step(i-1, total);
     const page = await pdf.getPage(i);
     const viewport = page.getViewport({ scale: 2 });
     const canvas = document.createElement('canvas'); canvas.width = viewport.width; canvas.height = viewport.height;
@@ -1632,6 +1796,7 @@ async function toolPdf2Word() {
   const pdf = await pdfjsLib.getDocument({ data: buffer }).promise;
   let html = '<html><head><meta charset="utf-8"></head><body>';
   for (let i = 1; i <= pdf.numPages; i++) {
+    await ProductUX.step(i-1, pdf.numPages);
     const content = await (await pdf.getPage(i)).getTextContent();
     const lines = {};
     content.items.forEach(item => {
@@ -2521,20 +2686,20 @@ async function renderRecent() {
    COOKIES
    ========================================================== */
 const GA_ID = 'G-30RLVLY5JJ';
-function acceptCookies() { localStorage.setItem('pdfnest_cookies', 'accepted'); document.getElementById('cookieBanner').classList.add('hidden'); window['ga-disable-' + GA_ID] = false; }
-function declineCookies() { localStorage.setItem('pdfnest_cookies', 'declined'); document.getElementById('cookieBanner').classList.add('hidden'); window['ga-disable-' + GA_ID] = true; }
+function acceptCookies() { v2Storage.setItem('pdfnest_cookies', 'accepted'); document.getElementById('cookieBanner').classList.add('hidden'); window['ga-disable-' + GA_ID] = false; }
+function declineCookies() { v2Storage.setItem('pdfnest_cookies', 'declined'); document.getElementById('cookieBanner').classList.add('hidden'); window['ga-disable-' + GA_ID] = true; }
 window.acceptCookies = acceptCookies;
 window.declineCookies = declineCookies;
-document.addEventListener('DOMContentLoaded', () => { const b = document.getElementById('cookieBanner'); if (!b) return; const c = localStorage.getItem('pdfnest_cookies'); if (!c) { b.classList.remove('hidden'); window['ga-disable-' + GA_ID] = true; } });
+document.addEventListener('DOMContentLoaded', () => { const b = document.getElementById('cookieBanner'); if (!b) return; const c = v2Storage.getItem('pdfnest_cookies'); if (!c) { b.classList.remove('hidden'); window['ga-disable-' + GA_ID] = true; } });
 </script>
 
 <script>
 /* ==========================================================
    INIT
    ========================================================== */
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+if (window.pdfjsLib) { pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; }
 function detectBrowserLang() {
-  const saved = localStorage.getItem('pdfnest_lang');
+  const saved = v2Storage.getItem('pdfnest_lang');
   if (saved && translations[saved]) return saved;
   const langs = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || 'en'];
   for (const lang of langs) {
@@ -2569,17 +2734,476 @@ setInterval(renderRecent, 5000);
 </script>
 
 <script>
+try {
+
 /* ==========================================================
    PWA — Service Worker
    ========================================================== */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js')
+    Promise.resolve().then(() => navigator.serviceWorker.register('./service-worker.js'))
       .then(reg => console.log('✅ SW:', reg.scope))
       .catch(err => console.warn('⚠️ SW failed:', err));
   });
 }
+
+} catch (error) { console.warn("PWA unavailable",error); }
 </script>
 
+<script>
+
+// Additive interface. Original tool handlers are retained.
+(() => {
+  'use strict';
+  const grid = document.getElementById('toolsGrid');
+  if (!grid || typeof TOOLS === 'undefined' || typeof t !== 'function') return;
+  const words = {
+    ru:['Найти инструмент…','Все','Страницы PDF','Конвертация','Редактирование','Избранное','Показано','Сбросить','Ничего не найдено','Диагностика загрузки','Объединить PDF','Подписать PDF','Библиотека не загружена','загружена','История файлов: отключить','История файлов: включить','Добавить в избранное','Убрать из избранного','Сохранение истории выключено. Уже сохранённые файлы можно удалить в блоке недавних файлов.'],
+    en:['Find a tool…','All','PDF pages','Convert','Edit','Favorites','Shown','Reset','No matching tools','Load diagnostics','Merge PDF','Sign PDF','Library not loaded','loaded','File history: disable','File history: enable','Add to favorites','Remove from favorites','History saving is disabled. Previously saved files can be removed in Recent files.'],
+    lv:['Meklēt rīku…','Visi','PDF lapas','Konvertēt','Rediģēt','Izlase','Parādīti','Atiestatīt','Nekas nav atrasts','Ielādes diagnostika','Apvienot PDF','Parakstīt PDF','Bibliotēka nav ielādēta','ielādēta','Failu vēsture: izslēgt','Failu vēsture: ieslēgt','Pievienot izlasei','Noņemt no izlases','Vēstures saglabāšana ir izslēgta. Iepriekš saglabātos failus var dzēst neseno failu sadaļā.'],
+    de:['Werkzeug suchen…','Alle','PDF-Seiten','Konvertieren','Bearbeiten','Favoriten','Angezeigt','Zurücksetzen','Keine Treffer','Ladediagnose','PDF verbinden','PDF unterschreiben','Bibliothek nicht geladen','geladen','Dateiverlauf: aus','Dateiverlauf: ein','Zu Favoriten','Aus Favoriten entfernen','Verlaufsspeicherung deaktiviert. Gespeicherte Dateien lassen sich unter Letzte Dateien entfernen.']
+  };
+  let category = 'all';
+  let query = '';
+  let favorites;
+  try { favorites = new Set(JSON.parse(v2Storage.getItem('marge_v2_favorites') || '[]')); }
+  catch (_) { favorites = new Set(); }
+  let historyEnabled = v2Storage.getItem('marge_v2_history') === 'yes';
+  const groups = {
+    pages:['merge','split','compress','rotate','extract','removepages'],
+    convert:['pdf2jpg','pdf2word','excel2pdf','pdf2excel','word2pdf','img2pdf'],
+    edit:['watermark','pagenum','metadata','editor','signature','stamp','textedit','protect']
+  };
+  const controls = document.getElementById('v2Controls');
+  const search = document.getElementById('toolSearch');
+  const tabs = document.getElementById('v2Tabs');
+  const count = document.getElementById('v2Count');
+  const reset = document.getElementById('v2Reset');
+  const diagnostics = document.createElement('details');
+  diagnostics.className = 'v2-diagnostics';
+  const diagnosticTitle = document.createElement('summary');
+  const diagnosticList = document.createElement('ul');
+  const historyButton = document.createElement('button');
+  historyButton.type = 'button';
+  historyButton.className = 'footer-btn';
+  historyButton.style.marginTop = '12px';
+  const historyNote = document.createElement('p');
+  historyNote.style.marginTop = '12px';
+  diagnostics.append(diagnosticTitle,diagnosticList,historyButton,historyNote);
+  grid.after(diagnostics);
+  const quick = document.createElement('div');
+  quick.className = 'v2-quick';
+  document.querySelector('.hero')?.append(quick);
+  const originalHistory = window.__idbAddFile;
+  if (typeof originalHistory === 'function') {
+    window.__idbAddFile = (...args) => historyEnabled ? originalHistory(...args) : Promise.resolve();
+  }
+  const language = () => words[document.documentElement.lang] || words.en;
+  function open(tool) {
+    if (tool.custom === 'removePages') openRemovePages();
+    else if (tool.custom === 'editor') openEditor();
+    else if (tool.custom === 'signature') openSignature();
+    else if (tool.custom === 'stamp') openStamp();
+    else if (tool.custom === 'textedit') openTextEditor();
+    else openTool(tool);
+  }
+  function render() {
+    const w = language();
+    search.placeholder = w[0];
+    search.setAttribute('aria-label',w[0]);
+    reset.textContent = w[7];
+    tabs.replaceChildren();
+    [['all',1],['pages',2],['convert',3],['edit',4],['favorites',5]].forEach(([id,n]) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = w[n];
+      button.setAttribute('aria-pressed',String(category === id));
+      button.onclick = () => { category = id; render(); };
+      tabs.append(button);
+    });
+    grid.replaceChildren();
+    const filtered = TOOLS.filter(tool => {
+      const text = [tool.id,t('tool.'+tool.id+'.name'),t('tool.'+tool.id+'.desc')].join(' ').toLocaleLowerCase();
+      const match = category === 'all' || (category === 'favorites' ? favorites.has(tool.id) : groups[category]?.includes(tool.id));
+      return match && text.includes(query.toLocaleLowerCase().trim());
+    });
+    filtered.forEach(tool => {
+      const card = document.createElement('div');
+      card.className = 'tool-card';
+      const launch = document.createElement('button');
+      launch.type = 'button';
+      launch.style.cssText = 'border:0;background:transparent;color:inherit;text-align:left;font:inherit;width:100%;cursor:pointer;';
+      const icon = document.createElement('span');
+      icon.className = 'tool-icon';
+      icon.textContent = tool.icon;
+      icon.setAttribute('aria-hidden','true');
+      const title = document.createElement('h3');
+      title.textContent = t('tool.'+tool.id+'.name');
+      const description = document.createElement('p');
+      description.className = 'v2-description';
+      description.textContent = t('tool.'+tool.id+'.desc');
+      launch.append(icon,title,description);
+      launch.onclick = () => open(tool);
+      const star = document.createElement('button');
+      star.type = 'button';
+      star.className = 'v2-star';
+      star.textContent = favorites.has(tool.id) ? '★' : '☆';
+      star.setAttribute('aria-label',favorites.has(tool.id) ? w[17] : w[16]);
+      star.setAttribute('aria-pressed',String(favorites.has(tool.id)));
+      star.onclick = () => {
+        favorites.has(tool.id) ? favorites.delete(tool.id) : favorites.add(tool.id);
+        v2Storage.setItem('marge_v2_favorites',JSON.stringify([...favorites]));
+        render();
+      };
+      card.append(launch,star);
+      grid.append(card);
+    });
+    count.textContent = w[6]+': '+filtered.length+' / '+TOOLS.length;
+    if (!filtered.length) {
+      const empty = document.createElement('p');
+      empty.className = 'v2-empty';
+      empty.textContent = w[8];
+      grid.append(empty);
+    }
+    quick.replaceChildren();
+    [['merge',10],['signature',11]].forEach(([id,n]) => {
+      const tool = TOOLS.find(x => x.id === id);
+      if (!tool) return;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = w[n];
+      button.onclick = () => open(tool);
+      quick.append(button);
+    });
+    diagnosticTitle.textContent = w[9];
+    diagnosticList.replaceChildren();
+    [['PDF-Lib',!!window.PDFLib],['PDF.js',!!window.pdfjsLib],['jsPDF',!!window.jspdf],['XLSX',!!window.XLSX],['Mammoth',!!window.mammoth],['JSZip',!!window.JSZip]].forEach(([name,ok]) => {
+      const li = document.createElement('li');
+      li.textContent = (ok ? '✓ ' : '⚠ ')+name+': '+(ok ? w[13] : w[12]);
+      diagnosticList.append(li);
+    });
+    historyButton.textContent = historyEnabled ? w[14] : w[15];
+    historyNote.textContent = historyEnabled ? '' : w[18];
+  }
+  search.addEventListener('input',() => { query = search.value; render(); });
+  reset.onclick = () => { query = ''; category = 'all'; search.value = ''; render(); };
+  historyButton.onclick = () => {
+    historyEnabled = !historyEnabled;
+    v2Storage.setItem('marge_v2_history',historyEnabled ? 'yes' : 'no');
+    render();
+  };
+  new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+  document.addEventListener('keydown',event => {
+    if (event.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay.active .modal-close').forEach(button => button.click());
+    }
+    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+      event.preventDefault(); search.focus();
+    }
+  });
+  window.renderTools = render;
+  render();
+})();
+
+</script>
+
+<section id="supportResult" class="support-result" aria-labelledby="supportResultTitle" hidden>
+ <h2 id="supportResultTitle" data-i18n="support.resultTitle">Файл готов!</h2>
+ <p data-i18n="support.resultText">Инструмент оказался полезным? Поддержите развитие marge-PDF небольшой суммой. Это добровольно, все текущие функции остаются бесплатными.</p>
+ <div class="support-result-actions">
+  <button type="button" id="supportResultDonate" data-i18n="support.button">Поддержать проект</button>
+  <button type="button" id="supportResultDismiss" data-i18n="support.later">Не сейчас</button>
+ </div>
+</section>
+<script>
+
+// Donation UI is isolated from PDF processing and never gates downloads.
+(() => {
+ 'use strict';
+ const copy = {"ru": ["☕ Поддержать проект", "Зачем поддерживать marge-PDF?", "Поддержите дальнейшую разработку marge-PDF: исправление ошибок и улучшение PDF-инструментов.", "Поддержка добровольная. Все текущие инструменты доступны бесплатно, независимо от доната.", "Файл готов!", "Инструмент оказался полезным? Поддержите развитие marge-PDF небольшой суммой. Это добровольно, все текущие функции остаются бесплатными.", "Не сейчас"], "en": ["☕ Support the project", "Why support marge-PDF?", "Support further development of marge-PDF: bug fixes and improvements to the PDF tools.", "Support is voluntary. All current tools are free to use, whether you donate or not.", "Your file is ready!", "Was this tool useful? Support marge-PDF with a small contribution. It is voluntary, and all current features remain free.", "Not now"], "lv": ["☕ Atbalstīt projektu", "Kāpēc atbalstīt marge-PDF?", "Atbalstiet marge-PDF turpmāko izstrādi: kļūdu labošanu un PDF rīku uzlabošanu.", "Atbalsts ir brīvprātīgs. Visi pašreizējie rīki ir pieejami bez maksas neatkarīgi no ziedojuma.", "Fails ir gatavs!", "Vai rīks noderēja? Atbalstiet marge-PDF ar nelielu ziedojumu. Tas ir brīvprātīgi, un visas pašreizējās funkcijas paliek bez maksas.", "Ne tagad"], "de": ["☕ Projekt unterstützen", "Warum marge-PDF unterstützen?", "Unterstützen Sie die Weiterentwicklung von marge-PDF: Fehlerbehebungen und Verbesserungen der PDF-Werkzeuge.", "Die Unterstützung ist freiwillig. Alle aktuellen Werkzeuge sind unabhängig von einer Spende kostenlos nutzbar.", "Ihre Datei ist fertig!", "War dieses Werkzeug hilfreich? Unterstützen Sie marge-PDF mit einem kleinen Beitrag. Das ist freiwillig, alle aktuellen Funktionen bleiben kostenlos.", "Nicht jetzt"]};
+ const keys = ['support.button','support.goalTitle','support.goal','support.voluntary','support.resultTitle','support.resultText','support.later'];
+ Object.entries(copy).forEach(([lang,values]) => {
+  if (!translations[lang]) return;
+  keys.forEach((key,i) => { translations[lang][key]=values[i]; });
+  translations[lang]['donate.subtitle']=values[2];
+ });
+ const panel=document.getElementById('supportResult');
+ let offered=false;
+ function updateCopy(){
+  const lang=document.documentElement.lang;
+  const values=copy[lang] || copy.en;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+   const key=el.getAttribute('data-i18n');
+   const index=keys.indexOf(key);
+   if(index>=0) el.textContent=values[index];
+  });
+  const subtitle=document.getElementById('donateDesc');
+  if(subtitle) subtitle.textContent=values[2];
+ }
+ function offer(){
+  if(offered) return;
+  offered=true;
+  // Do not compete with an already open donation window.
+  if(document.getElementById('donateOverlay')?.classList.contains('active')) return;
+  panel.hidden=false;
+ }
+ const originalShowStatus=window.showStatus;
+ if(typeof originalShowStatus==='function'){
+  window.showStatus=function(el,text,type){
+   const result=originalShowStatus.apply(this,arguments);
+   try {
+    if(type==='ok' && el && (text===t('common.done') || text===t('editor.saved'))) offer();
+   }catch(error){console.warn('Support prompt unavailable',error);}
+   return result;
+  };
+ }
+ document.getElementById('supportResultDismiss').onclick=()=>{panel.hidden=true;};
+ document.getElementById('supportResultDonate').onclick=()=>{
+  panel.hidden=true;
+  if(typeof openDonate==='function') openDonate();
+ };
+ document.getElementById('donateBtn').addEventListener('click',()=>{offered=true;panel.hidden=true;});
+ document.addEventListener('keydown',event=>{if(event.key==='Escape') panel.hidden=true;});
+ new MutationObserver(updateCopy).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+ updateCopy();
+})();
+
+</script>
+
+<section id="uxResult" class="ux-box" hidden aria-live="polite"></section>
+<div id="uxPreview" class="modal-overlay" hidden>
+ <div class="modal" role="dialog" aria-modal="true" aria-labelledby="uxPreviewTitle">
+  <button type="button" id="uxPreviewClose" class="modal-close" aria-label="Close">×</button>
+  <h2 id="uxPreviewTitle"></h2><p id="uxPreviewNote" class="ux-note"></p>
+  <div id="uxPreviewStatus" class="ux-note" role="status"></div>
+  <div id="uxPreviewGrid" class="ux-preview-grid"></div>
+  <div class="ux-actions"><button type="button" class="ux-button" id="uxPreviewMore"></button><button type="button" class="ux-button" id="uxPreviewApply"></button></div>
+ </div>
+</div>
+<div id="uxFeedback" class="modal-overlay" hidden>
+ <div class="modal" role="dialog" aria-modal="true" aria-labelledby="uxFeedbackTitle">
+  <button type="button" id="uxFeedbackClose" class="modal-close" aria-label="Close">×</button>
+  <h2 id="uxFeedbackTitle"></h2><p id="uxFeedbackNote" class="ux-note"></p>
+  <label for="uxFeedbackTool" id="uxFeedbackToolLabel"></label><select id="uxFeedbackTool"></select>
+  <label for="uxFeedbackText" id="uxFeedbackTextLabel" style="display:block;margin-top:12px"></label>
+  <textarea id="uxFeedbackText" maxlength="4000"></textarea>
+  <div class="ux-actions"><button type="button" id="uxFeedbackSend" class="ux-button"></button><button type="button" id="uxFeedbackCopy" class="ux-button"></button></div>
+  <p id="uxFeedbackStatus" class="ux-note" role="status"></p>
+ </div>
+</div>
+<script>
+
+// Product UX: additive preview, explicit job state, result and feedback UI.
+const ProductUX = (() => {
+ 'use strict';
+ const dictionaries = {"ru": {"preview": "Предпросмотр страниц", "previewNote": "Для Merge можно выбрать страницы и изменить их порядок стрелками. В остальных инструментах это только просмотр. Порядок файлов меняется в списке файлов.", "more": "Ещё 12 страниц", "apply": "Применить и закрыть", "close": "Закрыть", "page": "Страница", "loading": "Загрузка миниатюр…", "result": "Результат обработки", "download": "Скачать файл", "another": "Обработать другой файл", "before": "Исходный размер", "after": "Размер результата", "smaller": "Уменьшение", "notSmaller": "Файл не уменьшился. Сжатие не гарантируется.", "progress": "Обработка", "cancel": "Отменить", "cancelling": "Отмена запрошена. Остановка на ближайшем этапе…", "cancelled": "Операция отменена. Результат не скачан.", "cancelNote": "Отмена проверяется между этапами. Текущий вызов библиотеки может завершиться перед остановкой. В визуальных редакторах эта отмена не подключена.", "feedback": "Сообщить об ошибке", "privacy": "Документы, их имена и содержимое не прикрепляются. Отправляется только выбранный инструмент и введённое вами описание. Не вставляйте конфиденциальные данные.", "tool": "Инструмент", "description": "Что произошло?", "send": "Открыть письмо", "copy": "Копировать текст", "copied": "Текст скопирован.", "mail": "Откроется почтовое приложение. Проверьте письмо и отправьте его самостоятельно.", "empty": "Опишите проблему.", "roadmap": "Развитие проекта", "release": "Добавлено в этой версии", "next": "Идеи следующих версий, без обещанных сроков", "none": "Выберите хотя бы одну страницу.", "busy": "Сначала завершите текущую операцию.", "noPdf": "PDF.js не загружен. Проверьте подключение библиотеки.", "noPreview": "Предпросмотр доступен для PDF.", "done": "Обработано", "files": "файлов", "pages": "страниц", "clearResult": "Убрать результат"}, "en": {"preview": "Page preview", "previewNote": "For Merge, select pages and reorder them with arrows. Other tools offer read-only preview. Reorder files in the file list.", "more": "12 more pages", "apply": "Apply and close", "close": "Close", "page": "Page", "loading": "Loading thumbnails…", "result": "Processing result", "download": "Download file", "another": "Process another file", "before": "Input size", "after": "Output size", "smaller": "Reduction", "notSmaller": "The file did not get smaller. Compression is not guaranteed.", "progress": "Processing", "cancel": "Cancel", "cancelling": "Cancellation requested. Stopping at the next checkpoint…", "cancelled": "Operation cancelled. No result downloaded.", "cancelNote": "Cancellation is checked between stages. The current library call may finish before stopping. Visual editors do not use this cancellation control.", "feedback": "Report a problem", "privacy": "No documents, filenames or document content are attached. Only the selected tool and your description are included. Do not enter confidential data.", "tool": "Tool", "description": "What happened?", "send": "Open email", "copy": "Copy text", "copied": "Text copied.", "mail": "Your email application will open. Review and send the message yourself.", "empty": "Describe the problem.", "roadmap": "Project development", "release": "Added in this version", "next": "Ideas for future versions, without promised dates", "none": "Select at least one page.", "busy": "Finish the current operation first.", "noPdf": "PDF.js is not loaded. Check the library connection.", "noPreview": "Preview is available for PDFs.", "done": "Processed", "files": "files", "pages": "pages", "clearResult": "Dismiss result"}, "lv": {"preview": "Lappušu priekšskatījums", "previewNote": "Apvienošanai atlasiet lappuses un mainiet secību ar bultiņām. Citos rīkos tas ir tikai priekšskatījums. Failu secību maina failu sarakstā.", "more": "Vēl 12 lappuses", "apply": "Lietot un aizvērt", "close": "Aizvērt", "page": "Lappuse", "loading": "Ielādē sīktēlus…", "result": "Apstrādes rezultāts", "download": "Lejupielādēt failu", "another": "Apstrādāt citu failu", "before": "Sākotnējais izmērs", "after": "Rezultāta izmērs", "smaller": "Samazinājums", "notSmaller": "Fails nekļuva mazāks. Saspiešana nav garantēta.", "progress": "Apstrāde", "cancel": "Atcelt", "cancelling": "Atcelšana pieprasīta. Apstāšanās nākamajā posmā…", "cancelled": "Darbība atcelta. Rezultāts nav lejupielādēts.", "cancelNote": "Atcelšana tiek pārbaudīta starp posmiem. Pašreizējais bibliotēkas izsaukums var pabeigties pirms apstāšanās. Vizuālajos redaktoros šī atcelšana nav pievienota.", "feedback": "Ziņot par kļūdu", "privacy": "Dokumenti, failu nosaukumi un dokumentu saturs netiek pievienoti. Iekļauts tikai atlasītais rīks un jūsu apraksts. Neievadiet konfidenciālus datus.", "tool": "Rīks", "description": "Kas notika?", "send": "Atvērt e-pastu", "copy": "Kopēt tekstu", "copied": "Teksts nokopēts.", "mail": "Atvērsies e-pasta lietotne. Pārbaudiet un nosūtiet vēstuli patstāvīgi.", "empty": "Aprakstiet problēmu.", "roadmap": "Projekta attīstība", "release": "Pievienots šajā versijā", "next": "Idejas nākamajām versijām bez solītiem termiņiem", "none": "Atlasiet vismaz vienu lappusi.", "busy": "Vispirms pabeidziet pašreizējo darbību.", "noPdf": "PDF.js nav ielādēts. Pārbaudiet bibliotēkas savienojumu.", "noPreview": "Priekšskatījums pieejams PDF failiem.", "done": "Apstrādāts", "files": "faili", "pages": "lappuses", "clearResult": "Paslēpt rezultātu"}, "de": {"preview": "Seitenvorschau", "previewNote": "Für Merge Seiten auswählen und mit Pfeilen umordnen. Andere Werkzeuge bieten nur eine Vorschau. Die Dateireihenfolge wird in der Dateiliste geändert.", "more": "12 weitere Seiten", "apply": "Übernehmen und schließen", "close": "Schließen", "page": "Seite", "loading": "Vorschaubilder werden geladen…", "result": "Verarbeitungsergebnis", "download": "Datei herunterladen", "another": "Andere Datei verarbeiten", "before": "Eingabegröße", "after": "Ergebnisgröße", "smaller": "Verkleinerung", "notSmaller": "Die Datei wurde nicht kleiner. Komprimierung ist nicht garantiert.", "progress": "Verarbeitung", "cancel": "Abbrechen", "cancelling": "Abbruch angefordert. Stopp am nächsten Prüfpunkt…", "cancelled": "Vorgang abgebrochen. Kein Ergebnis heruntergeladen.", "cancelNote": "Der Abbruch wird zwischen Schritten geprüft. Der aktuelle Bibliotheksaufruf kann zuvor noch fertig werden. Visuelle Editoren verwenden diese Abbruchfunktion nicht.", "feedback": "Problem melden", "privacy": "Keine Dokumente, Dateinamen oder Dokumentinhalte werden angehängt. Enthalten sind nur das gewählte Werkzeug und Ihre Beschreibung. Keine vertraulichen Daten eingeben.", "tool": "Werkzeug", "description": "Was ist passiert?", "send": "E-Mail öffnen", "copy": "Text kopieren", "copied": "Text kopiert.", "mail": "Ihr E-Mail-Programm wird geöffnet. Prüfen und senden Sie die Nachricht selbst.", "empty": "Beschreiben Sie das Problem.", "roadmap": "Projektentwicklung", "release": "In dieser Version hinzugefügt", "next": "Ideen für künftige Versionen ohne zugesagte Termine", "none": "Mindestens eine Seite auswählen.", "busy": "Zuerst den aktuellen Vorgang beenden.", "noPdf": "PDF.js ist nicht geladen. Bibliotheksverbindung prüfen.", "noPreview": "Die Vorschau ist für PDFs verfügbar.", "done": "Verarbeitet", "files": "Dateien", "pages": "Seiten", "clearResult": "Ergebnis ausblenden"}};
+ const text = key => (dictionaries[document.documentElement.lang] || dictionaries.en)[key] || key;
+ const plans = new WeakMap();
+ let job = null;
+ let lastResult = null;
+ let preview = null;
+ let previewToken = 0;
+ let previewTask = null;
+ let returnFocus = null;
+ const $ = id => document.getElementById(id);
+ const resultBox = $('uxResult');
+ document.getElementById('toolsGrid').after(resultBox);
+ const button = (label, action) => {
+  const b=document.createElement('button');b.type='button';b.className='ux-button';b.textContent=label;b.onclick=action;return b;
+ };
+ const size = bytes => bytes.toLocaleString()+' B ('+(bytes/1024).toFixed(1)+' KiB)';
+ function abortCheck(){if(job?.cancelled) throw new DOMException('Cancelled','AbortError');}
+ async function step(done,total,unit='pages'){
+  if(!job) return;
+  await new Promise(resolve=>setTimeout(resolve,0));
+  abortCheck();
+  if(Number.isFinite(total) && total>0){
+   job.progress.max=total;job.progress.value=done;
+   job.label.textContent=text('done')+': '+done+' / '+total+' '+text(unit);
+  }
+ }
+ function begin(tool){
+  const panel=document.createElement('div');panel.id='uxProgress';panel.setAttribute('role','status');
+  const label=document.createElement('p');label.textContent=text('progress')+'…';
+  const progress=document.createElement('progress');progress.removeAttribute('value');
+  const note=document.createElement('p');note.className='ux-note';note.textContent=text('cancelNote');
+  const cancel=button(text('cancel'),()=>{job.cancelled=true;cancel.disabled=true;label.textContent=text('cancelling');});
+  panel.append(label,progress,note,cancel);$('runBtn').before(panel);
+  const controls=[...document.querySelectorAll('#modalOverlay button,#modalOverlay input,#modalOverlay select')].filter(el=>el!==cancel);
+  const previous=controls.map(el=>[el,el.disabled]);controls.forEach(el=>el.disabled=true);
+  job={tool:tool.id,inputBytes:currentFiles.reduce((sum,file)=>sum+file.size,0),cancelled:false,outputs:[],progress,label,panel,previous};
+ }
+ function finish(){if(!job)return;job.previous.forEach(([el,disabled])=>el.disabled=disabled);job.panel.remove();job=null;}
+ function discard(){if(job)job.outputs=[];}
+ function originalDownload(blob,name){
+  rawDownload(blob,name);
+  if(blob.size < 30*1024*1024 && typeof window.__idbAddFile === 'function') {
+   try { Promise.resolve(window.__idbAddFile(name,blob,'result')).catch(()=>{}); } catch (_) {}
+  }
+ }
+ function rawDownload(blob,name){
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
+ }
+ function showResult(blob,name,meta){
+  lastResult={blob,name,meta};renderResult();
+ }
+ function renderResult(){
+  if(!lastResult)return;
+  const {blob,name,meta}=lastResult;resultBox.replaceChildren();resultBox.hidden=false;
+  const title=document.createElement('h2');title.textContent=text('result');
+  const filename=document.createElement('p');filename.textContent=name;filename.style.overflowWrap='anywhere';
+  const info=document.createElement('p');info.className='ux-note';
+  info.textContent=(meta?text('before')+': '+size(meta.inputBytes)+' · ':'')+text('after')+': '+size(blob.size);
+  resultBox.append(title,filename,info);
+  if(meta?.tool==='compress'){
+   const p=document.createElement('p');p.className='ux-note';
+   p.textContent=blob.size<meta.inputBytes?text('smaller')+': '+((1-blob.size/meta.inputBytes)*100).toFixed(1)+'%':text('notSmaller');resultBox.append(p);
+  }
+  const actions=document.createElement('div');actions.className='ux-actions';
+  actions.append(button(text('download'),()=>rawDownload(blob,name)),button(text('another'),()=>{
+   if(job)return;
+   resultBox.hidden=true;lastResult=null;
+   if(meta){const tool=TOOLS.find(t=>t.id===meta.tool);if(tool)openTool(tool);}
+   else closeModal();
+  }),button(text('clearResult'),()=>{resultBox.hidden=true;lastResult=null;}));
+  resultBox.append(actions);
+ }
+ window.downloadBlob=function(blob,name){
+  if(!(blob instanceof Blob))throw new Error('Empty output');
+  abortCheck();
+  if(job){job.outputs.push({blob,name});return;}
+  originalDownload(blob,name);showResult(blob,name,null);
+ };
+ function commit(){
+  abortCheck();
+  for(const output of job.outputs){originalDownload(output.blob,output.name);showResult(output.blob,output.name,{tool:job.tool,inputBytes:job.inputBytes});}
+  job.outputs=[];
+ }
+ for(const eventName of ['drop','dragstart']) {
+  document.getElementById('modalOverlay').addEventListener(eventName,event=>{
+   if(job){event.preventDefault();event.stopImmediatePropagation();}
+  },true);
+ }
+ const originalClose=window.closeModal;
+ window.closeModal=function(){if(job)return;return originalClose.apply(this,arguments);};
+ const originalOpen=window.openTool;
+ window.openTool=function(){if(job)return;return originalOpen.apply(this,arguments);};
+ const originalRenderFiles=window.renderFileList;
+ window.renderFileList=function(tool,list,run){
+  originalRenderFiles.apply(this,arguments);
+  [...list.children].forEach((li,index)=>{
+   const file=currentFiles[index];if(!file || !/\.pdf$/i.test(file.name))return;
+   li.append(button(text('preview'),()=>openPreview(file,tool.id==='merge')));
+  });
+ };
+ function closePreview(){
+  previewToken++;previewTask?.cancel();previewTask=null;
+  const doc=preview?.doc;preview=null;if(doc)doc.destroy().catch(()=>{});
+  $('uxPreviewGrid').replaceChildren();$('uxPreview').hidden=true;$('uxPreview').classList.remove('active');returnFocus?.focus();
+ }
+ async function openPreview(file,editable){
+  if(job)return;
+  returnFocus=document.activeElement;
+  $('uxPreview').hidden=false;$('uxPreview').classList.add('active');
+  $('uxPreviewTitle').textContent=text('preview');$('uxPreviewNote').textContent=text('previewNote');
+  $('uxPreviewStatus').textContent=text('loading');$('uxPreviewGrid').replaceChildren();
+  $('uxPreviewApply').textContent=editable?text('apply'):text('close');$('uxPreviewApply').disabled=true;
+  $('uxPreviewMore').textContent=text('more');$('uxPreviewMore').hidden=true;
+  $('uxPreviewClose').focus();
+  const token=++previewToken;
+  try{
+   if(!window.pdfjsLib)throw new Error(text('noPdf'));
+   const doc=await pdfjsLib.getDocument({data:new Uint8Array(await file.arrayBuffer())}).promise;
+   if(token!==previewToken){await doc.destroy();return;}
+   const saved=plans.get(file);
+   preview={file,doc,editable,order:saved?[...saved.order]:Array.from({length:doc.numPages},(_,i)=>i),selected:new Set(saved?saved.selected:Array.from({length:doc.numPages},(_,i)=>i)),shown:Math.min(12,doc.numPages)};
+   await renderPreview(token);
+  }catch(error){if(token===previewToken)$('uxPreviewStatus').textContent=error.message;}
+ }
+ async function renderPreview(token=previewToken){
+  if(!preview)return;
+  const state=preview;const grid=$('uxPreviewGrid');grid.replaceChildren();
+  $('uxPreviewApply').disabled=true;$('uxPreviewMore').disabled=true;
+  $('uxPreviewStatus').textContent=text('loading');
+  try{
+   for(let pos=0;pos<state.shown;pos++){
+    if(token!==previewToken || preview!==state)return;
+    const pageIndex=state.order[pos];const page=await state.doc.getPage(pageIndex+1);
+    const viewport=page.getViewport({scale:Math.min(.35,140/page.getViewport({scale:1}).width)});
+    const card=document.createElement('div');card.className='ux-page';
+    const canvas=document.createElement('canvas');canvas.width=Math.ceil(viewport.width);canvas.height=Math.ceil(viewport.height);
+    card.append(canvas);grid.append(card);
+    previewTask=page.render({canvasContext:canvas.getContext('2d'),viewport});await previewTask.promise;previewTask=null;page.cleanup();
+    const label=document.createElement('label');label.textContent=text('page')+' '+(pageIndex+1);
+    if(state.editable){
+     const check=document.createElement('input');check.type='checkbox';check.checked=state.selected.has(pageIndex);
+     check.onchange=()=>{check.checked?state.selected.add(pageIndex):state.selected.delete(pageIndex);};label.prepend(check);
+    }
+    card.append(label);
+    if(state.editable){
+     const actions=document.createElement('div');actions.className='ux-actions';
+     for(const delta of [-1,1]){
+      const move=button(delta<0?'←':'→',()=>{
+       const next=pos+delta;if(next<0||next>=state.order.length)return;
+       [state.order[pos],state.order[next]]=[state.order[next],state.order[pos]];
+       state.shown=Math.max(state.shown,next+1);renderPreview();
+      });move.disabled=pos+delta<0||pos+delta>=state.order.length;
+      move.dataset.disabled=String(move.disabled);move.disabled=true;
+      move.setAttribute('aria-label',(delta<0?'← ':'→ ')+text('page')+' '+(pageIndex+1));actions.append(move);
+     }
+     card.append(actions);
+    }
+   }
+   if(token!==previewToken || preview!==state)return;
+   $('uxPreviewStatus').textContent=state.shown+' / '+state.doc.numPages;
+   $('uxPreviewMore').hidden=state.shown>=state.doc.numPages;
+  }catch(error){if(token===previewToken)$('uxPreviewStatus').textContent=error.message;}
+  finally{if(token===previewToken){$('uxPreviewApply').disabled=false;$('uxPreviewMore').disabled=false;grid.querySelectorAll('button[data-disabled]').forEach(b=>b.disabled=b.dataset.disabled==='true');}}
+ }
+ $('uxPreviewClose').onclick=closePreview;
+ $('uxPreviewMore').onclick=()=>{if(preview){preview.shown=Math.min(preview.shown+12,preview.doc.numPages);renderPreview();}};
+ $('uxPreviewApply').onclick=()=>{
+  if(preview?.editable){
+   if(!preview.selected.size){$('uxPreviewStatus').textContent=text('none');return;}
+   plans.set(preview.file,{order:[...preview.order],selected:[...preview.selected]});
+  }
+  closePreview();
+ };
+ function selection(file,count){const plan=plans.get(file);return plan?plan.order.filter(i=>plan.selected.includes(i)):Array.from({length:count},(_,i)=>i);}
+ const footer=document.querySelector('.footer-buttons')||document.querySelector('footer');
+ const feedbackButton=button(text('feedback'),()=>{
+  $('uxFeedback').hidden=false;$('uxFeedback').classList.add('active');$('uxFeedbackTool').replaceChildren();
+  TOOLS.forEach(tool=>{const option=document.createElement('option');option.value=tool.id;option.textContent=t('tool.'+tool.id+'.name');$('uxFeedbackTool').append(option);});
+  if(currentTool)$('uxFeedbackTool').value=currentTool.id;
+  $('uxFeedbackText').focus();
+ });footer.append(feedbackButton);
+ const roadmapLink=document.createElement('a');roadmapLink.className='footer-btn';roadmapLink.href='development.html';roadmapLink.textContent=text('roadmap');footer.append(roadmapLink);
+ function feedbackText(){return 'marge-PDF\nTool: '+$('uxFeedbackTool').value+'\n\n'+$('uxFeedbackText').value.trim();}
+ $('uxFeedbackSend').onclick=()=>{
+  if(!$('uxFeedbackText').value.trim()){$('uxFeedbackStatus').textContent=text('empty');return;}
+  location.href='mailto:'+CONFIG.EMAIL+'?subject='+encodeURIComponent('marge-PDF feedback')+'&body='+encodeURIComponent(feedbackText());
+  $('uxFeedbackStatus').textContent=text('mail');
+ };
+ $('uxFeedbackCopy').onclick=async()=>{
+  try{await navigator.clipboard.writeText(feedbackText());$('uxFeedbackStatus').textContent=text('copied');}
+  catch(error){$('uxFeedbackStatus').textContent=feedbackText();}
+ };
+ $('uxFeedbackClose').onclick=()=>{$('uxFeedback').hidden=true;$('uxFeedback').classList.remove('active');feedbackButton.focus();};
+ function updateLabels(){
+  feedbackButton.textContent=text('feedback');roadmapLink.textContent=text('roadmap');
+  $('uxFeedbackTitle').textContent=text('feedback');$('uxFeedbackNote').textContent=text('privacy');
+  $('uxFeedbackToolLabel').textContent=text('tool');$('uxFeedbackTextLabel').textContent=text('description');
+  $('uxFeedbackSend').textContent=text('send');$('uxFeedbackCopy').textContent=text('copy');
+  renderResult();
+ }
+ new MutationObserver(updateLabels).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+ document.addEventListener('keydown',event=>{
+  if(event.key==='Escape'){if(!$('uxPreview').hidden)closePreview();if(!$('uxFeedback').hidden)$('uxFeedbackClose').click();}
+ });
+ updateLabels();
+ return {text,step,begin,finish,discard,commit,selection,busy:()=>!!job};
+})();
+
+</script>
 </body>
 </html>
