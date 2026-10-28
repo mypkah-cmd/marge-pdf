@@ -129,6 +129,7 @@ async function toolImg2Pdf() {
   downloadBlob(new Blob([await pdf.save()], { type: 'application/pdf' }), 'images.pdf');
 }
 async function toolProtect() {
+  throw new Error('Password protection is temporarily unavailable: this build cannot encrypt PDFs yet.');
   const password = document.getElementById('pdfPassword').value;
   if (!password) throw new Error('Password required');
   const src = await PDFLib.PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });

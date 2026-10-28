@@ -131,7 +131,8 @@ textEditorCanvas.addEventListener('click', async e => {
  const canvasY=(e.clientY-rect.top)*textEditorCanvas.height/rect.height;
  const px=canvasX/teZoom,py=canvasY/teZoom;
  const pageIndex=teCurrentPage;
- const items=await getPageTextItems(pageIndex);
+ let items=[];
+ try{items=await getPageTextItems(pageIndex);}catch(error){console.warn('Text extraction unavailable; inserting new text',error);}
  if(pageIndex!==teCurrentPage)return;
  const baseH=textEditorCanvas.height/teZoom;
  let hit=null;
