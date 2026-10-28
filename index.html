@@ -5,6 +5,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>marge-PDF — All-in-One PDF Toolkit</title>
+<link rel="canonical" href="https://margepdf.com/">
+<meta property="og:url" content="https://margepdf.com/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "marge-PDF", "url": "https://margepdf.com/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}, "description": "Merge, convert, sign, watermark and edit PDFs in your browser. Files never leave your device."}</script>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#4f46e5">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -22,7 +25,6 @@
 <meta name="twitter:title" content="marge-PDF — All-in-One PDF Toolkit">
 <meta name="twitter:description" content="Merge, convert, compress, and manage PDFs — free, fast, and 100% private.">
 <meta name="twitter:image" content="https://margepdf.com/og-image.png">
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-30RLVLY5JJ"></script>
 <script src="js/app-02.js"></script>
 <link rel="icon" href="icon-192.png">
 
@@ -72,9 +74,6 @@
     <span id="siteNameLogo">marge-PDF</span>
   </div>
   <div class="header-right">
-    <div class="lv-clock" data-tooltip="" data-tooltip-i18n="tip.clock">
-      <span class="clock-time" id="lvTime">00:00:00</span>
-    </div>
     <a href="https://mypkah-cmd.github.io/marge-pdf/" class="mirror-btn" target="_blank" rel="noopener" data-tooltip="" data-tooltip-i18n="tip.mirror">
       <span>🔀</span>
       <span data-i18n="mirror.text">Mirror</span>
@@ -83,10 +82,18 @@
       <span>📢</span>
       <span data-i18n="adSlot.text">Your ad could be here</span>
     </a>
-    <button class="donate-btn" id="donateBtn" data-tooltip="" data-tooltip-i18n="tip.donate"><span data-i18n="support.button">Поддержать проект</span></button>
+    <button class="donate-btn" id="donateBtn" data-tooltip="" data-tooltip-i18n="tip.donate"><span data-i18n="support.button">Support the project</span></button>
     <button class="icon-btn" id="themeBtn" data-tooltip="" data-tooltip-i18n="tip.theme">🌙</button>
-    <button class="icon-btn" id="timerBtn" data-tooltip="" data-tooltip-i18n="tip.timer">⏱️</button>
-    <button class="icon-btn" id="alarmBtn" data-tooltip="" data-tooltip-i18n="tip.alarm">🔔</button>
+        <div class="extras-dropdown" id="extrasDropdown">
+      <button class="icon-btn" id="extrasBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="More">⋯</button>
+      <div class="extras-menu" id="extrasMenu">
+        <button class="icon-btn" id="timerBtn" data-tooltip="" data-tooltip-pos="left" data-tooltip-i18n="tip.timer">⏱️</button>
+        <button class="icon-btn" id="alarmBtn" data-tooltip="" data-tooltip-pos="left" data-tooltip-i18n="tip.alarm">🔔</button>
+        <div class="lv-clock" data-tooltip="" data-tooltip-i18n="tip.clock">
+      <span class="clock-time" id="lvTime">00:00:00</span>
+    </div>
+      </div>
+    </div>
     <button class="icon-btn" id="helpBtn" data-tooltip="" data-tooltip-i18n="tip.help">❓</button>
     <div class="lang-dropdown" id="langDropdown">
       <button class="lang-btn" id="langBtn" data-tooltip="" data-tooltip-i18n="tip.lang">
@@ -116,7 +123,7 @@
 </section>
 
 
-<section class="v2-controls" id="v2Controls" aria-label="Поиск инструментов">
+<section class="v2-controls" id="v2Controls" aria-label="Search tools">
   <label for="toolSearch" style="display:block;font-size:18px;font-weight:700;margin-bottom:10px">Поиск инструментов / Find a tool</label>
   <input id="toolSearch" class="v2-search" type="search" placeholder="Найти инструмент… / Find a tool…" autocomplete="off">
   <div class="v2-tabs" id="v2Tabs"></div>
@@ -136,6 +143,8 @@
   <div class="footer-buttons">
     <button class="footer-btn" onclick="openAbout()"><span>✨</span><span data-i18n="about.btnText">Why is it free?</span></button>
     <button class="footer-btn contact-btn" onclick="openContact()"><span>✉️</span><span data-i18n="contact.btnText">Contact us</span></button>
+        <a data-legal="privacy" href="en/privacy.html" class="footer-btn" ><span>🔒</span><span class="legal-label">Privacy Policy</span></a>
+    <a data-legal="terms" href="en/terms.html" class="footer-btn" ><span>📄</span><span class="legal-label">Terms of Use</span></a>
     <a href="https://mypkah-cmd.github.io/marge-pdf/" class="footer-btn mirror-btn-footer" target="_blank" rel="noopener">
       <span>🔀</span>
       <span data-i18n="mirror.text">Mirror</span>
@@ -147,6 +156,11 @@
     <a href="en/merge-pdf.html" style="color: var(--primary); margin: 0 8px 8px 0; display: inline-block;">Merge PDF (EN)</a>
     <a href="lv/merge-pdf.html" style="color: var(--primary); margin: 0 8px 8px 0; display: inline-block;">Merge PDF (LV)</a>
     <a href="de/merge-pdf.html" style="color: var(--primary); margin: 0 8px 8px 0; display: inline-block;">Merge PDF (DE)</a>
+    <br>
+    <a href="en/compress-pdf.html" style="color: var(--primary); margin: 0 8px 8px 0; display: inline-block;">Compress PDF (EN)</a>
+    <a href="en/split-pdf.html" style="color: var(--primary); margin: 0 8px 8px 0; display: inline-block;">Split PDF (EN)</a>
+    <a href="en/pdf-to-word.html" style="color: var(--primary); margin: 0 8px 8px 0; display: inline-block;">PDF to Word (EN)</a>
+    <a href="en/jpg-to-pdf.html" style="color: var(--primary); margin: 0 8px 8px 0; display: inline-block;">JPG to PDF (EN)</a>
     <br>
     <a href="ru/edit-pdf-text.html" style="color: var(--primary); margin: 0 8px 8px 0; display: inline-block;">Edit Text (RU)</a>
     <a href="en/sign-pdf.html" style="color: var(--primary); margin: 0 8px 8px 0; display: inline-block;">Sign PDF (EN)</a>
@@ -295,9 +309,9 @@
     <p class="desc" id="donateDesc" data-i18n="donate.subtitle">Support the development.</p>
     
 <div class="support-goal">
- <strong data-i18n="support.goalTitle">Зачем поддерживать marge-PDF?</strong>
- <p data-i18n="support.goal">Поддержите дальнейшую разработку marge-PDF: исправление ошибок и улучшение PDF-инструментов.</p>
- <p data-i18n="support.voluntary">Поддержка добровольная. Все текущие инструменты доступны бесплатно, независимо от доната.</p>
+ <strong data-i18n="support.goalTitle">Why support marge-PDF?</strong>
+ <p data-i18n="support.goal">Support further development of marge-PDF: bug fixes and better PDF tools.</p>
+ <p data-i18n="support.voluntary">Support is voluntary. All current tools stay free, regardless of donations.</p>
 </div>
 <div class="qr-section">
       <p class="qr-label" data-i18n="donate.qrLabel">📱 Scan QR to donate via PayPal</p>
@@ -507,6 +521,7 @@
 <!-- Cookie banner -->
 <div class="cookie-banner hidden" id="cookieBanner">
   <div class="cookie-text">🍪 We use cookies to improve your experience.</div>
+  <a data-legal="privacy" href="en/privacy.html" class="cookie-link" style="color:inherit;text-decoration:underline;font-size:13px;margin-right:12px"><span class="legal-label">Privacy Policy</span></a>
   <div class="cookie-buttons">
     <button class="cookie-btn cookie-accept" onclick="acceptCookies()">Accept</button>
     <button class="cookie-btn cookie-decline" onclick="declineCookies()">Decline</button>
@@ -539,11 +554,11 @@
 <script src="js/app-11.js"></script>
 
 <section id="supportResult" class="support-result" aria-labelledby="supportResultTitle" hidden>
- <h2 id="supportResultTitle" data-i18n="support.resultTitle">Файл готов!</h2>
- <p data-i18n="support.resultText">Инструмент оказался полезным? Поддержите развитие marge-PDF небольшой суммой. Это добровольно, все текущие функции остаются бесплатными.</p>
+ <h2 id="supportResultTitle" data-i18n="support.resultTitle">Your file is ready!</h2>
+ <p data-i18n="support.resultText">Was the tool useful? Support marge-PDF with a small amount. It is voluntary; all current features stay free.</p>
  <div class="support-result-actions">
-  <button type="button" id="supportResultDonate" data-i18n="support.button">Поддержать проект</button>
-  <button type="button" id="supportResultDismiss" data-i18n="support.later">Не сейчас</button>
+  <button type="button" id="supportResultDonate" data-i18n="support.button">Support the project</button>
+  <button type="button" id="supportResultDismiss" data-i18n="support.later">Not now</button>
  </div>
 </section>
 <script src="js/app-12.js"></script>
@@ -573,5 +588,8 @@
 <script src="js/app-14.js"></script>
 <script src="js/site-locale.js"></script>
 <script src="js/extra-entry.js"></script>
+<script src="js/extras-menu.js"></script>
+<script src="js/hash-open.js"></script>
+<script src="js/legal-links.js"></script>
 </body>
 </html>

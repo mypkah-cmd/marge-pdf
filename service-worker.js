@@ -3,15 +3,130 @@
    Кеширует статику, работает офлайн после первого визита
    ========================================================== */
 
-const CACHE_VERSION = 'marge-pdf-v1';
-const CACHE_STATIC = 'marge-pdf-static-v1';
+const CACHE_VERSION = 'marge-pdf-v2-2026-10-28';
+const CACHE_STATIC = CACHE_VERSION;
 
 /* Что кешировать сразу (оболочка приложения) */
 const PRECACHE_URLS = [
   './',
+  './css/site.css',
+  './de/compress-pdf.html',
+  './de/draw-on-pdf.html',
+  './de/edit-pdf-text.html',
+  './de/excel-to-pdf.html',
+  './de/extract-pdf-pages.html',
+  './de/jpg-to-pdf.html',
+  './de/merge-pdf.html',
+  './de/pdf-metadata.html',
+  './de/pdf-page-numbers.html',
+  './de/pdf-to-excel.html',
+  './de/pdf-to-jpg.html',
+  './de/pdf-to-word.html',
+  './de/privacy.html',
+  './de/remove-pdf-pages.html',
+  './de/rotate-pdf.html',
+  './de/sign-pdf.html',
+  './de/split-pdf.html',
+  './de/stamp-pdf.html',
+  './de/terms.html',
+  './de/watermark-pdf.html',
+  './de/word-to-pdf.html',
+  './en/compress-pdf.html',
+  './en/draw-on-pdf.html',
+  './en/edit-pdf-text.html',
+  './en/excel-to-pdf.html',
+  './en/extract-pdf-pages.html',
+  './en/jpg-to-pdf.html',
+  './en/merge-pdf.html',
+  './en/pdf-metadata.html',
+  './en/pdf-page-numbers.html',
+  './en/pdf-to-excel.html',
+  './en/pdf-to-jpg.html',
+  './en/pdf-to-word.html',
+  './en/privacy.html',
+  './en/remove-pdf-pages.html',
+  './en/rotate-pdf.html',
+  './en/sign-pdf.html',
+  './en/split-pdf.html',
+  './en/stamp-pdf.html',
+  './en/terms.html',
+  './en/watermark-pdf.html',
+  './en/word-to-pdf.html',
+  './icon-192.png',
+  './icon-512.png',
+  './icon.svg',
   './index.html',
+  './js/app-01.js',
+  './js/app-02.js',
+  './js/app-03.js',
+  './js/app-04.js',
+  './js/app-05.js',
+  './js/app-06.js',
+  './js/app-07.js',
+  './js/app-08.js',
+  './js/app-09.js',
+  './js/app-10.js',
+  './js/app-11.js',
+  './js/app-12.js',
+  './js/app-13.js',
+  './js/app-14.js',
+  './js/app-15.js',
+  './js/draw-editor.js',
+  './js/extra-entry.js',
+  './js/extra-tools.js',
+  './js/extras-menu.js',
+  './js/hash-open.js',
+  './js/lazy-loader.js',
+  './js/legal-links.js',
+  './js/page-text.js',
+  './js/pdf-tools.js',
+  './js/remove-pages.js',
+  './js/signature-stamp.js',
+  './js/site-locale.js',
+  './js/text-editor.js',
+  './lv/compress-pdf.html',
+  './lv/draw-on-pdf.html',
+  './lv/edit-pdf-text.html',
+  './lv/excel-to-pdf.html',
+  './lv/extract-pdf-pages.html',
+  './lv/jpg-to-pdf.html',
+  './lv/merge-pdf.html',
+  './lv/pdf-metadata.html',
+  './lv/pdf-page-numbers.html',
+  './lv/pdf-to-excel.html',
+  './lv/pdf-to-jpg.html',
+  './lv/pdf-to-word.html',
+  './lv/privacy.html',
+  './lv/remove-pdf-pages.html',
+  './lv/rotate-pdf.html',
+  './lv/sign-pdf.html',
+  './lv/split-pdf.html',
+  './lv/stamp-pdf.html',
+  './lv/terms.html',
+  './lv/watermark-pdf.html',
+  './lv/word-to-pdf.html',
   './manifest.webmanifest',
-  './icon.svg'
+  './ru/compress-pdf.html',
+  './ru/draw-on-pdf.html',
+  './ru/edit-pdf-text.html',
+  './ru/excel-to-pdf.html',
+  './ru/extract-pdf-pages.html',
+  './ru/jpg-to-pdf.html',
+  './ru/merge-pdf.html',
+  './ru/pdf-metadata.html',
+  './ru/pdf-page-numbers.html',
+  './ru/pdf-to-excel.html',
+  './ru/pdf-to-jpg.html',
+  './ru/pdf-to-word.html',
+  './ru/privacy.html',
+  './ru/remove-pdf-pages.html',
+  './ru/rotate-pdf.html',
+  './ru/sign-pdf.html',
+  './ru/split-pdf.html',
+  './ru/stamp-pdf.html',
+  './ru/terms.html',
+  './ru/watermark-pdf.html',
+  './ru/word-to-pdf.html'
 ];
 
 /* CDN-библиотеки, без которых ничего не работает */
@@ -32,7 +147,8 @@ self.addEventListener('install', event => {
   event.waitUntil(
     (async () => {
       const cache = await caches.open(CACHE_STATIC);
-      await cache.addAll(PRECACHE_URLS).catch(() => {});
+      const r = await Promise.allSettled(PRECACHE_URLS.map(u => cache.add(u)));
+      r.forEach((x, i) => { if (x.status === 'rejected') console.warn('SW: precache failed', PRECACHE_URLS[i]); });
       await Promise.all(
         CDN_URLS.map(url =>
           cache.add(url).catch(() => console.warn('SW: не удалось кешировать', url))
@@ -50,7 +166,7 @@ self.addEventListener('activate', event => {
       const keys = await caches.keys();
       await Promise.all(
         keys
-          .filter(k => k !== CACHE_STATIC)
+          .filter(k => k.startsWith('marge-pdf') && k !== CACHE_STATIC)
           .map(k => caches.delete(k))
       );
       await self.clients.claim();

@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /icon-generator.html
+Disallow: /og-generator.html
+
+Sitemap: https://margepdf.com/sitemap.xml
