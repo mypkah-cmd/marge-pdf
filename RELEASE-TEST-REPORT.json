@@ -1,0 +1,14 @@
+{
+  "files": 104,
+  "html_files": 26,
+  "javascript_checked": 38,
+  "missing_local_assets": [],
+  "javascript_syntax_errors": [],
+  "guide_languages": [
+    "en",
+    "ru",
+    "lv",
+    "de"
+  ],
+  "browser_pdf_export_test": "not completed"
+}
