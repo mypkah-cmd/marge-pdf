@@ -103,7 +103,7 @@
         const qrCanvas = qrDiv.querySelector('canvas');
         const qrDataUrl = qrCanvas.toDataURL('image/png');
         const qrBytes = await (await fetch(qrDataUrl)).arrayBuffer();
-        const src = await PDFLib.PDFDocument.load(await currentFiles[0].arrayBuffer(), { ignoreEncryption: true });
+        const src = await PDFLib.PDFDocument.load(await currentFiles[0].arrayBuffer());
         const png = await src.embedPng(qrBytes);
         src.getPages().forEach(page => {
           const { width, height } = page.getSize();
@@ -156,7 +156,7 @@
       showStatus(statusMsg, t('common.processing'), 'info');
       try {
         const buffer = await currentFiles[0].arrayBuffer();
-        const pdf = await pdfjsLib.getDocument({ data: buffer }).promise;
+        const pdf = await pdfjsLib.getDocument({isEvalSupported:false, data: buffer }).promise;
         let totalWords = 0, totalChars = 0;
         for (let i = 1; i <= pdf.numPages; i++) {
           const content = await (await pdf.getPage(i)).getTextContent();

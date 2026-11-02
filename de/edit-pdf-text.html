@@ -43,6 +43,7 @@
   .back-home { display: inline-block; margin-bottom: 20px; font-size: 14px; color: #64748b; }
   .back-home:hover { color: #4f46e5; }
 </style>
+<link rel="stylesheet" href="../css/modern.css">
 </head>
 <body>
 
@@ -113,7 +114,7 @@
 <p>Nein. Die Grenze ist der Arbeitsspeicher Ihres Geräts. Normalerweise 500 MB–1 GB. Auf einem schwachen Handy — weniger.</p>
 
 <h3>Was, wenn das PDF passwortgeschützt ist?</h3>
-<p>Entfernen Sie zuerst den Schutz mit dem Werkzeug <a href="../index.html#protect">Protect PDF</a>, dann bearbeiten Sie.</p>
+<p>Für verschlüsselte Dokumente verwenden Sie die Bildkopie mit dem bekannten Passwort. Suchbarer Text und interaktive Elemente bleiben nicht erhalten.</p>
 
 <h3>Kann ich Schriftart und Textfarbe ändern?</h3>
 <p>Ja. Das Formatierungsfenster bietet drei Schriftfamilien (Helvetica, Times New Roman, Courier), Größen von 6 bis 120 pt sowie eine Farbauswahl.</p>
@@ -134,7 +135,6 @@
 
 <p><a class="cta" href="../index.html#textedit">✏️ Text kostenlos bearbeiten →</a></p>
 
-<p class="legal-links" style="margin-top:32px;font-size:14px"><a href="privacy.html">Datenschutzerklärung</a> · <a href="terms.html">Nutzungsbedingungen</a></p>
 </div>
 
 <script type="application/ld+json">
@@ -150,5 +150,5 @@
 }
 </script>
 
-</body>
+<p class="pro-guide-note"><strong>Update:</strong> password protection uses AES-256. Known-password decryption preserves PDF structure. Safe text removal creates a fresh image-based PDF without the original text layer.</p></body>
 </html>

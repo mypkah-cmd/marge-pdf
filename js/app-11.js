@@ -75,7 +75,7 @@
     });
     filtered.forEach(tool => {
       const card = document.createElement('div');
-      card.className = 'tool-card';
+      card.className = 'tool-card';card.dataset.tool=tool.id;
       const launch = document.createElement('button');
       launch.type = 'button';
       launch.style.cssText = 'border:0;background:transparent;color:inherit;text-align:left;font:inherit;width:100%;cursor:pointer;';

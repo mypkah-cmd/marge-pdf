@@ -1,0 +1,51 @@
+{
+  "name": "marge-PDF — Beyond the margins",
+  "short_name": "marge-PDF",
+  "description": "Local PDF tools. Libraries are included; offline use is available after the first successful cache installation.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#faf9fd",
+  "theme_color": "#6854da",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": [
+    "productivity",
+    "utilities"
+  ],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Merge PDF",
+      "short_name": "Merge",
+      "url": "./index.html#merge",
+      "description": "Combine multiple PDFs into one"
+    },
+    {
+      "name": "Edit Text on PDF",
+      "short_name": "Edit Text",
+      "url": "./index.html#textedit",
+      "description": "Edit existing text on a PDF"
+    }
+  ]
+}

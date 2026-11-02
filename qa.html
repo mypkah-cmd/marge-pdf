@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="js/app-01.js?v=pdfpro4"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>marge-PDF — All-in-One PDF Toolkit</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#4f46e5">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="marge-PDF">
+<meta name="mobile-web-app-capable" content="yes">
+<meta property="og:title" content="marge-PDF — All-in-One PDF Toolkit">
+<meta property="og:description" content="Merge, convert, compress, and manage PDFs — free, fast, and 100% private.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://margepdf.com/og-image.png">
+<meta property="og:site_name" content="marge-PDF">
+<meta name="description" content="Merge PDFs. Beyond the margins. Free, fast, and 100% private. No limits on file size or number of files. Works directly in your browser.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="marge-PDF — All-in-One PDF Toolkit">
+<meta name="twitter:description" content="Merge, convert, compress, and manage PDFs — free, fast, and 100% private.">
+<meta name="twitter:image" content="https://margepdf.com/og-image.png">
+
+<link rel="icon" href="icon-192.png">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/modern.css?v=pdfpro4">
+</head>
+<body>
+
+<!-- Proxy / Zscaler banner -->
+<div class="proxy-banner" id="proxyBanner">
+  <button class="close" onclick="document.getElementById('proxyBanner').classList.remove('show')" aria-label="Close">✕</button>
+  <strong data-i18n="proxy.title">🔒 Working from a corporate computer?</strong>
+  <span data-i18n="proxy.text">If your security system blocks file uploads — try the mirror:</span>
+  <a href="https://mypkah-cmd.github.io/marge-pdf/" target="_blank" rel="noopener">mypkah-cmd.github.io/marge-pdf</a>
+</div>
+
+<header>
+  <div class="logo" onclick="location.reload()">
+        <div class="logo-icon" style="background: none; padding: 0;">
+      <svg viewBox="0 0 512 512" style="width: 34px; height: 34px; border-radius: 9px;">
+        <defs>
+          <linearGradient id="logo-g" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#6366f1"/>
+            <stop offset="100%" stop-color="#06b6d4"/>
+          </linearGradient>
+        </defs>
+        <rect width="512" height="512" rx="112" fill="url(#logo-g)"/>
+        <rect x="140" y="160" width="220" height="260" rx="16" fill="rgba(255,255,255,0.15)"/>
+        <rect x="160" y="140" width="220" height="260" rx="16" fill="rgba(255,255,255,0.3)"/>
+        <path d="M180 120 L300 120 L280 160 L320 160 L270 200 L310 200 L260 240 L300 240 L270 280 L310 280 L280 320 L320 320 L300 360 L180 360 Z" fill="#ffffff"/>
+      </svg>
+    </div>
+    <span id="siteNameLogo">marge-PDF</span>
+  </div>
+  <div class="header-right">
+    <div class="lv-clock" data-tooltip="" data-tooltip-i18n="tip.clock">
+      <span class="clock-time" id="lvTime">00:00:00</span>
+    </div>
+    <a href="https://mypkah-cmd.github.io/marge-pdf/" class="mirror-btn" target="_blank" rel="noopener" data-tooltip="" data-tooltip-i18n="tip.mirror">
+      <span>🔀</span>
+      <span data-i18n="mirror.text">Mirror</span>
+    </a>
+    <a href="#" class="ad-slot" onclick="contactUs(event)" data-tooltip="" data-tooltip-i18n="tip.ad">
+      <span>📢</span>
+      <span data-i18n="adSlot.text">Your ad could be here</span>
+    </a>
+    <button class="donate-btn" id="donateBtn" data-tooltip="" data-tooltip-i18n="tip.donate"><span data-i18n="support.button">Поддержать проект</span></button>
+    <button class="icon-btn" id="themeBtn" data-tooltip="" data-tooltip-i18n="tip.theme">🌙</button>
+    <button class="icon-btn" id="timerBtn" data-tooltip="" data-tooltip-i18n="tip.timer">⏱️</button>
+    <button class="icon-btn" id="alarmBtn" data-tooltip="" data-tooltip-i18n="tip.alarm">🔔</button>
+    <button class="icon-btn" id="helpBtn" data-tooltip="" data-tooltip-i18n="tip.help">❓</button>
+    <div class="lang-dropdown" id="langDropdown">
+      <button class="lang-btn" id="langBtn" data-tooltip="" data-tooltip-i18n="tip.lang">
+        <span>🌐</span>
+        <span id="langCurrentCode">EN</span>
+      </button>
+      <div class="lang-menu" id="langMenu">
+        <button data-lang="en" class="active"><span>🇬🇧</span> English</button>
+        <button data-lang="ru"><span>🇷🇺</span> Русский</button>
+        <button data-lang="lv"><span>🇱🇻</span> Latviešu</button>
+        <button data-lang="de"><span>🇩🇪</span> Deutsch</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <h1 data-i18n="hero.title">Merge PDFs. Beyond the margins.</h1>
+  <p data-i18n="hero.subtitle">All your PDF tools in one place — free, fast, and 100% private.</p>
+</section>
+
+<section class="why-section">
+  <div class="why-item"><div class="why-icon">🔒</div><h3 data-i18n="why.privacy.title">100% Private</h3><p data-i18n="why.privacy.desc"></p></div>
+  <div class="why-item"><div class="why-icon">⚡</div><h3 data-i18n="why.fast.title">Lightning Fast</h3><p data-i18n="why.fast.desc"></p></div>
+  <div class="why-item"><div class="why-icon">🆓</div><h3 data-i18n="why.free.title">Completely Free</h3><p data-i18n="why.free.desc"></p></div>
+  <div class="why-item"><div class="why-icon">💻</div><h3 data-i18n="why.all.title">Works Everywhere</h3><p data-i18n="why.all.desc"></p></div>
+</section>
+
+
+<section class="v2-controls" id="v2Controls" aria-label="Поиск инструментов">
+  <label for="toolSearch" style="display:block;font-size:18px;font-weight:700;margin-bottom:10px">Поиск инструментов / Find a tool</label>
+  <input id="toolSearch" class="v2-search" type="search" placeholder="Найти инструмент… / Find a tool…" autocomplete="off">
+  <div class="v2-tabs" id="v2Tabs"></div>
+  <div class="v2-summary"><span id="v2Count" aria-live="polite"></span><button id="v2Reset" type="button">Сбросить</button></div>
+</section>
+<div class="tools-grid" id="toolsGrid"></div>
+
+<section id="recentSection" class="hidden" style="max-width:1280px;margin:0 auto 40px;padding:0 24px;">
+  <h2 style="font-size:18px;margin-bottom:12px;" data-i18n="recent.title">🕓 Recent files</h2>
+  <div id="recentGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;"></div>
+</section>
+
+<footer>
+  <span data-i18n="footer.text">Made with ❤️ — All processing happens in your browser</span>
+  <br>
+  <span class="footer-copy">© KoT — All rights reserved</span>
+  <div class="footer-buttons">
+    <button class="footer-btn" onclick="openAbout()"><span>✨</span><span data-i18n="about.btnText">Why is it free?</span></button>
+    <button class="footer-btn contact-btn" onclick="openContact()"><span>✉️</span><span data-i18n="contact.btnText">Contact us</span></button>
+    <a href="https://mypkah-cmd.github.io/marge-pdf/" class="footer-btn mirror-btn-footer" target="_blank" rel="noopener">
+      <span>🔀</span>
+      <span data-i18n="mirror.text">Mirror</span>
+    </a>
+  </div>
+  <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 13px; max-width: 900px; margin-left: auto; margin-right: auto;">
+    <p style="font-weight: 700; margin-bottom: 8px; color: var(--muted);" data-i18n="help.group.media">Guides:</p>
+    <a href="ru/merge-pdf.html" style="color: var(--primary); margin: 0 8px 8px 0; display: inline-block;">Merge PDF (RU)</a>
+    <a href="en/merge-pdf.html" style="color: var(--primary); margin: 0 8px 8px 0; display: inline-block;">Merge PDF (EN)</a>
+    <a href="lv/merge-pdf.html" style="color: var(--primary); margin: 0 8px 8px 0; display: inline-block;">Merge PDF (LV)</a>
+    <a href="de/merge-pdf.html" style="color: var(--primary); margin: 0 8px 8px 0; display: inline-block;">Merge PDF (DE)</a>
+    <br>
+    <a href="ru/edit-pdf-text.html" style="color: var(--primary); margin: 0 8px 8px 0; display: inline-block;">Edit Text (RU)</a>
+    <a href="en/sign-pdf.html" style="color: var(--primary); margin: 0 8px 8px 0; display: inline-block;">Sign PDF (EN)</a>
+    <a href="ru/pdf-to-jpg.html" style="color: var(--primary); margin: 0 8px 8px 0; display: inline-block;">PDF to JPG (RU)</a>
+    <a href="de/watermark-pdf.html" style="color: var(--primary); margin: 0 8px 8px 0; display: inline-block;">Watermark (DE)</a>
+  </div>
+</footer>
+
+<!-- MODAL: tool -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2 id="modalTitle">Tool</h2>
+    <p class="desc" id="modalDesc"></p>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- MODAL: timer -->
+<div class="modal-overlay" id="timerOverlay">
+  <div class="modal" style="max-width: 420px;">
+    <button class="modal-close" onclick="closeTimerModal()">✕</button>
+    <h2 id="timerTitle" data-i18n="timer.title">⏱️ Timer</h2>
+    <p class="desc" id="timerDesc" data-i18n="timer.desc">Set a countdown.</p>
+    <div class="timer-display" id="timerDisplay">00:00:00</div>
+    <div class="options">
+      <label id="timerLabelH" data-i18n="timer.hours">Hours</label><input type="number" id="timerH" value="0" min="0" max="23">
+      <label id="timerLabelM" data-i18n="timer.minutes">Minutes</label><input type="number" id="timerM" value="5" min="0" max="59">
+      <label id="timerLabelS" data-i18n="timer.seconds">Seconds</label><input type="number" id="timerS" value="0" min="0" max="59">
+    </div>
+    <button class="btn" id="timerStartBtn" data-i18n="timer.start">▶ Start</button>
+    <button class="btn btn-secondary" id="timerStopBtn" style="display:none; margin-top:8px;" data-i18n="timer.stop">⏹ Stop</button>
+    <div class="status-msg hidden" id="timerStatus"></div>
+  </div>
+</div>
+
+<!-- MODAL: alarm -->
+<div class="modal-overlay" id="alarmOverlay">
+  <div class="modal" style="max-width: 420px;">
+    <button class="modal-close" onclick="closeAlarmModal()">✕</button>
+    <h2 id="alarmTitle" data-i18n="alarm.title">🔔 Alarm</h2>
+    <p class="desc" id="alarmDesc" data-i18n="alarm.desc">Set a time.</p>
+    <div class="options">
+      <label id="alarmLabelTime" data-i18n="alarm.timeLabel">Alarm time</label>
+      <div class="time-24"><input type="number" id="alarmHour" value="7" min="0" max="23"><span>:</span><input type="number" id="alarmMinute" value="0" min="0" max="59"></div>
+      <label id="alarmLabelLabel" data-i18n="alarm.labelLabel">Label</label><input type="text" id="alarmLabel" placeholder="Wake up!">
+    </div>
+    <button class="btn" id="alarmSetBtn" data-i18n="alarm.set">🔔 Set Alarm</button>
+    <div class="status-msg hidden" id="alarmStatus"></div>
+    <ul class="alarm-list" id="alarmList"></ul>
+  </div>
+</div>
+
+<!-- MODAL: help -->
+<div class="modal-overlay" id="helpOverlay">
+  <div class="modal" style="max-width: 720px;">
+    <button class="modal-close" onclick="closeHelp()">✕</button>
+    <h2 id="helpTitle">❓ How to use</h2>
+    <p class="desc" id="helpSubtitle">Quick guide to all tools</p>
+    <div id="helpBody" style="display:flex;flex-direction:column;gap:12px;margin:16px 0 20px;max-height:60vh;overflow-y:auto;padding-right:6px;"></div>
+    <button class="btn" onclick="closeHelp()" data-i18n="help.close">Got it</button>
+  </div>
+</div>
+
+<!-- MODAL: remove pages -->
+<div class="modal-overlay" id="removePagesOverlay">
+  <div class="modal" style="max-width: 640px;">
+    <button class="modal-close" onclick="closeRemovePages()">✕</button>
+    <h2 id="removePagesTitle" data-i18n="rp.title">🗑️ Remove Pages</h2>
+    <p class="desc" id="removePagesDesc" data-i18n="rp.desc">Click on pages you want to delete.</p>
+    <div class="drop-zone" id="rpDropZone"><span class="big">📁</span><span id="rpDropText" data-i18n="rp.drop">Drop a PDF here</span><input type="file" id="rpFileInput" accept="application/pdf"></div>
+    <div id="rpContent" class="hidden">
+      <p class="page-hint" id="rpHint" data-i18n="rp.hint">Click pages</p>
+      <div class="page-grid" id="rpGrid"></div>
+      <button class="btn" id="rpRunBtn" data-i18n="rp.run">🗑️ Delete Selected</button>
+    </div>
+    <div class="status-msg hidden" id="rpStatus"></div>
+  </div>
+</div>
+
+<!-- MODAL: editor -->
+<div class="modal-overlay" id="editorOverlay">
+  <div class="modal editor-wrapper">
+    <button class="modal-close" onclick="closeEditor()">✕</button>
+    <h2 id="editorTitle" data-i18n="editor.title">✏️ Edit PDF</h2>
+    <p class="desc" id="editorDesc" data-i18n="editor.desc">Draw on your PDF.</p>
+    <div class="drop-zone" id="editorDropZone"><span class="big">📁</span><span id="editorDropText" data-i18n="rp.drop">Drop a PDF here</span><input type="file" id="editorFileInput" accept="application/pdf"></div>
+    <div id="editorContent" class="hidden">
+      <div class="editor-toolbar">
+        <button class="tool-btn active" data-tool="pen" data-tooltip="" data-tooltip-i18n="tip.pen" data-tooltip-pos="top">✏️</button>
+        <button class="tool-btn" data-tool="marker" data-tooltip="" data-tooltip-i18n="tip.marker" data-tooltip-pos="top">🖍️</button>
+        <button class="tool-btn" data-tool="eraser" data-tooltip="" data-tooltip-i18n="tip.eraser" data-tooltip-pos="top">🧽</button>
+        <button class="tool-btn" data-tool="line" data-tooltip="" data-tooltip-i18n="tip.line" data-tooltip-pos="top">╱</button>
+        <button class="tool-btn" data-tool="rect" data-tooltip="" data-tooltip-i18n="tip.rect" data-tooltip-pos="top">▭</button>
+        <button class="tool-btn" data-tool="circle" data-tooltip="" data-tooltip-i18n="tip.circle" data-tooltip-pos="top">◯</button>
+        <button class="tool-btn" data-tool="arrow" data-tooltip="" data-tooltip-i18n="tip.arrow" data-tooltip-pos="top">➜</button>
+        <button class="tool-btn" data-tool="text" data-tooltip="" data-tooltip-i18n="tip.textBtn" data-tooltip-pos="top">T</button>
+        <button class="tool-btn" data-tool="select" data-tooltip="" data-tooltip-i18n="tip.select" data-tooltip-pos="top">🖱️</button>
+        <button class="tool-btn" data-tool="rotate" data-tooltip="" data-tooltip-i18n="tip.rotateTool" data-tooltip-pos="top">🔄</button>
+        <button class="tool-btn" data-tool="picker" data-tooltip="" data-tooltip-i18n="tip.picker" data-tooltip-pos="top">💧</button>
+        <div class="tool-divider"></div>
+        <div class="line-width-picker">
+          <button class="line-width-btn" data-lw="2" data-tooltip="" data-tooltip-i18n="tip.lw2" data-tooltip-pos="top"><span class="lw-dot"></span></button>
+          <button class="line-width-btn active" data-lw="4" data-tooltip="" data-tooltip-i18n="tip.lw4" data-tooltip-pos="top"><span class="lw-dot"></span></button>
+          <button class="line-width-btn" data-lw="8" data-tooltip="" data-tooltip-i18n="tip.lw8" data-tooltip-pos="top"><span class="lw-dot"></span></button>
+          <button class="line-width-btn" data-lw="14" data-tooltip="" data-tooltip-i18n="tip.lw14" data-tooltip-pos="top"><span class="lw-dot"></span></button>
+        </div>
+        <div class="tool-divider"></div>
+        <div class="color-swatch active" data-color="#ef4444" style="background:#ef4444" data-tooltip="" data-tooltip-i18n="tip.colorRed" data-tooltip-pos="top"></div>
+        <div class="color-swatch" data-color="#4f46e5" style="background:#4f46e5" data-tooltip="" data-tooltip-i18n="tip.colorBlue" data-tooltip-pos="top"></div>
+        <div class="color-swatch" data-color="#10b981" style="background:#10b981" data-tooltip="" data-tooltip-i18n="tip.colorGreen" data-tooltip-pos="top"></div>
+        <div class="color-swatch" data-color="#f59e0b" style="background:#f59e0b" data-tooltip="" data-tooltip-i18n="tip.colorOrange" data-tooltip-pos="top"></div>
+        <div class="color-swatch" data-color="#000000" style="background:#000000" data-tooltip="" data-tooltip-i18n="tip.colorBlack" data-tooltip-pos="top"></div>
+        <div class="tool-divider"></div>
+        <button class="tool-btn" id="editorUndo" data-tooltip="" data-tooltip-i18n="tip.undo" data-tooltip-pos="top">↶</button>
+        <button class="tool-btn" id="editorClear" data-tooltip="" data-tooltip-i18n="tip.clear" data-tooltip-pos="top">🗑️</button>
+        <div class="zoom-controls">
+          <button class="zoom-btn" id="editorZoomOut" data-tooltip="" data-tooltip-i18n="tip.zoomOut" data-tooltip-pos="top">−</button>
+          <span class="zoom-level" id="editorZoomLevel">100%</span>
+          <button class="zoom-btn" id="editorZoomIn" data-tooltip="" data-tooltip-i18n="tip.zoomIn" data-tooltip-pos="top">+</button>
+          <button class="zoom-btn" id="editorZoomReset" data-tooltip="" data-tooltip-i18n="tip.zoomReset" data-tooltip-pos="top">⌂</button>
+        </div>
+      </div>
+      <div class="editor-canvas-wrap">
+        <div class="editor-canvas-scroll" id="editorScroll">
+          <div class="editor-canvas-inner"><canvas id="editorCanvas"></canvas></div>
+        </div>
+      </div>
+      <div class="editor-pages">
+        <button class="page-nav-btn" id="editorPrev">◀ Prev</button>
+        <span class="page-counter" id="editorPageCounter">1 / 1</span>
+        <button class="page-nav-btn" id="editorNext">Next ▶</button>
+      </div>
+      <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:8px;" data-i18n="editor.hint">💡 select/move · rotate 15° · picker · Del — delete · Ctrl+wheel — zoom</p>
+      <button class="btn" id="editorSave" style="margin-top:12px;" data-i18n="editor.save">💾 Save & Download</button>
+    </div>
+    <div class="status-msg hidden" id="editorStatus"></div>
+  </div>
+</div>
+
+<!-- MODAL: donate -->
+<div class="modal-overlay" id="donateOverlay">
+  <div class="modal" style="max-width: 460px;">
+    <button class="modal-close" onclick="closeDonate()">✕</button>
+    <h2 id="donateTitle" data-i18n="donate.title">💰 Support the Project</h2>
+    <p class="desc" id="donateDesc" data-i18n="donate.subtitle">Support the development.</p>
+    
+<div class="support-goal">
+ <strong data-i18n="support.goalTitle">Зачем поддерживать marge-PDF?</strong>
+ <p data-i18n="support.goal">Поддержите дальнейшую разработку marge-PDF: исправление ошибок и улучшение PDF-инструментов.</p>
+ <p data-i18n="support.voluntary">Поддержка добровольная. Все текущие инструменты доступны бесплатно, независимо от доната.</p>
+</div>
+<div class="qr-section">
+      <p class="qr-label" data-i18n="donate.qrLabel">📱 Scan QR to donate via PayPal</p>
+      <div class="qr-wrapper"><div id="qrContainer"></div></div>
+    </div>
+    <div class="donate-list">
+      <a href="#" class="donate-item" id="donateOneTimeLink"><span class="donate-icon">☕</span><div class="donate-text"><strong id="donateOneTimeTitle" data-i18n="donate.oneTime">Donate $1</strong><small id="donateOneTimeDesc" data-i18n="donate.oneTimeDesc">One-time support</small></div></a>
+      <a href="#" class="donate-item" id="donateSubLink"><span class="donate-icon">🍰</span><div class="donate-text"><strong id="donateSubTitle" data-i18n="donate.sub">Donate $5</strong><small id="donateSubDesc" data-i18n="donate.subDesc">Bigger support</small></div></a>
+    </div>
+    <a href="#" class="donate-item" id="donateCustomLink" target="_blank" rel="noopener noreferrer">
+      <span class="donate-icon" aria-hidden="true">💝</span>
+      <div class="donate-text"><strong id="donateCustomTitle">Своя сумма</strong><small id="donateCustomDesc">Укажите сумму на странице PayPal</small></div>
+    </a>
+    <p class="donate-thanks" id="donateThanks" data-i18n="donate.thanks">Thank you! ❤️</p>
+  </div>
+</div>
+
+<!-- MODAL: save choice -->
+<div class="modal-overlay" id="saveChoiceOverlay">
+  <div class="modal" style="max-width: 480px;">
+    <button class="modal-close" onclick="closeSaveChoice()">✕</button>
+    <h2 id="saveChoiceTitle" data-i18n="saveChoice.title">💾 Save PDF</h2>
+    <p class="desc" id="saveChoiceDesc" data-i18n="saveChoice.desc">Choose method.</p>
+    <div class="save-choice-list">
+      <button class="save-choice-item" id="saveVectorBtn"><span class="save-choice-icon">🟢</span><div class="save-choice-text"><strong id="saveVectorTitle" data-i18n="saveChoice.vectorTitle">Save with text</strong><small id="saveVectorDesc" data-i18n="saveChoice.vectorDesc">Text stays copyable.</small></div></button>
+      <button class="save-choice-item" id="saveRasterBtn"><span class="save-choice-icon">🔴</span><div class="save-choice-text"><strong id="saveRasterTitle" data-i18n="saveChoice.rasterTitle">Save as image</strong><small id="saveRasterDesc" data-i18n="saveChoice.rasterDesc">Exact look.</small></div></button>
+    </div>
+    <div class="status-msg hidden" id="saveChoiceStatus"></div>
+  </div>
+</div>
+
+<!-- MODAL: about -->
+<div class="modal-overlay" id="aboutOverlay">
+  <div class="modal about-modal">
+    <button class="modal-close" onclick="closeAbout()">✕</button>
+    <h2 id="aboutTitle" data-i18n="about.title">✨ Why marge-PDF is Free</h2>
+    <p class="desc" id="aboutSubtitle" data-i18n="about.subtitle">And always will be</p>
+    <div class="about-content">
+      <div class="about-block"><div class="about-icon">🆓</div><div><strong data-i18n="about.block1.title">No limits. Ever.</strong><p data-i18n="about.block1.desc">Merge 5, 10, or 50 files — free, always.</p></div></div>
+      <div class="about-block"><div class="about-icon">🔒</div><div><strong data-i18n="about.block2.title">Your files never leave your device</strong><p data-i18n="about.block2.desc">Everything happens directly in your browser.</p></div></div>
+      <div class="about-block"><div class="about-icon">💰</div><div><strong data-i18n="about.block3.title">So how does it survive?</strong><p data-i18n="about.block3.desc">Almost zero costs. Free forever.</p></div></div>
+      <div class="about-block"><div class="about-icon">❤️</div><div><strong data-i18n="about.block4.title">Thank you for being here</strong><p data-i18n="about.block4.desc">Every user makes this project worth doing.</p></div></div>
+    </div>
+    <button class="btn" onclick="closeAbout(); openDonate();" data-i18n="about.supportBtn">💰 Support the project</button>
+  </div>
+</div>
+
+<!-- MODAL: contact -->
+<div class="modal-overlay" id="contactOverlay">
+  <div class="modal contact-modal">
+    <button class="modal-close" onclick="closeContact()">✕</button>
+    <h2 id="contactTitle" data-i18n="contact.title">✉️ Contact Us</h2>
+    <p class="desc" id="contactSubtitle" data-i18n="contact.subtitle">We'd love to hear from you</p>
+    <div class="contact-content">
+      <a href="#" id="contactEmailLink" class="contact-block">
+        <div class="contact-icon">📧</div>
+        <div class="contact-info"><strong data-i18n="contact.emailLabel">Email</strong><span id="contactEmailText">—</span></div>
+      </a>
+      <div class="contact-note" data-i18n="contact.note">Questions, suggestions, bug reports — drop us a line.</div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: signature -->
+<div class="modal-overlay" id="signatureOverlay">
+  <div class="modal" style="max-width: 640px;">
+    <button class="modal-close" onclick="closeSignature()">✕</button>
+    <h2 id="signatureTitle" data-i18n="sig.title">✍️ Add Signature</h2>
+    <p class="desc" id="signatureDesc" data-i18n="sig.desc">Draw, type, or upload your signature.</p>
+    <div class="drop-zone" id="sigDropZone"><span class="big">📁</span><span id="sigDropText" data-i18n="rp.drop">Drop a PDF here</span><input type="file" id="sigFileInput" accept="application/pdf"></div>
+    <div id="sigContent" class="hidden">
+      <div class="sig-tabs">
+        <button class="sig-tab active" data-sigtab="draw" data-i18n="sig.tab.draw">✏️ Draw</button>
+        <button class="sig-tab" data-sigtab="type" data-i18n="sig.tab.type">⌨️ Type</button>
+        <button class="sig-tab" data-sigtab="upload" data-i18n="sig.tab.upload">📤 Upload</button>
+      </div>
+      <div class="sig-tab-content active" data-sigcontent="draw">
+        <div class="sig-pad-wrap"><canvas id="sigCanvas" width="500" height="200"></canvas></div>
+        <div class="sig-tools">
+          <div class="sig-color active" data-sigcolor="#1e293b" style="background:#1e293b"></div>
+          <div class="sig-color" data-sigcolor="#4f46e5" style="background:#4f46e5"></div>
+          <div class="sig-color" data-sigcolor="#ef4444" style="background:#ef4444"></div>
+          <button class="tool-btn" id="sigClear" data-tooltip="" data-tooltip-i18n="tip.clear" data-tooltip-pos="top">🗑️</button>
+        </div>
+      </div>
+      <div class="sig-tab-content" data-sigcontent="type">
+        <div class="options"><label data-i18n="sig.type.label">Your name</label><input type="text" id="sigTextInput" placeholder="John Doe" maxlength="40"></div>
+        <div class="sig-font-picker">
+          <button class="sig-font-btn active" data-sigfont="'Brush Script MT', cursive" style="font-family:'Brush Script MT', cursive;">Signature</button>
+          <button class="sig-font-btn" data-sigfont="'Georgia', serif" style="font-family:Georgia, serif; font-style:italic;">Signature</button>
+        </div>
+        <div class="sig-preview-wrap"><div id="sigPreview">—</div></div>
+      </div>
+      <div class="sig-tab-content" data-sigcontent="upload">
+        <div class="drop-zone" id="sigImageDropZone"><span class="big">🖼️</span><span data-i18n="sig.upload.hint">Upload signature image (PNG)</span><input type="file" id="sigImageInput" accept="image/*"></div>
+        <div class="sig-preview-wrap" id="sigFilePreviewWrap" style="display:none;"><img id="sigFilePreview" alt="preview"></div>
+      </div>
+      <button class="btn" id="sigPlaceBtn" style="margin-top:16px;" data-i18n="sig.place">📌 Place on PDF</button>
+    </div>
+    <div class="status-msg hidden" id="sigStatus"></div>
+  </div>
+</div>
+
+<!-- MODAL: stamp -->
+<div class="modal-overlay" id="stampOverlay">
+  <div class="modal" style="max-width: 560px;">
+    <button class="modal-close" onclick="closeStamp()">✕</button>
+    <h2 id="stampTitle" data-i18n="stamp.title">🔖 Add Stamp</h2>
+    <p class="desc" id="stampDesc" data-i18n="stamp.desc">Choose a stamp then place it on the PDF.</p>
+    <div class="drop-zone" id="stampDropZone"><span class="big">📁</span><span id="stampDropText" data-i18n="rp.drop">Drop a PDF here</span><input type="file" id="stampFileInput" accept="application/pdf"></div>
+    <div id="stampContent" class="hidden">
+      <div class="stamp-preset-grid" id="stampPresetGrid">
+        <button class="stamp-preset active" data-stamp="APPROVED" data-color="#10b981" style="color:#10b981;border-color:#10b981;">APPROVED</button>
+        <button class="stamp-preset" data-stamp="REJECTED" data-color="#ef4444" style="color:#ef4444;border-color:#ef4444;">REJECTED</button>
+        <button class="stamp-preset" data-stamp="DRAFT" data-color="#64748b" style="color:#64748b;border-color:#64748b;">DRAFT</button>
+        <button class="stamp-preset" data-stamp="URGENT" data-color="#f59e0b" style="color:#f59e0b;border-color:#f59e0b;">URGENT</button>
+        <button class="stamp-preset" data-stamp="CONFIDENTIAL" data-color="#4f46e5" style="color:#4f46e5;border-color:#4f46e5;">CONFIDENTIAL</button>
+        <button class="stamp-preset" data-stamp="PAID" data-color="#10b981" style="color:#10b981;border-color:#10b981;">PAID</button>
+      </div>
+      <div class="options"><label data-i18n="stamp.custom">Custom text (optional)</label><input type="text" id="stampCustomText" placeholder="e.g. REVIEWED" maxlength="20"></div>
+      <div id="stampCanvasHolder" class="hidden">
+        <div class="editor-canvas-wrap">
+          <div class="editor-canvas-scroll" id="stampScroll">
+            <div class="editor-canvas-inner"><canvas id="stampCanvas"></canvas></div>
+          </div>
+        </div>
+        <p style="text-align:center;font-size:13px;color:var(--muted);margin:10px 0;" data-i18n="stamp.hintPlace">💡 Click on PDF to place stamp</p>
+      </div>
+      <button class="btn" id="stampPlaceBtn" data-i18n="stamp.place">📌 Place on PDF</button>
+    </div>
+    <div class="status-msg hidden" id="stampStatus"></div>
+  </div>
+</div>
+
+<!-- MODAL: text editor -->
+<div class="modal-overlay" id="textEditorOverlay">
+  <div class="modal editor-wrapper">
+    <button class="modal-close" onclick="closeTextEditor()">✕</button>
+    <h2 id="textEditorTitle" data-i18n="text.title">✏️ Edit Text on PDF</h2>
+    <p class="desc" id="textEditorDesc" data-i18n="text.desc">Click anywhere on the page to add text, or click existing text to edit it.</p>
+    <div class="drop-zone" id="textEditorDropZone"><span class="big">📁</span><span id="textEditorDropText" data-i18n="rp.drop">Drop a PDF here</span><input type="file" id="textEditorFileInput" accept="application/pdf"></div>
+    <div id="textEditorContent" class="hidden">
+      <div class="text-toolbar">
+        <div class="te-mode-group">
+          <button class="te-mode-btn active" data-temode="text" title="Add text">📝</button>
+          <button class="te-mode-btn" data-temode="whiteout" title="Whiteout">🖌️</button>
+          <button class="te-mode-btn" data-temode="redact" title="Black cover — not secure redaction">⬛</button>
+        </div>
+        <div class="toolbar-divider"></div>
+        <label data-i18n="text.font">Font:</label>
+        <select id="teFont">
+          <option value="Helvetica" selected>Helvetica</option>
+          <option value="TimesRoman">Times New Roman</option>
+          <option value="Courier">Courier</option>
+        </select>
+        <label data-i18n="text.size">Size:</label>
+        <input type="number" id="teSize" value="16" min="8" max="72">
+        <div class="toolbar-divider"></div>
+        <div class="color-swatch active" data-tecolor="#1e293b" style="background:#1e293b"></div>
+        <div class="color-swatch" data-tecolor="#4f46e5" style="background:#4f46e5"></div>
+        <div class="color-swatch" data-tecolor="#ef4444" style="background:#ef4444"></div>
+        <div class="color-swatch" data-tecolor="#10b981" style="background:#10b981"></div>
+        <div class="toolbar-divider"></div>
+        <button class="tool-btn" id="teUndo" data-tooltip="" data-tooltip-i18n="tip.undo" data-tooltip-pos="top">↶</button>
+        <button class="tool-btn" id="teClear" data-tooltip="" data-tooltip-i18n="tip.clear" data-tooltip-pos="top">🗑️</button>
+        <div class="zoom-controls">
+          <button class="zoom-btn" id="teZoomOut" data-tooltip="" data-tooltip-i18n="tip.zoomOut" data-tooltip-pos="top">−</button>
+          <span class="zoom-level" id="teZoomLevel">100%</span>
+          <button class="zoom-btn" id="teZoomIn" data-tooltip="" data-tooltip-i18n="tip.zoomIn" data-tooltip-pos="top">+</button>
+          <button class="zoom-btn" id="teZoomReset" data-tooltip="" data-tooltip-i18n="tip.zoomReset" data-tooltip-pos="top">⌂</button>
+        </div>
+      </div>
+      <div class="te-format-panel" id="teFormatPanel">
+        <span id="teFormatPanelLabel" style="font-size:12px;font-weight:700;color:var(--primary);">✏️ Editing:</span>
+        <label data-i18n="fmt.font">Font:</label>
+        <select id="fmtFont">
+          <option value="Helvetica">Helvetica</option>
+          <option value="TimesRoman">Times New Roman</option>
+          <option value="Courier">Courier</option>
+        </select>
+        <label data-i18n="fmt.size">Size:</label>
+        <input type="number" id="fmtSize" min="6" max="120" value="16">
+        <button class="te-format-btn" id="fmtBold" title="Bold"><b>B</b></button>
+        <button class="te-format-btn" id="fmtItalic" title="Italic"><i>I</i></button>
+        <label data-i18n="fmt.color">Color:</label>
+        <input type="color" id="fmtColor" value="#000000" style="width:36px;height:32px;padding:2px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:var(--card);">
+        <button class="te-format-btn" id="fmtApply" style="background:var(--primary);color:#fff;border-color:var(--primary);" data-i18n="fmt.apply">Apply</button>
+        <button class="te-format-btn" id="fmtCancel" data-i18n="fmt.cancel">Cancel</button>
+      </div>
+      <div class="editor-canvas-wrap">
+        <div class="editor-canvas-scroll" id="teScroll">
+          <div class="editor-canvas-inner"><canvas id="textEditorCanvas"></canvas></div>
+        </div>
+      </div>
+      <div class="editor-pages">
+        <button class="page-nav-btn" id="tePagePrev">◀ Prev</button>
+        <span class="page-counter" id="tePageCounter">1 / 1</span>
+        <button class="page-nav-btn" id="tePageNext">Next ▶</button>
+      </div>
+      <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:8px;" data-i18n="text.hintLong">💡 Click existing text to edit · Click empty to add · Ctrl+wheel — zoom</p>
+      <button class="btn" id="teSaveBtn" style="margin-top:12px;" data-i18n="editor.save">💾 Save & Download</button>
+    </div>
+    <div class="status-msg hidden" id="textEditorStatus"></div>
+  </div>
+</div>
+
+<!-- Cookie banner -->
+<div class="cookie-banner hidden" id="cookieBanner">
+  <div class="cookie-text">🍪 We use cookies to improve your experience.</div>
+  <div class="cookie-buttons">
+    <button class="cookie-btn cookie-accept" onclick="acceptCookies()">Accept</button>
+    <button class="cookie-btn cookie-decline" onclick="declineCookies()">Decline</button>
+  </div>
+</div>
+<script src="js/lazy-loader.js?v=pdfpro4"></script>
+<script src="js/app-03.js?v=pdfpro4"></script>
+<script src="js/app-04.js?v=pdfpro4"></script>
+
+
+
+
+
+
+
+
+
+<script src="js/app-05.js?v=pdfpro4"></script>
+
+<script src="js/app-06.js?v=pdfpro4"></script>
+
+<script src="js/app-07.js?v=pdfpro4"></script>
+
+<script src="js/app-08.js?v=pdfpro4"></script>
+
+<script src="js/app-09.js?v=pdfpro4"></script>
+
+
+
+<script src="js/app-11.js?v=pdfpro4"></script>
+
+<section id="supportResult" class="support-result" aria-labelledby="supportResultTitle" hidden>
+ <h2 id="supportResultTitle" data-i18n="support.resultTitle">Файл готов!</h2>
+ <p data-i18n="support.resultText">Инструмент оказался полезным? Поддержите развитие marge-PDF небольшой суммой. Это добровольно, все текущие функции остаются бесплатными.</p>
+ <div class="support-result-actions">
+  <button type="button" id="supportResultDonate" data-i18n="support.button">Поддержать проект</button>
+  <button type="button" id="supportResultDismiss" data-i18n="support.later">Не сейчас</button>
+ </div>
+</section>
+<script src="js/app-12.js?v=pdfpro4"></script>
+
+<section id="uxResult" class="ux-box" hidden aria-live="polite"></section>
+<div id="uxPreview" class="modal-overlay" hidden>
+ <div class="modal" role="dialog" aria-modal="true" aria-labelledby="uxPreviewTitle">
+  <button type="button" id="uxPreviewClose" class="modal-close" aria-label="Close">×</button>
+  <h2 id="uxPreviewTitle"></h2><p id="uxPreviewNote" class="ux-note"></p>
+  <div id="uxPreviewStatus" class="ux-note" role="status"></div>
+  <div id="uxPreviewGrid" class="ux-preview-grid"></div>
+  <div class="ux-actions"><button type="button" class="ux-button" id="uxPreviewMore"></button><button type="button" class="ux-button" id="uxPreviewApply"></button></div>
+ </div>
+</div>
+<div id="uxFeedback" class="modal-overlay" hidden>
+ <div class="modal" role="dialog" aria-modal="true" aria-labelledby="uxFeedbackTitle">
+  <button type="button" id="uxFeedbackClose" class="modal-close" aria-label="Close">×</button>
+  <h2 id="uxFeedbackTitle"></h2><p id="uxFeedbackNote" class="ux-note"></p>
+  <label for="uxFeedbackTool" id="uxFeedbackToolLabel"></label><select id="uxFeedbackTool"></select>
+  <label for="uxFeedbackText" id="uxFeedbackTextLabel" style="display:block;margin-top:12px"></label>
+  <textarea id="uxFeedbackText" maxlength="4000"></textarea>
+  <div class="ux-actions"><button type="button" id="uxFeedbackSend" class="ux-button"></button><button type="button" id="uxFeedbackCopy" class="ux-button"></button></div>
+  <p id="uxFeedbackStatus" class="ux-note" role="status"></p>
+ </div>
+</div>
+<script src="js/app-13.js?v=pdfpro4"></script>
+<script src="js/app-14.js?v=pdfpro4"></script>
+<script src="js/site-locale.js?v=pdfpro4"></script>
+<script src="js/extra-entry.js?v=pdfpro4"></script>
+<script src="js/modern.js?v=pdfpro4"></script>
+<script src="qa.js?v=pdfpro4"></script><script src="js/pdf-engine.js?v=pdfpro4"></script><script src="js/pro-tools.js?v=pdfpro4"></script><script src="js/pro-editor.js?v=pdfpro4"></script><script src="js/pro-ui.js?v=pdfpro4"></script></body>
+</html>

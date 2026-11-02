@@ -17,7 +17,7 @@ async function renderRecent() {
   files.forEach(f => {
     const card = document.createElement('div'); card.className = 'recent-card';
     const sizeKB = Math.round(f.size / 1024); const date = new Date(f.created).toLocaleString();
-    card.innerHTML = '<div style="font-size:24px;margin-bottom:6px;">📄</div><div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + f.name + '</div><div style="font-size:11px;color:var(--muted);margin-top:4px;">' + sizeKB + ' KB · ' + date + '</div>';
+    card.innerHTML = '<div style="font-size:24px;margin-bottom:6px;">📄</div><div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + String(f.name).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') + '</div><div style="font-size:11px;color:var(--muted);margin-top:4px;">' + sizeKB + ' KB · ' + date + '</div>';
     card.addEventListener('click', () => { const a=document.createElement('a'); a.href=URL.createObjectURL(f.blob); a.download=f.name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 5000); });
     const del = document.createElement('button'); del.className = 'rc-del'; del.textContent = '×';
     del.addEventListener('click', async (e) => { e.stopPropagation(); await idbDelete(f.id); renderRecent(); });

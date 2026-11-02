@@ -24,8 +24,11 @@ let teItems=[], teMode='text', teDrawingBox=false;
 let teBoxStartX=0, teBoxStartY=0, teBoxSnapshot=null;
 const tePageTextCache = {};
 
-function openTextEditor() { textEditorOverlay.classList.add('active'); tePdfBytes=null; tePdfDoc=null; teTotalPages=0; teCurrentPage=0; teZoom=1; teItems=[]; teFormatPanel.classList.remove('active'); Object.keys(tePageTextCache).forEach(k => delete tePageTextCache[k]); textEditorContent.classList.add('hidden'); textEditorDropZone.style.display='block'; textEditorStatus.className='status-msg hidden'; updateTeZoomUI(); }
-function closeTextEditor() { PageText.finish(); textEditorOverlay.classList.remove('active'); }
+function openTextEditor() {
+ let warning=document.getElementById('teVisualWarning');if(!warning){warning=document.createElement('p');warning.id='teVisualWarning';warning.className='ux-note';document.querySelector('#textEditorOverlay .modal').prepend(warning);}
+ warning.textContent=({ru:'Визуальное редактирование: закрытый прямоугольником или заменённый текст может оставаться в файле. Не используйте для удаления секретных данных.',en:'Visual editing: covered or replaced text may remain inside the PDF. Do not use this tool for secure redaction.',lv:'Vizuāla rediģēšana: aizklāts teksts var palikt PDF failā. Nelietojiet slepenu datu dzēšanai.',de:'Visuelle Bearbeitung: abgedeckter Text kann in der PDF verbleiben. Nicht zum sicheren Schwärzen verwenden.'})[document.documentElement.lang]||'Visual editing only — not secure redaction.';
+ SafeTextExport.setup();textEditorOverlay.classList.add('active'); tePdfBytes=null; tePdfDoc=null; teTotalPages=0; teCurrentPage=0; teZoom=1; teItems=[]; teFormatPanel.classList.remove('active'); Object.keys(tePageTextCache).forEach(k => delete tePageTextCache[k]); textEditorContent.classList.add('hidden'); textEditorDropZone.style.display='block'; textEditorStatus.className='status-msg hidden'; updateTeZoomUI(); }
+function closeTextEditor() { SafeTextExport.cancel(); PageText.finish(); textEditorOverlay.classList.remove('active'); }
 textEditorOverlay.addEventListener('click', e => { if (e.target === textEditorOverlay) closeTextEditor(); });
 function updateTeZoomUI() { if (teZoomLevel) teZoomLevel.textContent = Math.round(teZoom * 100) + '%'; }
 textEditorDropZone.addEventListener('click', () => textEditorFileInput.click());
@@ -37,7 +40,7 @@ async function loadTextEditorPdf(file) {
   try {
     showStatus(textEditorStatus, t('common.processing'), 'info');
     tePdfBytes = new Uint8Array(await file.arrayBuffer());
-    tePdfDoc = await pdfjsLib.getDocument({ data: tePdfBytes.slice() }).promise;
+    tePdfDoc = await pdfjsLib.getDocument({isEvalSupported:false, data: tePdfBytes.slice() }).promise;
     teTotalPages = tePdfDoc.numPages; teCurrentPage = 0;
     Object.keys(tePageTextCache).forEach(k => delete tePageTextCache[k]);
     textEditorContent.classList.remove('hidden'); textEditorDropZone.style.display='none';
@@ -49,7 +52,13 @@ async function getPageTextItems(pageNum) {
   if (tePageTextCache[pageNum]) return tePageTextCache[pageNum];
   const page = await tePdfDoc.getPage(pageNum + 1);
   const content = await page.getTextContent();
-  const items = content.items.map(it => { const tx=it.transform; return { str:it.str, x:tx[4], y:tx[5], width:it.width, height:it.height, fontSize:Math.hypot(tx[2],tx[3])||Math.abs(tx[3])||12 }; });
+  const viewport=page.getViewport({scale:teBaseScale});
+  const items=content.items.filter(it=>it.str).map(it=>{
+   const tx=pdfjsLib.Util.transform(viewport.transform,it.transform);const fontSize=Math.hypot(tx[2],tx[3])||12;
+   const length=Math.hypot(tx[0],tx[1])||1,dx=tx[0]/length*it.width*teBaseScale,dy=tx[1]/length*it.width*teBaseScale;
+   const xs=[tx[4],tx[4]+dx,tx[4]+tx[2],tx[4]+dx+tx[2]],ys=[tx[5],tx[5]+dy,tx[5]+tx[3],tx[5]+dy+tx[3]];
+   const left=Math.min(...xs),bottom=Math.max(...ys);return {str:it.str,x:left,y:viewport.height-bottom,width:Math.max(...xs)-left,height:bottom-Math.min(...ys),fontSize};
+  });
   tePageTextCache[pageNum] = items; return items;
 }
 function buildCanvasFont(it) {
@@ -141,7 +150,7 @@ textEditorCanvas.addEventListener('click', async e => {
   if(px>=item.x && px<=item.x+item.width && py>=top-2 && py<=bottom+2){hit=item;break;}
  }
  const x=hit?hit.x:px,y=hit?baseH-hit.y:py;
- if(hit){teSize=Math.max(8,Math.min(72,Math.round(hit.fontSize*.75)));document.getElementById('teSize').value=teSize;}
+ if(hit){teSize=Math.max(8,Math.min(72,Math.round(hit.fontSize/teBaseScale)));document.getElementById('teSize').value=teSize;}
  const style={font:teFont,size:teSize,color:teColor};
  // Temporarily cover the old glyphs while editing; Escape restores the page.
  if(hit){const ctx=textEditorCanvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(x*teZoom,(y-(hit.height||hit.fontSize))*teZoom,(hit.width+2)*teZoom,((hit.height||hit.fontSize)+2)*teZoom);}
@@ -171,41 +180,11 @@ textEditorCanvas.addEventListener('mousemove', e => { if (!teDrawingBox) return;
 textEditorCanvas.addEventListener('mouseup', e => { if (!teDrawingBox) return; teDrawingBox=false; const pos=teGetCanvasPos(e); const x=Math.min(teBoxStartX,pos.x), y=Math.min(teBoxStartY,pos.y); const w=Math.abs(pos.x-teBoxStartX), h=Math.abs(pos.y-teBoxStartY); if (w<4||h<4) { renderTextEditorPage(); return; } teItems.push({ kind: teMode==='whiteout'?'whiteout':'redact', page:teCurrentPage, x, y, w, h }); renderTextEditorPage(); });
 textEditorCanvas.addEventListener('mouseleave', () => { if (teDrawingBox) { teDrawingBox=false; renderTextEditorPage(); } });
 
-document.getElementById('teSaveBtn').addEventListener('click', async () => {
-  if (!tePdfDoc) { showStatus(textEditorStatus, t('text.needPDF'), 'err'); return; }
-  try {
-    showStatus(textEditorStatus, t('common.processing'), 'info');
-    const { PDFDocument, rgb, StandardFonts } = PDFLib;
-    const pdfDoc = await PDFDocument.load(tePdfBytes, { ignoreEncryption: true });
-    function hexToRgb(hex) { const h=hex.replace('#',''); return rgb(parseInt(h.substring(0,2),16)/255, parseInt(h.substring(2,4),16)/255, parseInt(h.substring(4,6),16)/255); }
-    const FONTS = {
-      'Helvetica': { regular:StandardFonts.Helvetica, bold:StandardFonts.HelveticaBold, italic:StandardFonts.HelveticaOblique, boldItalic:StandardFonts.HelveticaBoldOblique },
-      'TimesRoman': { regular:StandardFonts.TimesRoman, bold:StandardFonts.TimesRomanBold, italic:StandardFonts.TimesRomanItalic, boldItalic:StandardFonts.TimesRomanBoldItalic },
-      'Courier': { regular:StandardFonts.Courier, bold:StandardFonts.CourierBold, italic:StandardFonts.CourierOblique, boldItalic:StandardFonts.CourierBoldOblique }
-    };
-    const embedded = {};
-    async function getFont(name, bold, italic) {
-      const key = name+'|'+(bold?1:0)+(italic?1:0);
-      if (embedded[key]) return embedded[key];
-      const map = FONTS[name] || FONTS['Helvetica'];
-      let stdName = map.regular;
-      if (bold && italic) stdName = map.boldItalic; else if (bold) stdName = map.bold; else if (italic) stdName = map.italic;
-      const f = await pdfDoc.embedFont(stdName); embedded[key] = f; return f;
-    }
-    const pages = pdfDoc.getPages(); const scaleDiv = teBaseScale;
-    for (const item of teItems) {
-      const page = pages[item.page]; if (!page) continue;
-      const { height: pageH } = page.getSize();
-      if (item.kind === 'whiteout' || item.kind === 'redact') {
-        const color = item.kind==='whiteout' ? rgb(1,1,1) : rgb(0,0,0);
-        page.drawRectangle({ x:item.x/scaleDiv, y:pageH - (item.y+item.h)/scaleDiv, width:item.w/scaleDiv, height:item.h/scaleDiv, color });
-      } else {
-        const font = await getFont(item.font, item.bold, item.italic);
-        page.drawText(item.text, { x:item.x/scaleDiv, y:pageH - item.y/scaleDiv, size:item.size, font, color:hexToRgb(item.color) });
-      }
-    }
-    const bytes = await pdfDoc.save();
-    downloadBlob(new Blob([bytes], { type:'application/pdf' }), 'text-edited.pdf');
-    showStatus(textEditorStatus, t('common.done'), 'ok');
-  } catch (err) { console.error(err); showStatus(textEditorStatus, t('common.error') + err.message, 'err'); }
+document.getElementById('teSaveBtn').addEventListener('click',()=>SafeTextExport.run());
+
+// Touch/pen region selection uses the same tested mouse path.
+for(const [pointer,mouse] of [['pointerdown','mousedown'],['pointermove','mousemove'],['pointerup','mouseup']])textEditorCanvas.addEventListener(pointer,e=>{
+ if(e.pointerType==='mouse'||!['whiteout','redact'].includes(teMode))return;
+ e.preventDefault();if(pointer==='pointerdown')textEditorCanvas.setPointerCapture(e.pointerId);
+ textEditorCanvas.dispatchEvent(new MouseEvent(mouse,{clientX:e.clientX,clientY:e.clientY,bubbles:true,buttons:pointer==='pointerup'?0:1}));
 });

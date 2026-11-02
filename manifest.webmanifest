@@ -1,16 +1,19 @@
 {
   "name": "marge-PDF — Beyond the margins",
   "short_name": "marge-PDF",
-  "description": "Merge PDFs, convert, compress, and manage PDF files. 100% free, private, and works offline.",
+  "description": "Local PDF tools. Libraries are included; offline use is available after the first successful cache installation.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#0f172a",
-  "theme_color": "#4f46e5",
+  "background_color": "#faf9fd",
+  "theme_color": "#6854da",
   "lang": "en",
   "dir": "ltr",
-  "categories": ["productivity", "utilities"],
+  "categories": [
+    "productivity",
+    "utilities"
+  ],
   "icons": [
     {
       "src": "icon-192.png",

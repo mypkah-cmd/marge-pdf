@@ -57,7 +57,7 @@ async function loadSigPdf(file){
  if(sigSaving||sigRendering)return;
  try{
   sigMsg(t('common.processing'));sigRendering=true;sigButtons();
-  const bytes=new Uint8Array(await file.arrayBuffer());const doc=await pdfjsLib.getDocument({data:bytes.slice()}).promise;
+  const bytes=new Uint8Array(await file.arrayBuffer());const doc=await pdfjsLib.getDocument({isEvalSupported:false,data:bytes.slice()}).promise;
   if(sigPdfDoc)await sigPdfDoc.destroy();sigPdfDoc=doc;sigPdfBytes=bytes;sigTotalPages=doc.numPages;sigCurrentPage=0;sigPlacedItems=[];sigSelected=null;
   sigContent.classList.remove('hidden');sigDropZone.style.display='none';sigWorkspace.hidden=false;sigRendering=false;
   await renderSigPage();sigMsg(sigWords()[2]);
@@ -200,7 +200,7 @@ async function loadStampPdf(file) {
   try {
     showStatus(stampStatus, t('common.processing'), 'info');
     stampPdfBytes=new Uint8Array(await file.arrayBuffer());
-    stampPdfDoc=await pdfjsLib.getDocument({ data: stampPdfBytes.slice() }).promise;
+    stampPdfDoc=await pdfjsLib.getDocument({isEvalSupported:false, data: stampPdfBytes.slice() }).promise;
     stampTotalPages=stampPdfDoc.numPages; stampCurrentPage=0; stampPlacedItems=[];
     stampContent.classList.remove('hidden'); stampDropZone.style.display='none';
     stampCanvasHolder.classList.remove('hidden'); showStatus(stampStatus, '', 'info');
@@ -225,8 +225,9 @@ function onStampCanvasClick(e) {
   const tc=document.createElement('canvas'); tc.width=400; tc.height=120;
   const tctx=tc.getContext('2d'); tctx.clearRect(0,0,400,120);
   tctx.font='bold 42px Arial, sans-serif'; tctx.fillStyle=stampColor; tctx.textAlign='center'; tctx.textBaseline='middle';
+  let fs=42;while(tctx.measureText(stampText).width>350&&fs>12){fs--;tctx.font='bold '+fs+'px Arial, sans-serif';}
   tctx.strokeStyle=stampColor; tctx.lineWidth=4; tctx.strokeRect(10,20,380,80); tctx.fillText(stampText,200,60);
-  const dataUrl=tc.toDataURL('image/png'); const w=180, h=54;
+  const dataUrl=tc.toDataURL('image/png'); const pt=Number(document.getElementById('proStampSize')?.value||120);if(!Number.isFinite(pt)||pt<24||pt>300){showStatus(stampStatus,'24–300 pt','err');return;} const w=pt*stampScale, h=w*.3;
   const img=new Image(); img.onload=() => stampCanvasEl.getContext('2d').drawImage(img, x-w/2, y-h/2, w, h); img.src=dataUrl;
   stampPlacedItems.push({ page:stampCurrentPage, x:x-w/2, y:y-h/2, w, h, dataUrl });
   showStatus(stampStatus, t('stamp.placed') + stampText, 'ok');
@@ -235,9 +236,10 @@ document.querySelectorAll('.stamp-preset').forEach(p => { p.addEventListener('cl
 document.getElementById('stampCustomText').addEventListener('input', e => { const val=e.target.value.trim(); if (val) { document.querySelectorAll('.stamp-preset').forEach(x => x.classList.remove('active')); stampText=val.toUpperCase(); stampColor='#4f46e5'; } });
 document.getElementById('stampPlaceBtn').addEventListener('click', async () => {
   if (!stampPdfDoc) { showStatus(stampStatus, t('stamp.needPDF'), 'err'); return; }
+  if(!stampPlacedItems.length){showStatus(stampStatus,ProTools.L('Сначала разместите штамп на странице','Place a stamp on the page first'),'err');return;}
   try {
     showStatus(stampStatus, t('common.processing'), 'info');
-    const pdfDoc=await PDFLib.PDFDocument.load(stampPdfBytes, { ignoreEncryption: true });
+    const pdfDoc=await PDFLib.PDFDocument.load(stampPdfBytes);
     const pages=pdfDoc.getPages();
     for (const it of stampPlacedItems) {
       const page=pages[it.page]; if (!page) continue;

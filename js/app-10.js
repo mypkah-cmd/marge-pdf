@@ -5,7 +5,7 @@ try {
    ========================================================== */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    Promise.resolve().then(() => navigator.serviceWorker.register('./service-worker.js'))
+    Promise.resolve().then(() => navigator.serviceWorker.register('./service-worker.js?v=pdfpro4',{scope:'./',updateViaCache:'none'}))
       .then(reg => console.log('✅ SW:', reg.scope))
       .catch(err => console.warn('⚠️ SW failed:', err));
   });

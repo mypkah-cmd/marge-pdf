@@ -372,7 +372,7 @@ document.addEventListener('touchstart', warmupAudio);
 /* ==========================================================
    TIMER
    ========================================================== */
-let timerInterval = null, timerRemaining = 0, timerFinished = false;
+let timerInterval = null, timerRemaining = 0, timerFinished = false, timerDeadline = 0;
 const timerOverlay = document.getElementById('timerOverlay');
 const timerDisplay = document.getElementById('timerDisplay');
 const timerStartBtn = document.getElementById('timerStartBtn');
@@ -391,7 +391,7 @@ timerOverlay.addEventListener('click', e => { if (e.target === timerOverlay) clo
 function formatHMS(sec) { return String(Math.floor(sec/3600)).padStart(2,'0')+':'+String(Math.floor((sec%3600)/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0'); }
 
 function tickTimer() {
-  timerRemaining--;
+  timerRemaining = Math.max(0,Math.ceil((timerDeadline-Date.now())/1000));
   timerDisplay.textContent = formatHMS(timerRemaining);
   if (timerRemaining <= 0) {
     clearInterval(timerInterval);
@@ -414,6 +414,8 @@ function startTimerDefault() {
   const s = parseInt(document.getElementById('timerS').value, 10) || 0;
   const total = h * 3600 + m * 60 + s;
   if (total <= 0) { showStatus(timerStatus, 'Set time > 0', 'err'); return; }
+  clearInterval(timerInterval);
+  timerDeadline = Date.now()+total*1000;
   timerRemaining = total;
   timerDisplay.textContent = formatHMS(timerRemaining);
   timerStartBtn.style.display = 'none';

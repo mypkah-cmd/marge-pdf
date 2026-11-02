@@ -73,9 +73,9 @@ window.ExtraTools=(()=>{
   set('extraFileLabel','PDF-файл','PDF file');set('extraPasswordLabel','Пароль (если нужен)','Password (if needed)');
   set('extraQRLabel','Текст или ссылка для QR','QR text or URL');set('extraPagesLabel','Страницы (пусто = все)','Pages (blank = all)');set('extraSizeLabel','Размер, pt','Size, pt');
   set('extraRun','Выполнить','Run');set('extraCancel','Отменить','Cancel');
-  set('extraConsentText',' У меня есть право на обработку. Я понимаю: страницы станут изображениями; текст, ссылки, формы и подписи не сохранятся как интерактивные объекты.',' I am authorized to process this file. Pages become images; searchable text, links, forms and signatures are not retained as interactive objects.');
+  $('extraConsentText').textContent=ProTools.L(' У меня есть право на обработку этого документа. Пароль не подбирается.',' I am authorized to process this document. This tool does not guess passwords.');
   $('extraQR').hidden=id!=='qrpdf';$('extraConsent').hidden=id!=='unlockcopy';
-  $('extraNote').textContent=id==='unlockcopy'?t('Это не снятие шифрования с сохранением структуры. Создаётся новый PDF из изображений, 144 dpi. Введите известный пароль; подбора пароля нет.','This is not structure-preserving decryption. A new PDF is created from 144 dpi page images. Enter the known password; no password cracking.'):
+  $('extraNote').textContent=id==='unlockcopy'?ProTools.L('Снятие шифрования через QPDF с сохранением текста, ссылок и структуры. Введите известный пароль. Изменение подписанного файла может нарушить действительность подписи.','QPDF decryption preserves text, links and structure. Enter the known password. Changing a signed PDF may invalidate its signature.'):
    id==='pdfcount'?t('Слова считаются только в текстовом слое. Сканы без OCR могут дать 0 слов. Сегментация зависит от языка и качества текста.','Only the text layer is counted. Scans without OCR may have zero words. Segmentation depends on language and text quality.'):
    t('QR добавляется с белым полем, отступом 18 pt. Размер задаётся в PDF-пунктах. Подписанные PDF после изменения могут потерять действительность подписи.','QR includes a white quiet zone and 18 pt margin. Size uses PDF points. Editing signed PDFs may invalidate signatures.');
   fileLabel();
@@ -90,7 +90,7 @@ window.ExtraTools=(()=>{
  }
  async function openPDF(file){
   await LazyAssets.library('pdfjs');check();
-  task=pdfjsLib.getDocument({data:new Uint8Array(await file.arrayBuffer()),password:$('extraPassword').value});
+  task=pdfjsLib.getDocument({isEvalSupported:false,data:new Uint8Array(await file.arrayBuffer()),password:$('extraPassword').value});
   return task.promise;
  }
  function range(str,max){
@@ -107,7 +107,7 @@ window.ExtraTools=(()=>{
   $('extraResult').append(table);
  }
  $('extraClose').onclick=()=>{if(!busy){box.classList.remove('active');$('extraPassword').value='';}};
- $('extraCancel').onclick=()=>{if(busy){cancelled=true;renderTask?.cancel();task?.destroy().catch(()=>{});$('extraStatus').textContent=t('Отмена…','Cancelling…');}else $('extraClose').click();};
+ $('extraCancel').onclick=()=>{if(busy){cancelled=true;PdfEngine.cancel();renderTask?.cancel();task?.destroy().catch(()=>{});$('extraStatus').textContent=t('Отмена…','Cancelling…');}else $('extraClose').click();};
  $('extraRun').onclick=async()=>{
   if(busy)return;
   const file=$('extraFile').files[0];if(!file){$('extraStatus').textContent=t('Выберите PDF','Choose a PDF');return;}
@@ -119,7 +119,7 @@ window.ExtraTools=(()=>{
    $('extraStatus').textContent=t('Загрузка библиотек…','Loading libraries…');
    if(mode==='qrpdf'){
     const value=$('extraQRValue').value.trim();if(!value)throw new Error(t('Введите текст QR','Enter QR text'));
-    await Promise.all([LazyAssets.library('pdfLib'),LazyAssets.library('qr')]);check();
+    await Promise.all([LazyAssets.library('pdfLib'),LazyAssets.library('qr'),LazyAssets.library('pdfjs')]);check();
     const pdf=await PDFLib.PDFDocument.load(await file.arrayBuffer());
     const indices=range($('extraPages').value,pdf.getPageCount());
     const size=Number($('extraSize').value);if(!Number.isFinite(size)||size<24||size>200)throw new Error(SiteLocale.get('Size: 24–200 pt'));
@@ -129,14 +129,17 @@ window.ExtraTools=(()=>{
      const canvas=host.querySelector('canvas');if(!canvas)throw new Error(SiteLocale.get('QR canvas unavailable'));
      const padded=document.createElement('canvas');padded.width=padded.height=640;const ctx=padded.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,640,640);ctx.drawImage(canvas,64,64,512,512);data=padded.toDataURL('image/png');
     }finally{host.remove();}
-    const image=await pdf.embedPng(data);
+    const image=await pdf.embedPng(data);doc=await pdfjsLib.getDocument({isEvalSupported:false,data:new Uint8Array(await file.arrayBuffer())}).promise;
     for(let n=0;n<indices.length;n++){
      await step(n,indices.length);const page=pdf.getPage(indices[n]);
-     if(page.getRotation().angle%360!==0)throw new Error(t('Для QR сначала нормализуйте поворот страниц (0°).','Normalize page rotation to 0° before adding QR.'));
-     const crop=page.getCropBox();if(size+36>Math.min(crop.width,crop.height))throw new Error(t('QR слишком большой для страницы','QR too large for page'));
-     const pos=$('extraPosition').value;page.drawImage(image,{x:crop.x+(pos.endsWith('r')?crop.width-size-18:18),y:crop.y+(pos.startsWith('t')?crop.height-size-18:18),width:size,height:size});
+     const viewport=(await doc.getPage(indices[n]+1)).getViewport({scale:1});if(size+36>Math.min(viewport.width,viewport.height))throw new Error(t('QR слишком большой для страницы','QR too large for page'));
+     const pos=$('extraPosition').value,x=pos.endsWith('r')?viewport.width-size-18:18,y=pos.startsWith('t')?18:viewport.height-size-18;
+     const tl=viewport.convertToPdfPoint(x,y),tr=viewport.convertToPdfPoint(x+size,y),bl=viewport.convertToPdfPoint(x,y+size);
+     page.drawImage(image,{x:bl[0],y:bl[1],width:Math.hypot(tr[0]-tl[0],tr[1]-tl[1]),height:Math.hypot(tl[0]-bl[0],tl[1]-bl[1]),rotate:PDFLib.degrees(Math.atan2(tr[1]-tl[1],tr[0]-tl[0])*180/Math.PI)});
     }
     const bytes=await pdf.save();check();downloadBlob(new Blob([bytes],{type:'application/pdf'}),'qr-'+file.name);
+   }else if(mode==='unlockcopy'){
+    const bytes=await ProTools.decrypt(file,$('extraPassword').value);check();downloadBlob(new Blob([bytes],{type:'application/pdf'}),'decrypted.pdf');
    }else{
     doc=await openPDF(file);check();
     if(mode==='pdfcount'){

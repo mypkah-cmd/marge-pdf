@@ -32,7 +32,7 @@ const ProductUX = (() => {
   const label=document.createElement('p');label.textContent=text('progress')+'…';
   const progress=document.createElement('progress');progress.removeAttribute('value');
   const note=document.createElement('p');note.className='ux-note';note.textContent=text('cancelNote');
-  const cancel=button(text('cancel'),()=>{job.cancelled=true;cancel.disabled=true;label.textContent=text('cancelling');});
+  const cancel=button(text('cancel'),()=>{job.cancelled=true;if(typeof PdfEngine!=='undefined')PdfEngine.cancel();cancel.disabled=true;label.textContent=text('cancelling');});
   panel.append(label,progress,note,cancel);$('runBtn').before(panel);
   const controls=[...document.querySelectorAll('#modalOverlay button,#modalOverlay input,#modalOverlay select')].filter(el=>el!==cancel);
   const previous=controls.map(el=>[el,el.disabled]);controls.forEach(el=>el.disabled=true);
@@ -120,7 +120,7 @@ const ProductUX = (() => {
    await LazyAssets.library('pdfjs');
    if(token!==previewToken)return;
    if(!window.pdfjsLib)throw new Error(text('noPdf'));
-   const doc=await pdfjsLib.getDocument({data:new Uint8Array(await file.arrayBuffer())}).promise;
+   const doc=await pdfjsLib.getDocument({isEvalSupported:false,data:new Uint8Array(await file.arrayBuffer())}).promise;
    if(token!==previewToken){await doc.destroy();return;}
    const saved=plans.get(file);
    preview={file,doc,editable,order:saved?[...saved.order]:Array.from({length:doc.numPages},(_,i)=>i),selected:new Set(saved?saved.selected:Array.from({length:doc.numPages},(_,i)=>i)),shown:Math.min(12,doc.numPages)};

@@ -1,7 +1,7 @@
 /* ==========================================================
    INIT
    ========================================================== */
-if (window.pdfjsLib) { pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; }
+if (window.pdfjsLib) { pdfjsLib.GlobalWorkerOptions.workerSrc = 'vendor/worker.js'; }
 function detectBrowserLang() {
   const saved = v2Storage.getItem('pdfnest_lang');
   if (saved && translations[saved]) return saved;

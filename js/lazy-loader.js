@@ -1,14 +1,14 @@
 
 /* Deferred classic scripts retain the original shared lexical scope. */
 const LazyAssets = (() => {
- const urls = {"pdfLib": "https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js", "pdfjs": "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js", "xlsx": "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js", "jspdf": "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js", "autotable": "https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js", "mammoth": "https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js", "zip": "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js", "qr": "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"};
+ const urls = {"pdfLib": "vendor/pdfLib.js", "pdfjs": "vendor/pdfjs.js", "xlsx": "vendor/xlsx.js", "jspdf": "vendor/jspdf.js", "autotable": "vendor/autotable.js", "mammoth": "vendor/mammoth.js", "zip": "vendor/zip.js", "qr": "vendor/qr.js", "fontkit": "vendor/fontkit.js"};
  const promises = new Map();
  const ready = new Set();
  const checks = {
   pdfLib:()=>!!window.PDFLib, pdfjs:()=>!!window.pdfjsLib,
   xlsx:()=>!!window.XLSX, jspdf:()=>!!window.jspdf?.jsPDF,
   autotable:()=>!!window.jspdf?.jsPDF?.API?.autoTable,
-  mammoth:()=>!!window.mammoth, zip:()=>!!window.JSZip, qr:()=>!!window.QRCode
+  mammoth:()=>!!window.mammoth, zip:()=>!!window.JSZip, qr:()=>!!window.QRCode,fontkit:()=>!!window.fontkit
  };
  function script(key,url,check){
   if(ready.has(key) || check?.())return Promise.resolve();
@@ -31,19 +31,23 @@ const LazyAssets = (() => {
   if(key==='autotable')await library('jspdf');
   if(!urls[key])throw new Error('Unknown library: '+key);
   await script('lib:'+key,urls[key],checks[key]);
-  if(key==='pdfjs')pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  if(key==='pdfjs')pdfjsLib.GlobalWorkerOptions.workerSrc='vendor/worker.js';
  }
- function module(name){return script('module:'+name,'js/'+name+'.js'+(['page-text','draw-editor','text-editor'].includes(name)?'?v=textfix2':''));}
+ function module(name){return script('module:'+name,'js/'+name+'.js?v=pdfpro4');}
  const deps={
   merge:['pdfLib'],split:['pdfLib'],extract:['pdfLib'],compress:['pdfLib'],rotate:['pdfLib'],
-  watermark:['pdfLib'],pagenum:['pdfLib'],img2pdf:['pdfLib'],protect:['pdfLib'],metadata:['pdfLib'],
+  watermark:['pdfLib','fontkit'],pagenum:['pdfLib'],img2pdf:['pdfLib'],protect:['pdfLib'],metadata:['pdfLib'],
   pdf2jpg:['pdfjs','zip'],pdf2word:['pdfjs'],pdf2excel:['pdfjs','xlsx'],
-  excel2pdf:['xlsx','autotable'],word2pdf:['mammoth','jspdf']
+  excel2pdf:['xlsx','autotable'],word2pdf:['mammoth','autotable']
  };
  async function forTool(id){
   if(!deps[id])throw new Error('Unknown tool: '+id);
   await Promise.all(deps[id].map(library));await module('pdf-tools');
  }
+ let fontPromise;
+ async function fontBytes(){return fontPromise ||= fetch('vendor/NotoSans-Regular.ttf').then(r=>{if(!r.ok)throw new Error('Font unavailable');return r.arrayBuffer();}).then(b=>new Uint8Array(b)).catch(e=>{fontPromise=null;throw e;});}
+ async function pdfFont(doc){await library('fontkit');doc.registerFontkit(window.fontkit);return doc.embedFont(await fontBytes(),{subset:true});}
+ async function jsFont(doc){const bytes=await fontBytes();let s='';for(let n=0;n<bytes.length;n+=8192)s+=String.fromCharCode(...bytes.subarray(n,n+8192));doc.addFileToVFS('NotoSans.ttf',btoa(s));doc.addFont('NotoSans.ttf','NotoSans','normal');doc.setFont('NotoSans');}
  let qrPromise=null;
  async function qr(){
   if(document.getElementById('qrContainer').childElementCount)return;
@@ -56,7 +60,7 @@ const LazyAssets = (() => {
   })().catch(error=>{qrPromise=null;throw error;});
   return qrPromise;
  }
- return {library,module,forTool,qr};
+ return {library,module,forTool,qr,pdfFont,jsFont};
 })();
 // Capture entry points before modules replace these stubs with original functions.
 (() => {

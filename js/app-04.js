@@ -150,18 +150,15 @@ function downloadBlob(blob, filename) {
 }
 
 function parseRange(str, max) {
-  const pages = new Set();
-  str.split(',').forEach(part => {
-    part = part.trim(); if (!part) return;
-    if (part.includes('-')) {
-      const ab = part.split('-');
-      const a = parseInt(ab[0], 10), b = parseInt(ab[1], 10);
-      for (let i = a; i <= Math.min(b, max); i++) pages.add(i - 1);
-    } else {
-      const n = parseInt(part, 10);
-      if (n >= 1 && n <= max) pages.add(n - 1);
-    }
-  });
-  return [...pages].sort((a, b) => a - b);
+  if (!Number.isInteger(max) || max<1) throw new Error('Invalid page count');
+  if (!str.trim()) return Array.from({length:max},(_,i)=>i);
+  const pages=new Set();
+  for(const part of str.split(',')) {
+    const match=part.trim().match(/^(\d+)(?:\s*-\s*(\d+))?$/);
+    if(!match)throw new Error('Invalid page range: '+part);
+    const a=Number(match[1]),b=Number(match[2]||match[1]);
+    if(a<1||b<a||b>max)throw new Error('Page range outside document: '+part);
+    for(let n=a;n<=b;n++)pages.add(n-1);
+  }
+  return [...pages];
 }
-

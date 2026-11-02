@@ -88,7 +88,7 @@ async function loadEditorPdf(file) {
   try {
     showStatus(editorStatus, t('common.processing'), 'info');
     edPdfBytes = new Uint8Array(await file.arrayBuffer());
-    edPdfDoc = await pdfjsLib.getDocument({ data: edPdfBytes.slice() }).promise;
+    edPdfDoc = await pdfjsLib.getDocument({isEvalSupported:false, data: edPdfBytes.slice() }).promise;
     edTotalPages = edPdfDoc.numPages; edCurrentPage = 0;
     Object.keys(edHistory).forEach(k => delete edHistory[k]); Object.keys(edVectorOps).forEach(k => delete edVectorOps[k]);
     edSelectedOp = null;
@@ -246,8 +246,8 @@ saveChoiceOverlay.addEventListener('click', e => { if (e.target === saveChoiceOv
 document.getElementById('saveVectorBtn').addEventListener('click', async () => {
   saveChoiceStatus.className='status-msg hidden'; showStatus(saveChoiceStatus, t('common.processing'), 'info');
   try {
-    const pdfDoc = await PDFLib.PDFDocument.load(edPdfBytes, { ignoreEncryption: true });
-    const font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+    const pdfDoc = await PDFLib.PDFDocument.load(edPdfBytes);
+    const font = await LazyAssets.pdfFont(pdfDoc);
     function hexToRgb(hex) { const h=hex.replace('#',''); return PDFLib.rgb(parseInt(h.substring(0,2),16)/255, parseInt(h.substring(2,4),16)/255, parseInt(h.substring(4,6),16)/255); }
     const pages = pdfDoc.getPages();
     pages.forEach((page, pageIdx) => {
