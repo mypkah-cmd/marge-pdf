@@ -1,0 +1,12 @@
+/* Shared dark palette for studio dialogs and toolbars. PDF page itself remains white. */
+body.dark .studio-panel, body.dark [class*="studio-sidebar"], body.dark [class*="studio-tools"],
+body.dark [class*="studio-properties"], body.dark [class*="studio-header"],
+body.dark #textEditorOverlay .studio-panel, body.dark #editorOverlay .studio-panel {
+ background:#211e30!important; color:#eeeaf9!important; border-color:#373047!important;
+}
+body.dark .studio-panel button:not(.primary):not(.btn-primary),body.dark .studio-panel select,
+body.dark .studio-panel input,body.dark .studio-panel textarea {
+ background:#29243b; color:#eeeaf9; border-color:#514762;
+}
+body.dark .studio-panel label,body.dark .studio-panel p,body.dark .studio-panel small {color:#c6bed7}
+body.dark .studio-panel .btn-primary,body.dark .studio-panel .primary {color:#fff}

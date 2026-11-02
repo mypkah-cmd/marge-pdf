@@ -247,7 +247,14 @@ document.getElementById('saveVectorBtn').addEventListener('click', async () => {
   saveChoiceStatus.className='status-msg hidden'; showStatus(saveChoiceStatus, t('common.processing'), 'info');
   try {
     const pdfDoc = await PDFLib.PDFDocument.load(edPdfBytes);
-    const font = await LazyAssets.pdfFont(pdfDoc);
+    // Use the built-in PDF font for Latin text; no network fetch is needed.
+    // Load the bundled Unicode font only when non-Latin characters are actually used.
+    const textOps = Object.values(edVectorOps).flatMap(ops => Array.isArray(ops) ? ops : []).filter(op => op.type === 'text');
+    const needsUnicode = textOps.some(op => /[^\x00-\x7F]/.test(op.text || ''));
+    const font = needsUnicode
+      ? await LazyAssets.pdfFont(pdfDoc)
+      : await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+
     function hexToRgb(hex) { const h=hex.replace('#',''); return PDFLib.rgb(parseInt(h.substring(0,2),16)/255, parseInt(h.substring(2,4),16)/255, parseInt(h.substring(4,6),16)/255); }
     const pages = pdfDoc.getPages();
     pages.forEach((page, pageIdx) => {
@@ -269,7 +276,7 @@ document.getElementById('saveVectorBtn').addEventListener('click', async () => {
     });
     downloadBlob(new Blob([await pdfDoc.save()], { type:'application/pdf' }), 'edited-text.pdf');
     showStatus(saveChoiceStatus, t('editor.saved'), 'ok'); setTimeout(closeSaveChoice, 1200);
-  } catch (err) { console.error(err); showStatus(saveChoiceStatus, t('common.error') + err.message, 'err'); }
+  } catch (err) { console.error(err); showStatus(saveChoiceStatus, t('common.error') + (err.message === 'Failed to fetch' ? 'Unable to load a required font or resource. Check that vendor/NotoSans-Regular.ttf is published and refresh the page.' : err.message), 'err'); }
 });
 
 document.getElementById('saveRasterBtn').addEventListener('click', async () => {
@@ -278,9 +285,9 @@ document.getElementById('saveRasterBtn').addEventListener('click', async () => {
     const outDoc = await PDFLib.PDFDocument.create();
     const savedPage=edCurrentPage, savedZoom=edZoom;
     edZoom = 1;
-    for (let i=0;i<edTotalPages;i++) { edCurrentPage=i; await renderEditorPage(); const dataUrl=editorCanvas.toDataURL('image/png'); const pngBytes=await (await fetch(dataUrl)).arrayBuffer(); const png=await outDoc.embedPng(pngBytes); const pageW=edCanvasWidth/edBaseScale, pageH=edCanvasHeight/edBaseScale; const page=outDoc.addPage([pageW, pageH]); page.drawImage(png, { x:0, y:0, width:pageW, height:pageH }); }
+    for (let i=0;i<edTotalPages;i++) { edCurrentPage=i; await renderEditorPage(); const dataUrl=editorCanvas.toDataURL('image/png'); const pngBytes=Uint8Array.from(atob(dataUrl.split(',')[1]), c=>c.charCodeAt(0)); const png=await outDoc.embedPng(pngBytes); const pageW=edCanvasWidth/edBaseScale, pageH=edCanvasHeight/edBaseScale; const page=outDoc.addPage([pageW, pageH]); page.drawImage(png, { x:0, y:0, width:pageW, height:pageH }); }
     edCurrentPage=savedPage; edZoom=savedZoom; await renderEditorPage();
     downloadBlob(new Blob([await outDoc.save()], { type:'application/pdf' }), 'edited-image.pdf');
     showStatus(saveChoiceStatus, t('editor.saved'), 'ok'); setTimeout(closeSaveChoice, 1200);
-  } catch (err) { console.error(err); showStatus(saveChoiceStatus, t('common.error') + err.message, 'err'); }
+  } catch (err) { console.error(err); showStatus(saveChoiceStatus, t('common.error') + (err.message === 'Failed to fetch' ? 'Unable to load a required font or resource. Check that vendor/NotoSans-Regular.ttf is published and refresh the page.' : err.message), 'err'); }
 });

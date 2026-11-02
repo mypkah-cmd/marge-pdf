@@ -24,3 +24,15 @@ html:not(:has(#toolsGrid)) body{background:var(--bg);color:var(--text)}html:not(
 html,body{max-width:100%;overflow-x:clip}.header-right{flex-wrap:nowrap}.v2-tabs{scrollbar-width:thin}header{flex-wrap:nowrap}@media(max-width:650px){header{padding:13px 16px;gap:8px}.logo{gap:7px}.header-right{gap:5px}.v2-tabs{scrollbar-width:none}}
 .v2-quick{display:none!important}.hero-footnote{margin-top:24px!important}.pro-options{padding:18px;border:1px solid var(--border);border-radius:12px;margin:16px 0;background:var(--bg)}.pro-options select,.pro-options input:not([type=checkbox]),#teExportOptions select{width:100%;padding:11px;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:9px;margin-bottom:12px;font:inherit}#teExportOptions{border-top:1px solid var(--border);padding-top:18px;margin-top:20px}#teExportOptions label{display:block;margin:8px 0;font-size:13px}#teExportCancel{margin:8px 0}.rp-thumb{display:block;width:100%;height:150px;object-fit:contain;border-radius:5px}.page-item{min-height:190px!important;display:flex!important;flex-direction:column!important;gap:8px;align-items:center;justify-content:center}.page-item.selected{outline:2px solid var(--error);background:#fef2f2}body.dark .page-item.selected{background:#442733}.pro-stamp-controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:15px}.pro-stamp-controls input{max-width:110px}#textEditorCanvas{touch-action:manipulation}
 .pro-guide-note{max-width:850px;margin:25px auto;padding:20px 24px;border:1px solid var(--border);border-radius:15px;background:var(--card);font-size:14px}#teExportCancel{border-color:var(--border)}#rpGrid img:not([src]){background:var(--bg)}
+
+/* v7: restore the clock in the main header */
+.header-right > .lv-clock { display:flex !important; align-items:center; justify-content:center; min-width:96px; }
+@media(max-width:640px){.header-right > .lv-clock {min-width:76px;padding:4px 6px;font-size:11px}}
+
+/* Clock remains visible in the header, not inside the More menu. */
+header .header-right > .lv-clock{display:flex!important;align-items:center;justify-content:center;flex-shrink:0;min-width:100px;visibility:visible!important}
+header .header-right > .lv-clock .clock-time{font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* v7.0.3: Restore the visible GitHub Pages mirror link in the header. */
+header .header-right > a.mirror-btn { display:inline-flex !important; align-items:center; gap:6px; flex-shrink:0; visibility:visible !important; }
+@media (max-width:650px) { header .header-right > a.mirror-btn { padding:7px 9px; font-size:11px; } header .header-right > a.mirror-btn span:first-child {display:none;} }
